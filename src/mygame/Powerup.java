@@ -25,11 +25,13 @@ public class Powerup extends Geometry {
     private float speed = 2f;
     private int points;
     
+    PowerupType type;
  
     private static Random random = new Random();
     
     public Powerup(AssetManager assetManager, Brick brick){  
-
+        type = new PowerupType(assetManager);
+        
         Geometry pill = (Geometry) ((Node) assetManager.loadModel("Models/pill/Sphere.001.mesh.xml")).getChild(0);
         setMesh(pill.getMesh());
         setName("Thing");
@@ -39,8 +41,7 @@ public class Powerup extends Geometry {
         material.setColor("Specular", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
-        
-        selectTextureByPowerType(assetManager);
+        material.setTexture("DiffuseMap", type.getTexture());
         
         setMaterial(material);
         rotate(0f,1.60f,0f);
@@ -51,29 +52,6 @@ public class Powerup extends Geometry {
         
     } 
 
-    private void selectTextureByPowerType(AssetManager assetManager){
-        int pick = random.nextInt(PowerTypes.values().length);
-       
-        switch(PowerTypes.values()[pick]){
-            case EXPAND:
-                material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_blue.png", false)));
-                break;
-            case CATCH:
-                material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_green.png", false)));
-                break;
-            case LIFE:
-                material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_gray.png", false)));
-                break;
-            case SLOWER:
-                material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_light_blue.png", false)));
-                break;
-            case FIRE:
-                material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_red.png", false)));
-                break;
-        }
-    
-    }
-    
     public float getSpeed() {
         return speed;
     }
@@ -88,6 +66,14 @@ public class Powerup extends Geometry {
 
     private void setPoints(int points) {
         this.points = points;
+    }
+
+    public PowerupType getType() {
+        return type;
+    }
+
+    public void setType(PowerupType type) {
+        this.type = type;
     }
    
     
