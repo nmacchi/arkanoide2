@@ -4,12 +4,10 @@
  */
 package customcontrols;
 
-import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
 import com.jme3.material.Material;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 
@@ -74,74 +72,28 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 //
             rootNode.collideWith(breaker.getWorldBound(), results);
             if (results.size() > 0) {
-                
+
                 CollisionResult collision = results.getClosestCollision();
-                if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
-                    //System.out.println(results.getCollision(0).getContactNormal());
-
-                    //if(collision.getGeometry().getName().equals("BreakerBar") && breakerBar.isImpactInBorderZone(breaker)){
-                    //    changeDirection(breaker.getDirection());
-                    //}else{
-                        Triangle tri = new Triangle();
-                        collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
-                        
-                        changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
-                    //}
-
-
-
+                
+                if (collision.getGeometry().getName().equals("Floor")) {
+                    System.out.println("Hola");
+                    breakerBar.restLife();
+                    breaker.resetBall(breakerBar);    
                     
-                    //if (collision.getGeometry().getName().equals("BreakerBar")) {
-                        //Evaluate impact zone
-                        //System.out.println(tri.getCenter().x);
-                    //} else {
-                        //changeDirection(results.getClosestCollision().getContactNormal().normalizeLocal(), breaker.getDirection());
-                        
-                   // }
 
+                } else if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
+                    Triangle tri = new Triangle();
+                    collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
+
+                    changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
 
                     if (collision.getGeometry() instanceof Brick) {
                         removeBrick((Brick) collision.getGeometry());
                     }
-
-                } else if (collision.getGeometry().getName().equals("Floor")) {
-                    breakerBar.restLife();
-                    breaker.resetBall(breakerBar);
+                    
+                    
                 }
-
             }
-
-//            if (results.size() > 0) {
-//               
-//                if (breaker.hasCollision(results.getCollision(1).getGeometry())) {
-//
-//                    changeDirection(results.getCollision(1).getContactNormal().normalizeLocal(), breaker.getDirection());
-//
-//                    Geometry objCollisionedTo = results.getCollision(1).getGeometry();
-//                    
-//                    if (objCollisionedTo instanceof Brick) {
-//                        
-//                        Brick brick = (Brick) objCollisionedTo;
-//                        brick.countHits();
-//                        
-//                        if (brick.getCountHits() == brick.getHardness()) {
-//                            
-//                            ((BreakerBar) rootNode.getChild("BreakerBar")).setScore(brick.getPoints());
-//                            
-//                            if(brick instanceof CommonBrick){
-//                                if(((CommonBrick)brick).isHasSurprise()){  
-//                                    Surprise surprise = ((CommonBrick)brick).getSurprise();
-//                                    surprise.addControl(new SurpriseControl(rootNode));
-//                                    rootNode.attachChild(surprise); 
-//                                }
-//                            }
-//                            
-//                            brick.removeFromParent();
-//                            
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 
@@ -157,21 +109,18 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     private void changeDirection(Vector3f direction) {
         System.out.println("llega");
         Vector3f newInvertedDirection = direction.mult(-1);
-        
+
         Quaternion q = new Quaternion();
         q.fromAngleAxis(30, Vector3f.UNIT_Z);
-        
+
         breaker.setDirection(q.mult(newInvertedDirection));
     }
 
     private void removeBrick(Brick brick) {
-        //if (brickCollisioned instanceof Brick) {
-
-        //Brick brick = (Brick) brickCollisioned;
         brick.countHits();
-                
+
         if (brick.getCountHits() >= brick.getHardness()) {
-       
+            
             ((BreakerBar) rootNode.getChild("BreakerBar")).setScore(brick.getPoints());
 
             if (brick instanceof CommonBrick) {
@@ -181,10 +130,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     rootNode.attachChild(surprise);
                 }
             }
-
+            
             brick.removeFromParent();
-
         }
-        //}
     }
 }

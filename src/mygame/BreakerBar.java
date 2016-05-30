@@ -23,7 +23,7 @@ public class BreakerBar extends Geometry{
     private static float height = 0.022f;
     private static float deep = 0.025f;
     
-    private float speed = 1f;
+    private float speed = 0.5f;
     private Vector3f position;
     
     private boolean ballShooted;
@@ -39,18 +39,6 @@ public class BreakerBar extends Geometry{
         setLocalTranslation(initialPosition);
         scale(0.06f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
-        
-//        Box breakerBar = new Box(width, height, deep);
-        
- 
-        
-//        material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        material.setColor("Color", ColorRGBA.DarkGray);
-        
-//        setName("BreakerBar");
-//        setMesh(breakerBar);
-//        setMaterial(material);
-        
         
         this.lifes = 3;  //Set default lifes
     }
@@ -94,6 +82,30 @@ public class BreakerBar extends Geometry{
         getLocalTranslation().x = FastMath.clamp(getLocalTranslation().x, -0.60f, 0.60f);
     }
 
+    public void move(String direction, float value){
+//        position = this.getParent().getLocalTranslation();
+        if(direction.equals("Left")){
+            
+            this.getParent().setLocalTranslation(this.getParent().getLocalTranslation().x - value*speed, this.getParent().getLocalTranslation().y, this.getParent().getLocalTranslation().z);
+//            if(!isBallShooted()){
+//               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() - value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
+//            }
+        }
+        
+//        if(direction.equals("Right")){
+//            this.getParent().move(getLocalTranslation().x + value*speed, position.y, position.z);
+//            if(!isBallShooted()){
+//               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() + value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
+//            }
+//        }
+        
+//        if(!ballShooted){
+//           breaker.getLocalTranslation().x = FastMath.clamp(breaker.getLocalTranslation().x, -0.60f, 0.60f);
+//        }
+        this.updateGeometricState();
+        this.getLocalTranslation().x = FastMath.clamp(getLocalTranslation().x, -0.60f, 0.60f);
+        System.out.println(this.getLocalTranslation());
+    }
 
     public static Vector3f getInitialPosition() {
         return initialPosition;
@@ -103,16 +115,6 @@ public class BreakerBar extends Geometry{
         BreakerBar.initialPosition = initialPosition;
     }
     
-    /*
-    public void addPhysics(BulletAppState bulletAppState){
-        RigidBodyControl breakerBar_phy = new RigidBodyControl(0.0f);
-        
-        this.addControl(breakerBar_phy);
-        breakerBar_phy.setRestitution(1f);
-        breakerBar_phy.setKinematic(true);
-        bulletAppState.getPhysicsSpace().add(breakerBar_phy);
-    }*/
-
     public static float getWidth() {
         return width;
     }
@@ -140,7 +142,11 @@ public class BreakerBar extends Geometry{
     public int getScore() {
         return score;
     }
-
+    
+    public String getFormattedScore(){
+        return String.format("%08d", score);
+    }
+    
     public void setScore(int score) {
         this.score += score;
     }
