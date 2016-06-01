@@ -23,7 +23,7 @@ public class BreakerBar extends Geometry{
     private static float height = 0.022f;
     private static float deep = 0.025f;
     
-    private float speed = 0.5f;
+    private float speed = 0.7f;
     private Vector3f position;
     
     private boolean ballShooted;
@@ -82,30 +82,7 @@ public class BreakerBar extends Geometry{
         getLocalTranslation().x = FastMath.clamp(getLocalTranslation().x, -0.60f, 0.60f);
     }
 
-    public void move(String direction, float value){
-//        position = this.getParent().getLocalTranslation();
-        if(direction.equals("Left")){
-            
-            this.getParent().setLocalTranslation(this.getParent().getLocalTranslation().x - value*speed, this.getParent().getLocalTranslation().y, this.getParent().getLocalTranslation().z);
-//            if(!isBallShooted()){
-//               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() - value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
-//            }
-        }
-        
-//        if(direction.equals("Right")){
-//            this.getParent().move(getLocalTranslation().x + value*speed, position.y, position.z);
-//            if(!isBallShooted()){
-//               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() + value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
-//            }
-//        }
-        
-//        if(!ballShooted){
-//           breaker.getLocalTranslation().x = FastMath.clamp(breaker.getLocalTranslation().x, -0.60f, 0.60f);
-//        }
-        this.updateGeometricState();
-        this.getLocalTranslation().x = FastMath.clamp(getLocalTranslation().x, -0.60f, 0.60f);
-        System.out.println(this.getLocalTranslation());
-    }
+
 
     public static Vector3f getInitialPosition() {
         return initialPosition;

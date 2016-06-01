@@ -28,7 +28,6 @@ import customcontrols.BreakerControl;
  */
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
 
-    private Arkanoide arkanoide;
     private Node bricks;
     private Breaker breaker;
     private BreakerBar breakerBar;
@@ -71,15 +70,6 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         breaker.addControl(new BreakerControl(rootNode, breakerBar));
         rootNode.attachChild(breaker);
         
-        
-        //Arkanoide
-        arkanoide = new Arkanoide(breakerBar, breaker);
-        rootNode.attachChild(arkanoide);
-//        pivot.attachChild(breakerBar);
-//        
-//        rootNode.attachChild(pivot);
-        
-        
         //Text Panels
         stateText = new BitmapText(guiFont, false);
         stateText.setSize(25f);      // font size
@@ -87,7 +77,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         stateText.setLocalTranslation(300, settings.getHeight() / 2, 0); // position
         guiNode.attachChild(stateText);
 
-//        livesCount = new BitmapText(guiFont, false);
+        livesCount = new BitmapText(guiFont, false);
 //        livesCount.setSize(14f);      // font size
 //        livesCount.setColor(ColorRGBA.Blue);
 //        livesCount.setLocalTranslation(200, 400, 0); // position
@@ -219,9 +209,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
-//            breakerBar.move(name, value, breaker);
-//            breakerBar.move(name, value);
-            arkanoide.moveChildren(name, value);
+            breakerBar.move(name, value, breaker);
         }
     };
     
