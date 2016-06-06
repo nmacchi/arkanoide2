@@ -22,9 +22,7 @@ public class Breaker extends Geometry implements Collidable {
     private static float speed = 0.5f;
     private Vector3f initialPosition = new Vector3f(0.0f, 0.08f, 1f);
     private Vector3f direction;
-    
-    
-    private RigidBodyControl breaker_phy = new RigidBodyControl(1f);
+
     
     Breaker(AssetManager assetManager, BreakerBar breakerBar){
         super("Breaker", new Sphere(16, 16, 0.022f, true, false));
@@ -41,27 +39,6 @@ public class Breaker extends Geometry implements Collidable {
         this.direction = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y + 1, 0);
     }
     
-    /*
-    public void applyPhysics(BulletAppState bulletAppState){
-        //Vector3f initalDirection = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y +1, 0);
-
-        this.addControl(breaker_phy);
-        bulletAppState.getPhysicsSpace().add(breaker_phy);
-        
-        breaker_phy.setFriction(0.0f);
-        breaker_phy.setRestitution(1f);
-        breaker_phy.setLinearVelocity(this.direction.mult(speed));     
-    }*/
-    
-    /*
-    public RigidBodyControl getBreaker_phy() {
-        return breaker_phy;
-    }
-
-    public void setBreaker_phy(RigidBodyControl breaker_phy) {
-        this.breaker_phy = breaker_phy;
-    }*/
-
     public Vector3f getDirection() {
         return direction;
     }

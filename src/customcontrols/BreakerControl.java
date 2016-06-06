@@ -129,7 +129,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             }
             
             brick.removeFromParent();
-            rootNode.addControl(new BrickExplosionControl(brick.getExplosionFX(), rootNode));
+            //rootNode.addControl(new BrickExplosionControl(brick.getExplosionFX(), rootNode));
+            brick.getFX().executeFX(rootNode);
         }
     }
 }

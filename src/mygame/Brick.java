@@ -32,7 +32,7 @@ public class Brick extends Geometry {
     private int countHits;
     
     //FX
-    private SmokeTrail explosionFX;
+    private SmokeTrail FX;
     
     Brick(){}
     
@@ -55,7 +55,7 @@ public class Brick extends Geometry {
         count++;
         
         //create FX
-        explosionFX = new SmokeTrail(assetManager, position);
+        FX = new SmokeTrail(assetManager, position);
     }
 
     public static float getWidth() {
@@ -125,8 +125,8 @@ public class Brick extends Geometry {
         return countHits;
     }
 
-    public SmokeTrail getExplosionFX() {
-        return explosionFX;
+    public SmokeTrail getFX() {
+        return FX;
     }
     
     
