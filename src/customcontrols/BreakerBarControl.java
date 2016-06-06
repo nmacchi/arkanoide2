@@ -29,7 +29,7 @@ public class BreakerBarControl extends AbstractControl {
     
     @Override
     protected void controlUpdate(float tpf) {
-       CollisionResults results = new CollisionResults();
+//       CollisionResults results = new CollisionResults();
        
        
     }

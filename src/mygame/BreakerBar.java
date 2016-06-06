@@ -140,20 +140,20 @@ public class BreakerBar extends Geometry{
         this.lifes--;
     }
     
-    public boolean isImpactInBorderZone(Breaker breaker){
-        float impactPos = breaker.getLocalTranslation().x;
-
-        float posLeft = getLocalTranslation().x - (getWidth());
-        float posLeft2 = getLocalTranslation().x - (getWidth() / 1.5f);
-
-        float posRight = getLocalTranslation().x + (getWidth());
-        float posRight2 = getLocalTranslation().x + (getWidth() / 1.5f);
-
-        if ((impactPos >= posLeft && impactPos <= posLeft2) || (impactPos <= posRight && impactPos >= posRight2)) {
-            return true;
-        } 
-        
-        return false;
-    }
+//    public boolean isImpactInBorderZone(Breaker breaker){
+//        float impactPos = breaker.getLocalTranslation().x;
+//
+//        float posLeft = getLocalTranslation().x - (getWidth());
+//        float posLeft2 = getLocalTranslation().x - (getWidth() / 1.5f);
+//
+//        float posRight = getLocalTranslation().x + (getWidth());
+//        float posRight2 = getLocalTranslation().x + (getWidth() / 1.5f);
+//
+//        if ((impactPos >= posLeft && impactPos <= posLeft2) || (impactPos <= posRight && impactPos >= posRight2)) {
+//            return true;
+//        } 
+//        
+//        return false;
+//    }
     
 }

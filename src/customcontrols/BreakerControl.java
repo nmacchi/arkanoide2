@@ -6,9 +6,8 @@ package customcontrols;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.export.Savable;
-import com.jme3.material.Material;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 
 import com.jme3.math.Vector3f;
@@ -32,8 +31,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     private Node rootNode;
     private BreakerBar breakerBar;
     private Breaker breaker;
-    Material m;
-
+ 
     BreakerControl() {
     }
 
@@ -76,7 +74,6 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 CollisionResult collision = results.getClosestCollision();
                 
                 if (collision.getGeometry().getName().equals("Floor")) {
-                    System.out.println("Hola");
                     breakerBar.restLife();
                     breaker.resetBall(breakerBar);    
                     
@@ -106,15 +103,15 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
         breaker.setDirection(direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2)));
     }
 
-    private void changeDirection(Vector3f direction) {
-        System.out.println("llega");
-        Vector3f newInvertedDirection = direction.mult(-1);
-
-        Quaternion q = new Quaternion();
-        q.fromAngleAxis(30, Vector3f.UNIT_Z);
-
-        breaker.setDirection(q.mult(newInvertedDirection));
-    }
+//    private void changeDirection(Vector3f direction) {
+//        System.out.println("llega");
+//        Vector3f newInvertedDirection = direction.mult(-1);
+//
+//        Quaternion q = new Quaternion();
+//        q.fromAngleAxis(30, Vector3f.UNIT_Z);
+//
+//        breaker.setDirection(q.mult(newInvertedDirection));
+//    }
 
     private void removeBrick(Brick brick) {
         brick.countHits();
@@ -132,6 +129,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             }
             
             brick.removeFromParent();
+            rootNode.addControl(new BrickExplosionControl(brick.getExplosionFX(), rootNode));
         }
     }
 }

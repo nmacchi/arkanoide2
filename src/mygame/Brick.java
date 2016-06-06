@@ -5,14 +5,12 @@
 package mygame;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
+import effects.SmokeTrail;
 import java.util.Random;
 
 /**
@@ -27,29 +25,25 @@ public class Brick extends Geometry {
     //Dimentions
     private static float width = 0.075f;
     private static float height = 0.025f;
-    private static float deep = 0.025f;
     
     private static int count = 0;
     
-    private RigidBodyControl brick_phy;
     private boolean hasPowerup;
     private int countHits;
+    
+    //FX
+    private SmokeTrail explosionFX;
     
     Brick(){}
     
     Brick(AssetManager assetManager, Vector3f position) {
         Geometry brick = (Geometry) ((Node) assetManager.loadModel("Models/brick/Cube.mesh.xml")).getChild(0);
         
-        //Box box = new Box(width, height, deep);
-
-//        material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setBoolean("UseMaterialColors", true);
         material.setColor("Specular", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
-        
         
         setMesh(brick.getMesh());
         setLocalTranslation(position);
@@ -59,13 +53,9 @@ public class Brick extends Geometry {
         
         setName("Brick" + count);
         count++;
-    }
-
-    public void addPhysics(BulletAppState bulletAppState) {
-        brick_phy = new RigidBodyControl(0.0f);
-        this.addControl(brick_phy);
-        brick_phy.setRestitution(1f);
-        bulletAppState.getPhysicsSpace().add(brick_phy);
+        
+        //create FX
+        explosionFX = new SmokeTrail(assetManager, position);
     }
 
     public static float getWidth() {
@@ -74,14 +64,6 @@ public class Brick extends Geometry {
 
     public static float getHeight() {
         return height;
-    }
-
-    public RigidBodyControl getBrick_phy() {
-        return brick_phy;
-    }
-
-    public void setBrick_phy(RigidBodyControl brick_phy) {
-        this.brick_phy = brick_phy;
     }
 
     public boolean isHasPowerup() {
@@ -143,6 +125,9 @@ public class Brick extends Geometry {
         return countHits;
     }
 
+    public SmokeTrail getExplosionFX() {
+        return explosionFX;
+    }
     
     
     
