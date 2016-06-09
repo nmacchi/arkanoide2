@@ -20,6 +20,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import customcontrols.BreakerControl;
+import states.AppGuiState;
 
 /**
  * test
@@ -70,24 +71,28 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         breaker.addControl(new BreakerControl(rootNode, breakerBar));
         rootNode.attachChild(breaker);
         
+        
+        AppGuiState guiState = new AppGuiState();
+        stateManager.attach(guiState);
+        
         //Text Panels
-        stateText = new BitmapText(guiFont, false);
-        stateText.setSize(25f);      // font size
-        stateText.setColor(ColorRGBA.Blue);                             // font color
-        stateText.setLocalTranslation(300, settings.getHeight() / 2, 0); // position
-        guiNode.attachChild(stateText);
+//        stateText = new BitmapText(guiFont, false);
+//        stateText.setSize(25f);      // font size
+//        stateText.setColor(ColorRGBA.Blue);                             // font color
+//        stateText.setLocalTranslation(300, settings.getHeight() / 2, 0); // position
+//        guiNode.attachChild(stateText);
 
-        livesCount = new BitmapText(guiFont, false);
+//        livesCount = new BitmapText(guiFont, false);
 //        livesCount.setSize(14f);      // font size
 //        livesCount.setColor(ColorRGBA.Blue);
 //        livesCount.setLocalTranslation(200, 400, 0); // position
 //        guiNode.attachChild(livesCount);
         
-        scoreCount = new BitmapText(guiFont, false);
-        scoreCount.setSize(18f);      // font size
-        scoreCount.setColor(ColorRGBA.White);
-        scoreCount.setLocalTranslation(settings.getWidth()/2 - 50, settings.getHeight(), 0); // position
-        guiNode.attachChild(scoreCount);
+//        scoreCount = new BitmapText(guiFont, false);
+//        scoreCount.setSize(18f);      // font size
+//        scoreCount.setColor(ColorRGBA.White);
+//        scoreCount.setLocalTranslation(settings.getWidth()/2 - 50, settings.getHeight(), 0); // position
+//        guiNode.attachChild(scoreCount);
     }
 
     private void initAudio() {
@@ -176,19 +181,19 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     public void simpleUpdate(float tpf) {
         //TODO: add update code
         if (breakerBar.getLifes() == 0 && !bricks.getChildren().isEmpty()) {
-            stateText.setText("You Lose :(");
+//            stateText.setText("You Lose :(");
             resetBall();
         }
 
         if (bricks.getChildren().isEmpty()) {
             if (breakerBar.getLifes() != 0) {
-                stateText.setText("You Win :)");
+//                stateText.setText("You Win :)");
                 resetBall();
             }
         }
         
 //        livesCount.setText("Vidas: " + breakerBar.getLifes());
-        scoreCount.setText("Puntuación: " + breakerBar.getFormattedScore());  
+//        scoreCount.setText("Puntuación: " + breakerBar.getFormattedScore());  
         
 //        System.out.println(cam.getDirection());
     }
