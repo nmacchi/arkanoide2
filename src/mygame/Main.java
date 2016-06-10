@@ -21,6 +21,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import customcontrols.BreakerControl;
 import states.AppGuiState;
+import states.AppPlayerState;
 
 /**
  * test
@@ -71,9 +72,11 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         breaker.addControl(new BreakerControl(rootNode, breakerBar));
         rootNode.attachChild(breaker);
         
-        
+        AppPlayerState playerState = new AppPlayerState();
+        stateManager.attach(playerState);
         AppGuiState guiState = new AppGuiState();
         stateManager.attach(guiState);
+        
         
         //Text Panels
 //        stateText = new BitmapText(guiFont, false);
