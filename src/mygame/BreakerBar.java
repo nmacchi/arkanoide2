@@ -29,7 +29,7 @@ public class BreakerBar extends Geometry{
     private boolean ballShooted;
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
-    BreakerBar(AssetManager assetManager){
+    public BreakerBar(AssetManager assetManager){
         Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
         
         setName("BreakerBar");

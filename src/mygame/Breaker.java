@@ -17,14 +17,14 @@ import com.jme3.scene.shape.Sphere;
  *
  * @author nicolas
  */
-public class Breaker extends Geometry implements Collidable {
+public class Breaker extends Geometry  {
     
     private static float speed = 0.5f;
-    private Vector3f initialPosition = new Vector3f(0.0f, 0.08f, 1f);
+    private static Vector3f initialPosition = new Vector3f(0.25f, 0.08f, 1f);
     private Vector3f direction;
 
     
-    Breaker(AssetManager assetManager, BreakerBar breakerBar){
+    public Breaker(AssetManager assetManager){
         super("Breaker", new Sphere(16, 16, 0.022f, true, false));
         
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
@@ -35,7 +35,7 @@ public class Breaker extends Geometry implements Collidable {
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
         
-        setLocalTranslation(initialPosition.setX(breakerBar.getLocalTranslation().getX()));
+        setLocalTranslation(initialPosition);
         this.direction = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y + 1, 0);
     }
     
@@ -58,4 +58,10 @@ public class Breaker extends Geometry implements Collidable {
     public void resetBall(BreakerBar breakerBar){
         
     }
+
+    public static Vector3f getInitialPosition() {
+        return initialPosition;
+    }
+    
+    
 }

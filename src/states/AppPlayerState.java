@@ -20,7 +20,7 @@ public class AppPlayerState extends AbstractAppState{
     
     private int score;
     
-     @Override
+    @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
        
@@ -44,7 +44,11 @@ public class AppPlayerState extends AbstractAppState{
     public void setCurrentLives(int currentLives) {
         this.currentLives = currentLives;
     }
-
+    
+    public void restLife(){
+        this.currentLives--;
+    }
+    
     public int getScore() {
         return score;
     }

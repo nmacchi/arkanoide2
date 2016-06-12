@@ -21,6 +21,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import customcontrols.BreakerControl;
 import states.AppGuiState;
+import states.AppInitState;
 import states.AppPlayerState;
 
 /**
@@ -68,34 +69,20 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         rootNode.attachChild(breakerBar);
         
         //Breaker
-        breaker = new Breaker(assetManager, breakerBar);
+        breaker = new Breaker(assetManager);
         breaker.addControl(new BreakerControl(rootNode, breakerBar));
         rootNode.attachChild(breaker);
+        
+        AppInitState initState = new AppInitState();
+        stateManager.attach(initState);
+        
+        System.out.println(rootNode.getChildren().size());
         
         AppPlayerState playerState = new AppPlayerState();
         stateManager.attach(playerState);
         AppGuiState guiState = new AppGuiState();
         stateManager.attach(guiState);
-        
-        
-        //Text Panels
-//        stateText = new BitmapText(guiFont, false);
-//        stateText.setSize(25f);      // font size
-//        stateText.setColor(ColorRGBA.Blue);                             // font color
-//        stateText.setLocalTranslation(300, settings.getHeight() / 2, 0); // position
-//        guiNode.attachChild(stateText);
 
-//        livesCount = new BitmapText(guiFont, false);
-//        livesCount.setSize(14f);      // font size
-//        livesCount.setColor(ColorRGBA.Blue);
-//        livesCount.setLocalTranslation(200, 400, 0); // position
-//        guiNode.attachChild(livesCount);
-        
-//        scoreCount = new BitmapText(guiFont, false);
-//        scoreCount.setSize(18f);      // font size
-//        scoreCount.setColor(ColorRGBA.White);
-//        scoreCount.setLocalTranslation(settings.getWidth()/2 - 50, settings.getHeight(), 0); // position
-//        guiNode.attachChild(scoreCount);
     }
 
     private void initAudio() {
@@ -237,7 +224,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
         //Set ball initial location
         breakerBar.setBallShooted(false);
-        breaker = new Breaker(assetManager, breakerBar);
+        breaker = new Breaker(assetManager);
         rootNode.attachChild(breaker);
     }
     
