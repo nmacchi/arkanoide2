@@ -19,6 +19,8 @@ import mygame.BreakerBar;
 public class BreakerBarControl extends AbstractControl {
     
     private BreakerBar breakerBar;
+    private CollisionResults results = new CollisionResults();
+    
     
     @Override
     public void setSpatial(Spatial spatial) {

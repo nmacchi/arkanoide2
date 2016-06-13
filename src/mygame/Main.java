@@ -19,10 +19,10 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
-import customcontrols.BreakerControl;
 import states.AppGuiState;
 import states.AppInitState;
 import states.AppPlayerState;
+import states.AppResetState;
 
 /**
  * test
@@ -70,18 +70,20 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         
         //Breaker
         breaker = new Breaker(assetManager);
-        breaker.addControl(new BreakerControl(rootNode, breakerBar));
+        //breaker.addControl(new BreakerControl(rootNode, breakerBar));
         rootNode.attachChild(breaker);
         
         AppInitState initState = new AppInitState();
         stateManager.attach(initState);
         
-        System.out.println(rootNode.getChildren().size());
+        //System.out.println(rootNode.getChildren().size());
         
         AppPlayerState playerState = new AppPlayerState();
         stateManager.attach(playerState);
         AppGuiState guiState = new AppGuiState();
         stateManager.attach(guiState);
+        AppResetState resetState = new AppResetState();
+        stateManager.attach(resetState);
 
     }
 

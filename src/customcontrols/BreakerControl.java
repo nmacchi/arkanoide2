@@ -4,9 +4,9 @@
  */
 package customcontrols;
 
+import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.export.Savable;
 import com.jme3.math.Triangle;
 
@@ -21,6 +21,8 @@ import mygame.BreakerBar;
 import mygame.Brick;
 import mygame.CommonBrick;
 import mygame.Powerup;
+import states.AppPlayerState;
+import states.AppResetState;
 
 /**
  *
@@ -31,13 +33,16 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     private Node rootNode;
     private BreakerBar breakerBar;
     private Breaker breaker;
- 
+    
+    private AppStateManager stateManager;  
+    
     BreakerControl() {
     }
 
-    public BreakerControl(Node rootNode, BreakerBar breakerBar) {
+    public BreakerControl(Node rootNode, BreakerBar breakerBar, AppStateManager stateManager) {
         this.rootNode = rootNode;
         this.breakerBar = breakerBar;
+        this.stateManager = stateManager;
     }
 
     @Override
@@ -74,9 +79,10 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 CollisionResult collision = results.getClosestCollision();
                 
                 if (collision.getGeometry().getName().equals("Floor")) {
-                    breakerBar.restLife();
-                    breaker.resetBall(breakerBar);    
-                    
+//                    breakerBar.restLife();
+//                    breaker.resetBall(breakerBar);  
+                    stateManager.getState(AppPlayerState.class).restLife();
+                    stateManager.getState(AppResetState.class).reset();
 
                 } else if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
                     Triangle tri = new Triangle();

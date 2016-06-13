@@ -47,6 +47,8 @@ public class AppPlayerState extends AbstractAppState{
     
     public void restLife(){
         this.currentLives--;
+        //Call Update GUI
+        
     }
     
     public int getScore() {

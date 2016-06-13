@@ -18,32 +18,27 @@ import mygame.BreakerBar;
  */
 public class AppResetState extends AbstractAppState{
     
-    private Node rootNode;
     private AppStateManager stateManager;
+    SimpleApplication app;
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
        
-        rootNode = ((SimpleApplication)app).getRootNode();
-        stateManager = app.getStateManager();
+        app = (SimpleApplication)app;
+        this.stateManager = app.getStateManager();
     }
     
     public void reset(){
-        stateManager.getState(AppPlayerState.class).restLife();
-        
         //Set entities to initial position
-        ((BreakerBar)rootNode.getChild("BreakerBar")).removeFromParent();
-        ((Breaker)rootNode.getChild("Breaker")).removeFromParent();
+        ((BreakerBar)app.getRootNode().getChild("BreakerBar")).removeFromParent();
+        ((Breaker)app.getRootNode().getChild("Breaker")).removeFromParent();
         
         //Hacer algun efecto de explosion
         
-        
-        
-        
-        
-        
-//        ((Breaker)rootNode.getChild("Breaker")).setLocalTranslation();
+        app.getRootNode().attachChild(stateManager.getState(AppInitState.class).getArkanoid());
+        app.getRootNode().attachChild(stateManager.getState(AppInitState.class).getBall());
+
     }
     
     
