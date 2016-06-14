@@ -8,7 +8,6 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.scene.Node;
 import mygame.Breaker;
 import mygame.BreakerBar;
 
@@ -30,6 +29,10 @@ public class AppResetState extends AbstractAppState{
     }
     
     public void reset(){
+        //Call GUI state for update
+        int currentLives = stateManager.getState(AppPlayerState.class).getCurrentLives();
+        stateManager.getState(AppGuiState.class).updateLivesIndicator(app, currentLives);
+              
         //Set entities to initial position
         ((BreakerBar)app.getRootNode().getChild("BreakerBar")).removeFromParent();
         ((Breaker)app.getRootNode().getChild("Breaker")).removeFromParent();

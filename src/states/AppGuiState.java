@@ -22,25 +22,25 @@ import com.jme3.scene.Spatial;
  */
 public class AppGuiState extends AbstractAppState {
    
-    private static int INITIAL_POSITION_LOCAL_NODE = 100;
+//    private static int INITIAL_POSITION_LOCAL_NODE = 100;
     
     private BitmapText stateIndicator;
     private BitmapText scoreIndicator;
     
     private Node localNode = new Node ("Lives Node");
-    private int xPositionForLives;
+//    private Spatial arkanoid;
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
-        this.xPositionForLives = INITIAL_POSITION_LOCAL_NODE;
+//        this.xPositionForLives = INITIAL_POSITION_LOCAL_NODE;
         
         initGUILights(app);
         
         initializeStateIndicator(app);
-        initializeScoreIndicator(app);
-        initializeLivesIndicator(app, stateManager.getState(AppPlayerState.class).getCurrentLives());   
+        initializeScoreIndicator(app, stateManager);
+        updateLivesIndicator(app, stateManager.getState(AppPlayerState.class).getCurrentLives());   
     }
 
     @Override
@@ -70,27 +70,28 @@ public class AppGuiState extends AbstractAppState {
         scoreIndicator.setColor(ColorRGBA.White);
         scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
         scoreIndicator.setText("Puntuación: ");
-        
+    
         ((SimpleApplication)app).getGuiNode().attachChild(scoreIndicator);
     }
     
-    private void initializeLivesIndicator(Application app, int lives){
+    public void updateLivesIndicator(Application app, int lives){
+        localNode.detachAllChildren();
+        
+        int xPositionForLives = 100;
         
         for(int x=0; x < lives; x++){
             Spatial arkanoid = app.getAssetManager().loadModel("Models/arkanoide/Arkanoide.j3o");
-            
             arkanoid.scale(20f);
             arkanoid.rotate(-0.5f,2.5f,0f);
-            
+    
             arkanoid.setLocalTranslation(app.getContext().getSettings().getWidth() - xPositionForLives,50, 0);
             
             localNode.attachChild(arkanoid);
-            
-            ((SimpleApplication)app).getGuiNode().attachChild(localNode);
-            
+         
             xPositionForLives += 50;
-            
         }
+        
+        ((SimpleApplication)app).getGuiNode().attachChild(localNode);
         
     }
     
@@ -105,9 +106,15 @@ public class AppGuiState extends AbstractAppState {
         al.setColor(ColorRGBA.White);
         ((SimpleApplication)app).getGuiNode().addLight(al);
     }
-    
-    public void updateGUILivesNode(){
-        localNode.detachChildAt(localNode.getChildren().size() -1);
+
+    public BitmapText getStateIndicator() {
+        return stateIndicator;
     }
+
+    public BitmapText getScoreIndicator() {
+        return scoreIndicator;
+    }
+    
+    
     
 }
