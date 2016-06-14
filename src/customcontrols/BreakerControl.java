@@ -22,7 +22,7 @@ import mygame.Brick;
 import mygame.CommonBrick;
 import mygame.Powerup;
 import states.AppPlayerState;
-import states.AppResetState;
+import states.GamePlayAppState;
 
 /**
  *
@@ -81,8 +81,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 if (collision.getGeometry().getName().equals("Floor")) {
 //                    breakerBar.restLife();
 //                    breaker.resetBall(breakerBar);  
-                    stateManager.getState(AppPlayerState.class).restLife();
-                    stateManager.getState(AppResetState.class).reset();
+                    stateManager.getState(GamePlayAppState.class).reset();
 
                 } else if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
                     Triangle tri = new Triangle();
@@ -93,8 +92,6 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     if (collision.getGeometry() instanceof Brick) {
                         removeBrick((Brick) collision.getGeometry());
                     }
-                    
-                    
                 }
             }
         }
@@ -124,8 +121,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
         if (brick.getCountHits() >= brick.getHardness()) {
             
-            ((BreakerBar) rootNode.getChild("BreakerBar")).setScore(brick.getPoints());
-
+            stateManager.getState(GamePlayAppState.class).setScore(brick.getPoints());
+            
             if (brick instanceof CommonBrick) {
                 if (((CommonBrick) brick).isHasPowerup()) {
                     Powerup surprise = ((CommonBrick) brick).getPowerup();
@@ -135,7 +132,6 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             }
             
             brick.removeFromParent();
-            //rootNode.addControl(new BrickExplosionControl(brick.getExplosionFX(), rootNode));
             brick.getFX().executeFX(rootNode);
         }
     }

@@ -56,7 +56,7 @@ public class AppPlayerState extends AbstractAppState{
     }
 
     public void setScore(int score) {
-        this.score = score;
+        this.score += score;
     }
 
     public String getFormattedScore(){

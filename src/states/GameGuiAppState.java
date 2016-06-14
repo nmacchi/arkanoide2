@@ -20,8 +20,9 @@ import com.jme3.scene.Spatial;
  *
  * @author nicolas
  */
-public class AppGuiState extends AbstractAppState {
+public class GameGuiAppState extends AbstractAppState {
    
+    private AppStateManager stateManager;
 //    private static int INITIAL_POSITION_LOCAL_NODE = 100;
     
     private BitmapText stateIndicator;
@@ -34,6 +35,7 @@ public class AppGuiState extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
+        this.stateManager = stateManager;
 //        this.xPositionForLives = INITIAL_POSITION_LOCAL_NODE;
         
         initGUILights(app);
@@ -63,13 +65,14 @@ public class AppGuiState extends AbstractAppState {
         ((SimpleApplication)app).getGuiNode().attachChild(stateIndicator);
     }
     
-    private void initializeScoreIndicator(Application app){
+    private void initializeScoreIndicator(Application app, AppStateManager stateManager){
         scoreIndicator = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false); 
         
+        scoreIndicator.setName("Score Indicator");
         scoreIndicator.setSize(18f);      // font size
         scoreIndicator.setColor(ColorRGBA.White);
         scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
-        scoreIndicator.setText("Puntuación: ");
+        scoreIndicator.setText(stateManager.getState(AppPlayerState.class).getFormattedScore());
     
         ((SimpleApplication)app).getGuiNode().attachChild(scoreIndicator);
     }
@@ -115,6 +118,13 @@ public class AppGuiState extends AbstractAppState {
         return scoreIndicator;
     }
     
+    public void updateScoreIndicator(){
+        ((BitmapText)((SimpleApplication)stateManager.getApplication()).getRootNode().getChild("Score Indicator")).setText(stateManager.getState(GamePlayAppState.class).getFormattedScore());
+    }
     
+    @Override
+    public void update(float tpf) {
+        
+    }
     
 }

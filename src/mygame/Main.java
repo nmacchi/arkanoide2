@@ -19,8 +19,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
-import states.AppGuiState;
-import states.AppInitState;
+import states.GameGuiAppState;
+import states.GamePlayAppState;
 import states.AppPlayerState;
 import states.AppResetState;
 
@@ -73,14 +73,14 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         //breaker.addControl(new BreakerControl(rootNode, breakerBar));
         rootNode.attachChild(breaker);
         
-        AppInitState initState = new AppInitState();
+        GamePlayAppState initState = new GamePlayAppState();
         stateManager.attach(initState);
         
         //System.out.println(rootNode.getChildren().size());
         
         AppPlayerState playerState = new AppPlayerState();
         stateManager.attach(playerState);
-        AppGuiState guiState = new AppGuiState();
+        GameGuiAppState guiState = new GameGuiAppState();
         stateManager.attach(guiState);
         AppResetState resetState = new AppResetState();
         stateManager.attach(resetState);
