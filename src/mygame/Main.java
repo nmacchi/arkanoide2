@@ -65,25 +65,25 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         setSceneLights(cam);
         
         //BreakerBar
-        breakerBar = new BreakerBar(assetManager); 
-        rootNode.attachChild(breakerBar);
+        //breakerBar = new BreakerBar(assetManager); 
+        //rootNode.attachChild(breakerBar);
         
         //Breaker
-        breaker = new Breaker(assetManager);
+        //breaker = new Breaker(assetManager);
         //breaker.addControl(new BreakerControl(rootNode, breakerBar));
-        rootNode.attachChild(breaker);
+        //rootNode.attachChild(breaker);
         
         GamePlayAppState initState = new GamePlayAppState();
         stateManager.attach(initState);
         
         //System.out.println(rootNode.getChildren().size());
         
-        AppPlayerState playerState = new AppPlayerState();
-        stateManager.attach(playerState);
+//        AppPlayerState playerState = new AppPlayerState();
+//        stateManager.attach(playerState);
         GameGuiAppState guiState = new GameGuiAppState();
         stateManager.attach(guiState);
-        AppResetState resetState = new AppResetState();
-        stateManager.attach(resetState);
+//        AppResetState resetState = new AppResetState();
+//        stateManager.attach(resetState);
 
     }
 
@@ -172,17 +172,17 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     @Override
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-        if (breakerBar.getLifes() == 0 && !bricks.getChildren().isEmpty()) {
+        //if (breakerBar.getLifes() == 0 && !bricks.getChildren().isEmpty()) {
 //            stateText.setText("You Lose :(");
-            resetBall();
-        }
+            //resetBall();
+        //}
 
-        if (bricks.getChildren().isEmpty()) {
-            if (breakerBar.getLifes() != 0) {
-//                stateText.setText("You Win :)");
-                resetBall();
-            }
-        }
+//        if (bricks.getChildren().isEmpty()) {
+//            if (breakerBar.getLifes() != 0) {
+////                stateText.setText("You Win :)");
+//                resetBall();
+//            }
+//        }
         
 //        livesCount.setText("Vidas: " + breakerBar.getLifes());
 //        scoreCount.setText("Puntuación: " + breakerBar.getFormattedScore());  
