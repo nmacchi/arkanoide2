@@ -21,8 +21,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import states.GameGuiAppState;
 import states.GamePlayAppState;
-import states.AppPlayerState;
-import states.AppResetState;
+import states.InputAppState;
 
 /**
  * test
@@ -32,16 +31,16 @@ import states.AppResetState;
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
 
     private Node bricks;
-    private Breaker breaker;
-    private BreakerBar breakerBar;
+//    private Breaker breaker;
+//    private BreakerBar breakerBar;
 
     //Messages
-    private BitmapText livesCount;
-    private BitmapText stateText;
-    private BitmapText scoreCount;
+//    private BitmapText livesCount;
+//    private BitmapText stateText;
+//    private BitmapText scoreCount;
     //Audio nodes
-    private AudioNode audio_crash;
-    private AudioNode audio_rebound;
+//    private AudioNode audio_crash;
+//    private AudioNode audio_rebound;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -52,17 +51,17 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     public void simpleInitApp() {
         bricks = new Node("BricksNode");
         rootNode.attachChild(bricks);
-
+        showSettings = false;
         //Init components
-        flyCam.setEnabled(false);
-        cam.setLocation(new Vector3f(-0.005f, 0.52f, 3.19f));
+//        flyCam.setEnabled(false);
+//        cam.setLocation(new Vector3f(-0.005f, 0.52f, 3.19f));
         //viewPort.setBackgroundColor(new ColorRGBA(236f / 255f, 246f / 255f, 180f / 255f, 1f));
         
-        initAudio();
-        initKeys();
+//        initAudio();
+//        initKeys();
         initScene();
         makeWall();
-        setSceneLights(cam);
+//        setSceneLights(cam);
         
         //BreakerBar
         //breakerBar = new BreakerBar(assetManager); 
@@ -84,22 +83,23 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         stateManager.attach(guiState);
 //        AppResetState resetState = new AppResetState();
 //        stateManager.attach(resetState);
-
+//        InputAppState inputState = new InputAppState();
+//        stateManager.attach(inputState);
     }
 
-    private void initAudio() {
-        audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
-        audio_crash.setPositional(false);
-        audio_crash.setLooping(false);
-        audio_crash.setVolume(2);
-        rootNode.attachChild(audio_crash);
-
-        audio_rebound = new AudioNode(assetManager, "Sounds/effects/bottle-glass-uncork-01.wav", false);
-        audio_rebound.setPositional(false);
-        audio_rebound.setLooping(false);
-        audio_rebound.setVolume(2);
-        rootNode.attachChild(audio_rebound);
-    }
+//    private void initAudio() {
+//        audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
+//        audio_crash.setPositional(false);
+//        audio_crash.setLooping(false);
+//        audio_crash.setVolume(2);
+//        rootNode.attachChild(audio_crash);
+//
+//        audio_rebound = new AudioNode(assetManager, "Sounds/effects/bottle-glass-uncork-01.wav", false);
+//        audio_rebound.setPositional(false);
+//        audio_rebound.setLooping(false);
+//        audio_rebound.setVolume(2);
+//        rootNode.attachChild(audio_rebound);
+//    }
 
     private void makeWall() {
         float initialX = -0.60f;
@@ -195,55 +195,55 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         //TODO: add render code
     }
 
-    private void initKeys() {
-        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping("Shoot", new KeyTrigger(KeyInput.KEY_SPACE));
+//    private void initKeys() {
+//        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_LEFT));
+//        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_RIGHT));
+//        inputManager.addMapping("Shoot", new KeyTrigger(KeyInput.KEY_SPACE));
+//
+//        inputManager.addListener(analogListener, "Left", "Right");
+//        inputManager.addListener(actionListener, "Shoot");
+//    }
+//    
+//    private AnalogListener analogListener = new AnalogListener() {
+//        public void onAnalog(String name, float value, float tpf) {
+//            breakerBar.move(name, value, breaker);
+//        }
+//    };
+//    
+//    private ActionListener actionListener = new ActionListener() {
+//        public void onAction(String name, boolean isPressed, float tpf) {
+//            if (name.equals("Shoot") && !isPressed && !breakerBar.isBallShooted()) {
+//                breakerBar.setBallShooted(Boolean.TRUE);
+//            }
+//        }
+//    };
 
-        inputManager.addListener(analogListener, "Left", "Right");
-        inputManager.addListener(actionListener, "Shoot");
-    }
-    
-    private AnalogListener analogListener = new AnalogListener() {
-        public void onAnalog(String name, float value, float tpf) {
-            breakerBar.move(name, value, breaker);
-        }
-    };
-    
-    private ActionListener actionListener = new ActionListener() {
-        public void onAction(String name, boolean isPressed, float tpf) {
-            if (name.equals("Shoot") && !isPressed && !breakerBar.isBallShooted()) {
-                breakerBar.setBallShooted(Boolean.TRUE);
-            }
-        }
-    };
 
-
-    private void resetBall() {
-        //Remove ball from scene
-        breaker.removeFromParent();
-        //bulletAppState.getPhysicsSpace().remove(breaker.getBreaker_phy());
-
-        //Set ball initial location
-        breakerBar.setBallShooted(false);
-        breaker = new Breaker(assetManager);
-        rootNode.attachChild(breaker);
-    }
+//    private void resetBall() {
+//        //Remove ball from scene
+//        breaker.removeFromParent();
+//        //bulletAppState.getPhysicsSpace().remove(breaker.getBreaker_phy());
+//
+//        //Set ball initial location
+//        breakerBar.setBallShooted(false);
+//        breaker = new Breaker(assetManager);
+//        rootNode.attachChild(breaker);
+//    }
     
     /**
      * scene lights
      */
     
-    private void setSceneLights(Camera cam){
-        DirectionalLight sun = new DirectionalLight();
-        sun.setColor(ColorRGBA.White.mult(0.7f));
-        
-        //sun.setDirection(new Vector3f(0.6679365f, -0.04685749f, -0.7427416f));
-        sun.setDirection(cam.getDirection().normalizeLocal());
-        rootNode.addLight(sun);
-        
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White);
-        rootNode.addLight(al);
-    }
+//    private void setSceneLights(Camera cam){
+//        DirectionalLight sun = new DirectionalLight();
+//        sun.setColor(ColorRGBA.White.mult(0.7f));
+//        
+//        //sun.setDirection(new Vector3f(0.6679365f, -0.04685749f, -0.7427416f));
+//        sun.setDirection(cam.getDirection().normalizeLocal());
+//        rootNode.addLight(sun);
+//        
+//        AmbientLight al = new AmbientLight();
+//        al.setColor(ColorRGBA.White);
+//        rootNode.addLight(al);
+//    }
 }

@@ -8,6 +8,12 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import customcontrols.BreakerControl;
 import mygame.Breaker;
 import mygame.BreakerBar;
@@ -27,6 +33,12 @@ public class GamePlayAppState extends AbstractAppState{
     
     AppStateManager stateManager;
     SimpleApplication app;
+    AssetManager assetManager;
+    
+    private AudioNode audio_crash;
+    private AudioNode audio_rebound;
+    
+    private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -34,6 +46,7 @@ public class GamePlayAppState extends AbstractAppState{
         
         this.stateManager = stateManager;
         this.app = (SimpleApplication)app;
+        this.assetManager = ((SimpleApplication)app).getAssetManager();
         
         arkanoid = new BreakerBar(app.getAssetManager());
         ball = new Breaker(app.getAssetManager());
@@ -41,8 +54,46 @@ public class GamePlayAppState extends AbstractAppState{
         
         ((SimpleApplication)app).getRootNode().attachChild(arkanoid);
         ((SimpleApplication)app).getRootNode().attachChild(ball);
+        
+        InputAppState inputState = new InputAppState();
+        stateManager.attach(inputState);
+        
+        configureCameraSettings();
+        initAudio();
+        initSceneLights();
     }
+    
+    private void configureCameraSettings(){
+        app.getFlyByCamera().setEnabled(false);
+        app.getCamera().setLocation(CAM_LOCATION);
+    }
+    
+    private void initAudio() {
+        audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
+        audio_crash.setPositional(false);
+        audio_crash.setLooping(false);
+        audio_crash.setVolume(2);
+        app.getRootNode().attachChild(audio_crash);
 
+        audio_rebound = new AudioNode(assetManager, "Sounds/effects/bottle-glass-uncork-01.wav", false);
+        audio_rebound.setPositional(false);
+        audio_rebound.setLooping(false);
+        audio_rebound.setVolume(2);
+        app.getRootNode().attachChild(audio_rebound);
+    }
+    
+    private void initSceneLights(){
+        DirectionalLight sun = new DirectionalLight();
+        sun.setColor(ColorRGBA.White.mult(0.7f));
+ 
+        sun.setDirection(app.getCamera().getDirection().normalizeLocal());
+        app.getRootNode().addLight(sun);
+        
+        AmbientLight al = new AmbientLight();
+        al.setColor(ColorRGBA.White);
+        app.getRootNode().addLight(al);
+    }
+    
     public BreakerBar getArkanoid() {
         return arkanoid;
     }
@@ -61,7 +112,6 @@ public class GamePlayAppState extends AbstractAppState{
     
     public void restLife(){
         this.currentLives--;
-        //Call Update GUI 
     }
     
     public int getScore() {

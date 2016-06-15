@@ -37,7 +37,6 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     }
 
     public enum InputMapping {
-
         LEFT, RIGHT, SHOOT
     }
 
@@ -58,7 +57,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
-        if (name.equals("Shoot") && !isPressed && !arkanoid.isBallShooted()) {
+        if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !arkanoid.isBallShooted()) {
             arkanoid.setBallShooted(Boolean.TRUE);
         }
     }
