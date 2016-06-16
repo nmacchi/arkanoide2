@@ -4,6 +4,7 @@
  */
 package customcontrols;
 
+import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
 import com.jme3.renderer.RenderManager;
@@ -14,6 +15,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import mygame.BreakerBar;
 import mygame.Powerup;
+import states.GamePlayAppState;
 
 /**
  *
@@ -23,14 +25,16 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
     
     private static float rotationSpeed = 2f;
     private static float translationSpeed = 3f;
-    private int index;
+
     private Node rootNode;
+    private AppStateManager stateManager;
     
     public PowerupControl(){}
     
-    public PowerupControl(Node rootNode){
-        //this.index = i;
+    public PowerupControl(Node rootNode, AppStateManager stateManager){
+
         this.rootNode = rootNode;
+        this.stateManager = stateManager;
     }
     
     @Override
@@ -51,10 +55,13 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
         
         spatial.collideWith(((Geometry)rootNode.getChild("BreakerBar")).getWorldBound(), results);
         if(results.size() != 0){
-            BreakerBar breakerBar = (BreakerBar)rootNode.getChild("BreakerBar");
-            breakerBar.setScore(breakerBar.getScore() + ((Powerup)spatial).getPoints());
+//            BreakerBar breakerBar = (BreakerBar)rootNode.getChild("BreakerBar");
+            stateManager.getState(GamePlayAppState.class).setScore(((Powerup)spatial).getPoints());
+//            breakerBar.setScore(breakerBar.getScore() + ((Powerup)spatial).getPoints());
             spatial.removeFromParent();
         }
+        
+        spatial.removeControl(this);
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

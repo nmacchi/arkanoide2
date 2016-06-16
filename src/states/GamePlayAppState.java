@@ -14,6 +14,7 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import customcontrols.BreakerControl;
 import mygame.Breaker;
 import mygame.BreakerBar;
@@ -24,6 +25,8 @@ import mygame.BreakerBar;
  * @author nicolas
  */
 public class GamePlayAppState extends AbstractAppState{
+    
+    private static int INITIAL_DEFAULT_LIVES = 3;
     
     private int currentLives;
     private int score;
@@ -48,6 +51,8 @@ public class GamePlayAppState extends AbstractAppState{
         this.app = (SimpleApplication)app;
         this.assetManager = ((SimpleApplication)app).getAssetManager();
         
+        currentLives = INITIAL_DEFAULT_LIVES;
+        
         arkanoid = new BreakerBar(app.getAssetManager());
         ball = new Breaker(app.getAssetManager());
         ball.addControl(new BreakerControl(((SimpleApplication)app).getRootNode(), arkanoid, stateManager));
@@ -64,7 +69,7 @@ public class GamePlayAppState extends AbstractAppState{
     }
     
     private void configureCameraSettings(){
-        app.getFlyByCamera().setEnabled(false);
+        app.getFlyByCamera().setEnabled(true);
         app.getCamera().setLocation(CAM_LOCATION);
     }
     
@@ -129,18 +134,22 @@ public class GamePlayAppState extends AbstractAppState{
     
     public void reset(){
         restLife();
-        
-        //Call GUI state for update
-        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
-              
+  
         //Set entities to initial position
         ((BreakerBar)app.getRootNode().getChild("BreakerBar")).removeFromParent();
         ((Breaker)app.getRootNode().getChild("Breaker")).removeFromParent();
         
+        
+        //Call GUI state for update
+        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
+              
         //Hacer algun efecto de explosion
         
-        app.getRootNode().attachChild(stateManager.getState(GamePlayAppState.class).getArkanoid());
-        app.getRootNode().attachChild(stateManager.getState(GamePlayAppState.class).getBall());
+        app.getRootNode().attachChild(getArkanoid());
+        arkanoid.setLocalTranslation(BreakerBar.getInitialPosition());
+        arkanoid.setBallShooted(Boolean.FALSE);
+        app.getRootNode().attachChild(getBall());
+        ball.setLocalTranslation(Breaker.getInitialPosition());
 
     }
 }

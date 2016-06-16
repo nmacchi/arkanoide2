@@ -119,12 +119,6 @@ public class GameGuiAppState extends AbstractAppState {
     }
     
     public void updateScoreIndicator(){
-        ((BitmapText)((SimpleApplication)stateManager.getApplication()).getRootNode().getChild("Score Indicator")).setText(stateManager.getState(GamePlayAppState.class).getFormattedScore());
+        scoreIndicator.setText(stateManager.getState(GamePlayAppState.class).getFormattedScore());
     }
-    
-    @Override
-    public void update(float tpf) {
-        
-    }
-    
 }

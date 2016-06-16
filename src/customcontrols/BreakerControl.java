@@ -21,7 +21,6 @@ import mygame.BreakerBar;
 import mygame.Brick;
 import mygame.CommonBrick;
 import mygame.Powerup;
-import states.AppPlayerState;
 import states.GamePlayAppState;
 
 /**
@@ -126,7 +125,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             if (brick instanceof CommonBrick) {
                 if (((CommonBrick) brick).isHasPowerup()) {
                     Powerup surprise = ((CommonBrick) brick).getPowerup();
-                    surprise.addControl(new PowerupControl(rootNode));
+                    surprise.addControl(new PowerupControl(rootNode, stateManager));
                     rootNode.attachChild(surprise);
                 }
             }

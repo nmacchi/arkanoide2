@@ -29,6 +29,8 @@ public class BreakerBar extends Geometry{
     private boolean ballShooted;
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
+    private AssetManager assetManager;
+    
     public BreakerBar(AssetManager assetManager){
         Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
         
@@ -59,16 +61,29 @@ public class BreakerBar extends Geometry{
         this.ballShooted = ballShooted;
     }
     
+    public void createSpaceship(Vector3f position){
+        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/spaceship.j3o")).getChild(0);
+        
+        geometry.scale(0.10f, 0.07f, 0.055f);
+        geometry.rotate(0f,1.60f,0f);
+        
+        setName("BreakerBar");
+        setMesh(geometry.getMesh());
+        setMaterial(geometry.getMaterial());
+        
+        setLocalTranslation(position);
+    }
+    
     public void move(String direction, float value, Breaker breaker){
         position = this.getLocalTranslation();
-        if(direction.equals("Left")){
+        if(direction.equals("LEFT")){
             setLocalTranslation(position.x - value*speed, position.y, position.z);
             if(!isBallShooted()){
                breaker.setLocalTranslation(breaker.getLocalTranslation().getX() - value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
             }
         }
         
-        if(direction.equals("Right")){
+        if(direction.equals("RIGHT")){
             setLocalTranslation(getLocalTranslation().x + value*speed, position.y, position.z);
             if(!isBallShooted()){
                breaker.setLocalTranslation(breaker.getLocalTranslation().getX() + value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
@@ -116,29 +131,29 @@ public class BreakerBar extends Geometry{
         BreakerBar.deep = deep;
     }
 
-    public int getScore() {
-        return score;
-    }
-    
-    public String getFormattedScore(){
-        return String.format("%08d", score);
-    }
-    
-    public void setScore(int score) {
-        this.score += score;
-    }
-
-    public int getLifes() {
-        return lifes;
-    }
-
-    public void setLifes(int lifes) {
-        this.lifes = lifes;
-    }
-    
-    public void restLife(){
-        this.lifes--;
-    }
+//    public int getScore() {
+//        return score;
+//    }
+//    
+//    public String getFormattedScore(){
+//        return String.format("%08d", score);
+//    }
+//    
+//    public void setScore(int score) {
+//        this.score += score;
+//    }
+//
+//    public int getLifes() {
+//        return lifes;
+//    }
+//
+//    public void setLifes(int lifes) {
+//        this.lifes = lifes;
+//    }
+//    
+//    public void restLife(){
+//        this.lifes--;
+//    }
     
 //    public boolean isImpactInBorderZone(Breaker breaker){
 //        float impactPos = breaker.getLocalTranslation().x;
