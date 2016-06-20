@@ -13,7 +13,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import mygame.BreakerBar;
 import mygame.Powerup;
 import states.GamePlayAppState;
 
@@ -55,14 +54,10 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
         
         spatial.collideWith(((Geometry)rootNode.getChild("BreakerBar")).getWorldBound(), results);
         if(results.size() != 0){
-//            BreakerBar breakerBar = (BreakerBar)rootNode.getChild("BreakerBar");
             stateManager.getState(GamePlayAppState.class).setScore(((Powerup)spatial).getPoints());
-//            breakerBar.setScore(breakerBar.getScore() + ((Powerup)spatial).getPoints());
             spatial.removeFromParent();
         }
-        
-        spatial.removeControl(this);
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     @Override

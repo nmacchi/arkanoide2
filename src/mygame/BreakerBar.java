@@ -8,41 +8,35 @@ import com.jme3.asset.AssetManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 
 /**
  *
  * @author nicolas
  */
 public class BreakerBar extends Geometry{
-    private int score;
-    private int lifes;
     
     //Dimentions
-    private static float width = 0.12f;
-    private static float height = 0.022f;
-    private static float deep = 0.025f;
+//    private static float width = 0.12f;
+//    private static float height = 0.022f;
+//    private static float deep = 0.025f;
     
-    private float speed = 0.7f;
+    protected AssetManager assetManager;
+    protected boolean ballShooted;
+    protected float speed = 0.7f;
     private Vector3f position;
     
-    private boolean ballShooted;
-    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
-    private AssetManager assetManager;
+//    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
+    
+    
+    
+    public BreakerBar(){
+        
+    }
     
     public BreakerBar(AssetManager assetManager){
-        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
-        
-        setName("BreakerBar");
-        setMesh(geometry.getMesh());
-        setMaterial(geometry.getMaterial());
-        
-        setLocalTranslation(initialPosition);
-        scale(0.06f, 0.07f, 0.045f);
-        rotate(0f,1.60f,0f);
-        
-        this.lifes = 3;  //Set default lifes
+        this.assetManager = assetManager; 
+        setName("BreakerBar"); 
     }
 
     public float getSpeed() {
@@ -61,18 +55,31 @@ public class BreakerBar extends Geometry{
         this.ballShooted = ballShooted;
     }
     
-    public void createSpaceship(Vector3f position){
-        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/spaceship.j3o")).getChild(0);
-        
-        geometry.scale(0.10f, 0.07f, 0.055f);
-        geometry.rotate(0f,1.60f,0f);
-        
-        setName("BreakerBar");
-        setMesh(geometry.getMesh());
-        setMaterial(geometry.getMaterial());
-        
-        setLocalTranslation(position);
-    }
+//    public void createSpaceship(Vector3f position){
+//        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/spaceship_model.j3o")).getChild(0);
+//        
+//        setMesh(geometry.getMesh());
+//        setMaterial(geometry.getMaterial());
+//        
+//        scale(1.2f);
+//        rotate(0f,0f,0f);
+//        
+//        setLocalTranslation(position);
+//    }
+    
+//    private void createArkanoid(Vector3f position){
+//        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
+//        
+//        setName("BreakerBar");
+//        setMesh(geometry.getMesh());
+//        setMaterial(geometry.getMaterial());
+//        
+//        setLocalTranslation(initialPosition);
+//        scale(0.06f, 0.07f, 0.045f);
+//        rotate(0f,1.60f,0f);
+//        
+//        
+//    } 
     
     public void move(String direction, float value, Breaker breaker){
         position = this.getLocalTranslation();
@@ -99,37 +106,37 @@ public class BreakerBar extends Geometry{
 
 
 
-    public static Vector3f getInitialPosition() {
-        return initialPosition;
-    }
+//    public static Vector3f getInitialPosition() {
+//        return initialPosition;
+//    }
 
-    public static void setInitialPosition(Vector3f initialPosition) {
-        BreakerBar.initialPosition = initialPosition;
-    }
+//    public static void setInitialPosition(Vector3f initialPosition) {
+//        BreakerBar.initialPosition = initialPosition;
+//    }
     
-    public static float getWidth() {
-        return width;
-    }
-
-    public static void setWidth(float width) {
-        BreakerBar.width = width;
-    }
-
-    public static float getHeight() {
-        return height;
-    }
-
-    public static void setHeight(float height) {
-        BreakerBar.height = height;
-    }
-
-    public static float getDeep() {
-        return deep;
-    }
-
-    public static void setDeep(float deep) {
-        BreakerBar.deep = deep;
-    }
+//    public static float getWidth() {
+//        return width;
+//    }
+//
+//    public static void setWidth(float width) {
+//        BreakerBar.width = width;
+//    }
+//
+//    public static float getHeight() {
+//        return height;
+//    }
+//
+//    public static void setHeight(float height) {
+//        BreakerBar.height = height;
+//    }
+//
+//    public static float getDeep() {
+//        return deep;
+//    }
+//
+//    public static void setDeep(float deep) {
+//        BreakerBar.deep = deep;
+//    }
 
 //    public int getScore() {
 //        return score;

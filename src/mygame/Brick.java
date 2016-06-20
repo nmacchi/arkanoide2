@@ -4,14 +4,17 @@
  */
 package mygame;
 
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import customcontrols.PowerupControl;
 import effects.SmokeTrail;
 import java.util.Random;
+import states.GamePlayAppState;
 
 /**
  *
@@ -19,6 +22,7 @@ import java.util.Random;
  */
 public class Brick extends Geometry {
     
+    protected AppStateManager stateManager;
     protected int points;
     protected int hardness;
     
@@ -36,7 +40,9 @@ public class Brick extends Geometry {
     
     Brick(){}
     
-    Brick(AssetManager assetManager, Vector3f position) {
+    Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {
+        this.stateManager = stateManager;
+        
         Geometry brick = (Geometry) ((Node) assetManager.loadModel("Models/brick/Cube.mesh.xml")).getChild(0);
         
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
@@ -129,6 +135,25 @@ public class Brick extends Geometry {
         return FX;
     }
     
+    public void removeBrick(Node rootNode, Brick brick){
+        countHits();
+
+        if (getCountHits() >= getHardness()) {
+            
+            stateManager.getState(GamePlayAppState.class).setScore(getPoints());
+            
+            if (brick instanceof CommonBrick) {
+                if (((CommonBrick) brick).isHasPowerup()) {
+                    Powerup powerup = ((CommonBrick) brick).getPowerup();
+                    powerup.addControl(new PowerupControl(rootNode, stateManager));
+                    rootNode.attachChild(powerup);
+                }
+            }
+            
+            brick.removeFromParent();
+            brick.getFX().executeFX(rootNode);
+        }
+    }
     
     
 }

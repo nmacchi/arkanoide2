@@ -19,8 +19,6 @@ import com.jme3.scene.control.AbstractControl;
 import mygame.Breaker;
 import mygame.BreakerBar;
 import mygame.Brick;
-import mygame.CommonBrick;
-import mygame.Powerup;
 import states.GamePlayAppState;
 
 /**
@@ -55,31 +53,15 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
         if (breakerBar.isBallShooted()) {
             breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
 
-//            rootNode.detachChildNamed("Line");
-//        
-//            Ray ray = new Ray(breaker.getLocalTranslation(), breaker.getDirection());
-//          
-//            Geometry g = new Geometry("Line", new Line(breaker.getLocalTranslation(), breaker.getDirection()));
-//            g.setMaterial(m);
-//            rootNode.attachChild(g);
-//  
-//            Triangle tri = new Triangle();
-//
-//col.getGeometry().getMesh().getTriangle(col.getTriangleIndex(),tri);
-//
-//return tri.getNormal();
-
 
             CollisionResults results = new CollisionResults();
-//
+
             rootNode.collideWith(breaker.getWorldBound(), results);
             if (results.size() > 0) {
 
                 CollisionResult collision = results.getClosestCollision();
                 
                 if (collision.getGeometry().getName().equals("Floor")) {
-//                    breakerBar.restLife();
-//                    breaker.resetBall(breakerBar);  
                     stateManager.getState(GamePlayAppState.class).reset();
 
                 } else if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
@@ -89,7 +71,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
 
                     if (collision.getGeometry() instanceof Brick) {
-                        removeBrick((Brick) collision.getGeometry());
+                        Brick brick = (Brick)collision.getGeometry();
+                        brick.removeBrick(rootNode, (Brick) collision.getGeometry());
                     }
                 }
             }
@@ -115,23 +98,23 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 //        breaker.setDirection(q.mult(newInvertedDirection));
 //    }
 
-    private void removeBrick(Brick brick) {
-        brick.countHits();
-
-        if (brick.getCountHits() >= brick.getHardness()) {
-            
-            stateManager.getState(GamePlayAppState.class).setScore(brick.getPoints());
-            
-            if (brick instanceof CommonBrick) {
-                if (((CommonBrick) brick).isHasPowerup()) {
-                    Powerup surprise = ((CommonBrick) brick).getPowerup();
-                    surprise.addControl(new PowerupControl(rootNode, stateManager));
-                    rootNode.attachChild(surprise);
-                }
-            }
-            
-            brick.removeFromParent();
-            brick.getFX().executeFX(rootNode);
-        }
-    }
+//    private void removeBrick(Brick brick) {
+//        brick.countHits();
+//
+//        if (brick.getCountHits() >= brick.getHardness()) {
+//            
+//            stateManager.getState(GamePlayAppState.class).setScore(brick.getPoints());
+//            
+//            if (brick instanceof CommonBrick) {
+//                if (((CommonBrick) brick).isHasPowerup()) {
+//                    Powerup powerup = ((CommonBrick) brick).getPowerup();
+//                    powerup.addControl(new PowerupControl(rootNode, stateManager));
+//                    rootNode.attachChild(powerup);
+//                }
+//            }
+//            
+//            brick.removeFromParent();
+//            brick.getFX().executeFX(rootNode);
+//        }
+//    }
 }

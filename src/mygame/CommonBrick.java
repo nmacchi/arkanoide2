@@ -4,10 +4,9 @@
  */
 package mygame;
 
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +26,8 @@ public class CommonBrick extends Brick {
      *
      */
 
-    CommonBrick(AssetManager assetManager, Vector3f position, Integer index) {
-        super(assetManager, position);
+    CommonBrick(AssetManager assetManager, Vector3f position, Integer index, AppStateManager stateManager) {
+        super(assetManager, position, stateManager);
 
         String color = brickColors.get(index);
         material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/brick/texture_"+color+".png", false)));

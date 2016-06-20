@@ -14,10 +14,12 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import customcontrols.BreakerControl;
+import customcontrols.SpaceshipControl;
+import mygame.Arkanoid;
 import mygame.Breaker;
 import mygame.BreakerBar;
+import mygame.Spaceship;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -31,8 +33,9 @@ public class GamePlayAppState extends AbstractAppState{
     private int currentLives;
     private int score;
     
-    private BreakerBar arkanoid;
+    private Arkanoid arkanoid;
     private Breaker ball;
+    private Spaceship spaceship;
     
     AppStateManager stateManager;
     SimpleApplication app;
@@ -53,11 +56,22 @@ public class GamePlayAppState extends AbstractAppState{
         
         currentLives = INITIAL_DEFAULT_LIVES;
         
-        arkanoid = new BreakerBar(app.getAssetManager());
+//        System.out.println(assetManager.loadModel("Models/spaceship/Cube.mesh.j3o"));
+        
+//        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/Cube.mesh.j3o")).getChild(0);
+////        
+//        geometry.scale(0.10f, 0.07f, 0.055f);
+//        geometry.rotate(0f,1.60f,0f);
+//        
+//        ((SimpleApplication)app).getRootNode().attachChild(geometry);
+        
+        arkanoid = new Arkanoid(app.getAssetManager());
         ball = new Breaker(app.getAssetManager());
         ball.addControl(new BreakerControl(((SimpleApplication)app).getRootNode(), arkanoid, stateManager));
+        spaceship = new Spaceship(app.getAssetManager());
+        spaceship.addControl(new SpaceshipControl());
         
-        ((SimpleApplication)app).getRootNode().attachChild(arkanoid);
+        ((SimpleApplication)app).getRootNode().attachChild(spaceship);
         ((SimpleApplication)app).getRootNode().attachChild(ball);
         
         InputAppState inputState = new InputAppState();
@@ -69,7 +83,7 @@ public class GamePlayAppState extends AbstractAppState{
     }
     
     private void configureCameraSettings(){
-        app.getFlyByCamera().setEnabled(true);
+        app.getFlyByCamera().setEnabled(false);
         app.getCamera().setLocation(CAM_LOCATION);
     }
     
@@ -146,10 +160,16 @@ public class GamePlayAppState extends AbstractAppState{
         //Hacer algun efecto de explosion
         
         app.getRootNode().attachChild(getArkanoid());
-        arkanoid.setLocalTranslation(BreakerBar.getInitialPosition());
+        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
         arkanoid.setBallShooted(Boolean.FALSE);
         app.getRootNode().attachChild(getBall());
         ball.setLocalTranslation(Breaker.getInitialPosition());
 
     }
+
+    public Spaceship getSpaceship() {
+        return spaceship;
+    }
+    
+    
 }
