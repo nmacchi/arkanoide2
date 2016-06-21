@@ -16,7 +16,8 @@ import com.jme3.scene.Node;
 public class Arkanoid extends BreakerBar{
     
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f);
-    private Vector3f direction = new Vector3f().set(Vector3f.UNIT_X);
+  
+    protected boolean ballShooted;
     
     public Arkanoid(){}
     
@@ -41,8 +42,16 @@ public class Arkanoid extends BreakerBar{
         return initialPosition;
     }
 
-    public Vector3f getDirection() {
-        return direction;
+//    public Vector3f getDirection() {
+//        return direction;
+//    }
+    
+     public boolean isBallShooted() {
+        return ballShooted;
+    }
+
+    public final void setBallShooted(boolean ballShooted) {
+        this.ballShooted = ballShooted;
     }
     
     

@@ -52,7 +52,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         this.spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
         this.rootNode = this.app.getRootNode();
         
-        this.direction = arkanoid.getDirection();
+        this.direction = BreakerBar.getDirection();
         
         addInputMappings();
     }

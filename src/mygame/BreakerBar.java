@@ -21,10 +21,10 @@ public class BreakerBar extends Geometry{
 //    private static float deep = 0.025f;
     
     protected AssetManager assetManager;
-    protected boolean ballShooted;
+//    protected boolean ballShooted;
     protected float speed = 0.7f;
     private Vector3f position;
-    
+    private static Vector3f direction = new Vector3f().set(Vector3f.UNIT_X);
     
 //    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
@@ -46,14 +46,16 @@ public class BreakerBar extends Geometry{
     public void setSpeed(float speed) {
         this.speed = speed;
     }
-
-    public boolean isBallShooted() {
-        return ballShooted;
-    }
-
-    public final void setBallShooted(boolean ballShooted) {
-        this.ballShooted = ballShooted;
-    }
+    
+    
+    
+//    public boolean isBallShooted() {
+//        return ballShooted;
+//    }
+//
+//    public final void setBallShooted(boolean ballShooted) {
+//        this.ballShooted = ballShooted;
+//    }
     
 //    public void createSpaceship(Vector3f position){
 //        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/spaceship_model.j3o")).getChild(0);
@@ -81,28 +83,28 @@ public class BreakerBar extends Geometry{
 //        
 //    } 
     
-    public void move(String direction, float value, Breaker breaker){
-        position = this.getLocalTranslation();
-        if(direction.equals("LEFT")){
-            setLocalTranslation(position.x - value*speed, position.y, position.z);
-            if(!isBallShooted()){
-               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() - value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
-            }
-        }
-        
-        if(direction.equals("RIGHT")){
-            setLocalTranslation(getLocalTranslation().x + value*speed, position.y, position.z);
-            if(!isBallShooted()){
-               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() + value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
-            }
-        }
-        
-        if(!ballShooted){
-           breaker.getLocalTranslation().x = FastMath.clamp(breaker.getLocalTranslation().x, -0.60f, 0.60f);
-        }
-        
-        getLocalTranslation().x = FastMath.clamp(getLocalTranslation().x, -0.60f, 0.60f);
-    }
+//    public void move(String direction, float value, Breaker breaker){
+//        position = this.getLocalTranslation();
+//        if(direction.equals("LEFT")){
+//            setLocalTranslation(position.x - value*speed, position.y, position.z);
+//            if(!isBallShooted()){
+//               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() - value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
+//            }
+//        }
+//        
+//        if(direction.equals("RIGHT")){
+//            setLocalTranslation(getLocalTranslation().x + value*speed, position.y, position.z);
+//            if(!isBallShooted()){
+//               breaker.setLocalTranslation(breaker.getLocalTranslation().getX() + value*speed, breaker.getLocalTranslation().getY(), breaker.getLocalTranslation().getZ());
+//            }
+//        }
+//        
+//        if(!ballShooted){
+//           breaker.getLocalTranslation().x = FastMath.clamp(breaker.getLocalTranslation().x, -0.60f, 0.60f);
+//        }
+//        
+//        getLocalTranslation().x = FastMath.clamp(getLocalTranslation().x, -0.60f, 0.60f);
+//    }
 
 
 
@@ -177,5 +179,9 @@ public class BreakerBar extends Geometry{
 //        
 //        return false;
 //    }
+
+    public static Vector3f getDirection() {
+        return direction;
+    }
     
 }
