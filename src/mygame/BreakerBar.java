@@ -36,9 +36,9 @@ public class BreakerBar extends Geometry{
     
     public BreakerBar(AssetManager assetManager){
         this.assetManager = assetManager; 
-        setName("BreakerBar"); 
+        setName("BreakerBar");         
     }
-
+    
     public float getSpeed() {
         return speed;
     }

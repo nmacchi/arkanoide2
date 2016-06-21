@@ -14,6 +14,7 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import customcontrols.BreakerControl;
 import customcontrols.SpaceshipControl;
 import mygame.Arkanoid;
@@ -33,6 +34,7 @@ public class GamePlayAppState extends AbstractAppState{
     private int currentLives;
     private int score;
     
+    private Node breakerBarNode = new Node("BreakerBarNode");
     private Arkanoid arkanoid;
     private Breaker ball;
     private Spaceship spaceship;
@@ -56,23 +58,17 @@ public class GamePlayAppState extends AbstractAppState{
         
         currentLives = INITIAL_DEFAULT_LIVES;
         
-//        System.out.println(assetManager.loadModel("Models/spaceship/Cube.mesh.j3o"));
-        
-//        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/Cube.mesh.j3o")).getChild(0);
-////        
-//        geometry.scale(0.10f, 0.07f, 0.055f);
-//        geometry.rotate(0f,1.60f,0f);
-//        
-//        ((SimpleApplication)app).getRootNode().attachChild(geometry);
-        
         arkanoid = new Arkanoid(app.getAssetManager());
         ball = new Breaker(app.getAssetManager());
         ball.addControl(new BreakerControl(((SimpleApplication)app).getRootNode(), arkanoid, stateManager));
         spaceship = new Spaceship(app.getAssetManager());
         spaceship.addControl(new SpaceshipControl());
         
-        ((SimpleApplication)app).getRootNode().attachChild(spaceship);
-        ((SimpleApplication)app).getRootNode().attachChild(ball);
+        breakerBarNode.attachChild(arkanoid);
+        breakerBarNode.attachChild(ball);
+        
+        ((SimpleApplication)app).getRootNode().attachChild(breakerBarNode);
+//        ((SimpleApplication)app).getRootNode().attachChild(ball);
         
         InputAppState inputState = new InputAppState();
         stateManager.attach(inputState);
@@ -113,7 +109,7 @@ public class GamePlayAppState extends AbstractAppState{
         app.getRootNode().addLight(al);
     }
     
-    public BreakerBar getArkanoid() {
+    public Arkanoid getArkanoid() {
         return arkanoid;
     }
 

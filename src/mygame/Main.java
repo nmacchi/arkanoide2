@@ -1,6 +1,9 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
+import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 
@@ -19,9 +22,11 @@ import states.GamePlayAppState;
  * @author normenhansen
  */
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
-
+    
+    
     private Node bricks;
-
+    ParticleEmitter smoke;
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -29,6 +34,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleInitApp() {
+        
         bricks = new Node("BricksNode");
         rootNode.attachChild(bricks);
        
@@ -40,6 +46,8 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         
         GameGuiAppState guiState = new GameGuiAppState();
         stateManager.attach(guiState);
+        
+       
     }
 
     private void makeWall() {
@@ -112,6 +120,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleUpdate(float tpf) {
+//        smoke.emitAllParticles();
         //TODO: add update code
     }
 

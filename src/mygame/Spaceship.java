@@ -5,13 +5,11 @@
 package mygame;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Sphere;
-import customcontrols.BulletsControl;
+import effects.SpaceshipFlame;
 
 /**
  *
@@ -25,9 +23,14 @@ public class Spaceship extends BreakerBar{
     private float cooldownTime;
     private static float timeToWait = 0.25f;
     
+    private ParticleEmitter turbo;
+    private ParticleEmitter turbo1;
+    private ParticleEmitter turbo2;
+    
     public Spaceship(AssetManager assetManager){
         super(assetManager);
-        createSpaceship();    
+        createSpaceship();
+        turbo = new SpaceshipFlame(assetManager).getSpaceshipFire();
     }
     
     private void createSpaceship(){
@@ -43,20 +46,15 @@ public class Spaceship extends BreakerBar{
     }
     
     private void createBullets(){
-        bullet1 = new Bullet(assetManager, getLocalTranslation());
-        bullet2 = (Bullet)bullet1.clone();
+        bullet1 = new Bullet(assetManager, getLocalTranslation(), this.getParent());
+        bullet2 = new Bullet(assetManager, getLocalTranslation(), this.getParent());  
         
-        bullet1.calculatePosition(true);
-        bullet2.calculatePosition(false);      
+        this.getParent().attachChild(bullet1);
+        this.getParent().attachChild(bullet2);
     }
     
-    public void fire(Node rootNode){
-        createBullets();
-        bullet1.addControl(new BulletsControl(rootNode));
-        bullet2.addControl(new BulletsControl(rootNode));
-        rootNode.attachChild(bullet1);
-        rootNode.attachChild(bullet2);
-        
+    public void fire(){
+        createBullets();     
         cooldownTime=timeToWait;
     }
 
@@ -70,6 +68,10 @@ public class Spaceship extends BreakerBar{
             
     public void restCooldownTime(float tpf){
         this.cooldownTime -= tpf;
+    }
+
+    public ParticleEmitter getTurbo() {
+        return turbo;
     }
     
     
