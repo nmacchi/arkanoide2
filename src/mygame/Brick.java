@@ -43,7 +43,7 @@ public class Brick extends Geometry {
     Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {
         this.stateManager = stateManager;
         
-        Geometry brick = (Geometry) ((Node) assetManager.loadModel("Models/brick/Cube.mesh.xml")).getChild(0);
+        Geometry brick = (Geometry) ((Node) assetManager.loadModel("Models/brick/Cube.mesh.j3o")).getChild(0);
         
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setBoolean("UseMaterialColors", true);
@@ -89,7 +89,8 @@ public class Brick extends Geometry {
         for (int i = 0; i <= numSurprises; i++) {
 
             while (!hasPowerup) {
-                Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
+                //Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
+                Brick brick = (Brick) bricksNode.getChild(i);//TEST
                 
                 //Only commonBrick could have rewards
                 if(brick instanceof CommonBrick){

@@ -87,7 +87,16 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         
         xPosition = ((Geometry)rootNode.getChild("BreakerBar")).getWorldTranslation().x; 
         
-//        if (name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0) {
+//        if(stateManager.getState(GamePlayAppState.class).isGameStarted()){
+//            if(name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0){
+//                spaceship.fire();
+//            }   
+//        }
+        
+        
+//        if (stateManager.getState(GamePlayAppState.class).isGameStarted()){
+//            (name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0
+//                }) {
 //                spaceship.fire();
 //        }
     }

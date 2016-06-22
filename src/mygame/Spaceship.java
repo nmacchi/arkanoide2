@@ -25,6 +25,7 @@ public class Spaceship extends BreakerBar{
    
     private ParticleEmitter turbo1;
     private ParticleEmitter turbo2;
+    private Node localNode = new Node("FlameEffect");
     
     public Spaceship(AssetManager assetManager){
         super(assetManager);
@@ -40,9 +41,9 @@ public class Spaceship extends BreakerBar{
         scale(0.06f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
         
-        setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
+        //setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
         
-        //createTurbo();
+//        createTurbo();
     }
     
     private void createBullets(){
@@ -71,10 +72,13 @@ public class Spaceship extends BreakerBar{
     }
 
     public void createTurbo(){
-        turbo1 = new SpaceshipFlame(assetManager, this.getWorldTranslation()).getSpaceshipFire();
-        turbo2 = new SpaceshipFlame(assetManager, this.getWorldTranslation()).getSpaceshipFire();
+        turbo1 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
+        turbo2 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
         
-        this.getParent().attachChild(turbo1);
-        this.getParent().attachChild(turbo2);
+        localNode.attachChild(turbo1);
+        localNode.attachChild(turbo2);
+        
+        this.getParent().attachChild(localNode);
+        //this.getParent().attachChild(turbo2);
     }
 }

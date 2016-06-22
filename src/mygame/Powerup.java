@@ -32,7 +32,7 @@ public class Powerup extends Geometry {
     public Powerup(AssetManager assetManager, Brick brick){  
         type = new PowerupType(assetManager);
         
-        Geometry pill = (Geometry) ((Node) assetManager.loadModel("Models/pill/Sphere.001.mesh.xml")).getChild(0);
+        Geometry pill = (Geometry) ((Node) assetManager.loadModel("Models/pill/Sphere.001.mesh.j3o")).getChild(0);
         setMesh(pill.getMesh());
         setName("Thing");
 

@@ -13,6 +13,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import mygame.Arkanoid;
 import mygame.Powerup;
 import states.GamePlayAppState;
 
@@ -50,10 +51,16 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
         spatial.collideWith(((Geometry)rootNode.getChild("Floor")).getWorldBound(), results);
         if(results.size() != 0){
             spatial.removeFromParent();
+            results.clear();
         }    
         
         spatial.collideWith(((Geometry)rootNode.getChild("BreakerBar")).getWorldBound(), results);
         if(results.size() != 0){
+            Geometry g = ((Geometry)rootNode.getChild("BreakerBar"));
+            if(g instanceof Arkanoid){
+                ((Arkanoid)g).setActivePower(((Powerup)spatial).getType().getName());
+            }
+            
             stateManager.getState(GamePlayAppState.class).setScore(((Powerup)spatial).getPoints());
             spatial.removeFromParent();
         }

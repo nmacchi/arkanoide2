@@ -15,11 +15,10 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
-import customcontrols.SpaceshipControl;
 import mygame.Arkanoid;
 import mygame.Breaker;
-import mygame.BreakerBar;
 import mygame.Spaceship;
 
 /**
@@ -60,19 +59,9 @@ public class GamePlayAppState extends AbstractAppState{
         
         currentLives = INITIAL_DEFAULT_LIVES;
         
-        arkanoid = new Arkanoid(app.getAssetManager());
-        ball = new Breaker(app.getAssetManager());
-        ball.addControl(new BreakerControl(((SimpleApplication)app).getRootNode(), arkanoid, stateManager));
-        spaceship = new Spaceship(app.getAssetManager());
-        spaceship.addControl(new SpaceshipControl());
+        initMainEntities();
         
         
-        breakerBarNode.attachChild(spaceship);
-        spaceship.createTurbo();
-        breakerBarNode.attachChild(ball);
-        
-        ((SimpleApplication)app).getRootNode().attachChild(breakerBarNode);
-
 //        ((SimpleApplication)app).getRootNode().attachChild(ball);
         
         InputAppState inputState = new InputAppState();
@@ -81,6 +70,24 @@ public class GamePlayAppState extends AbstractAppState{
         configureCameraSettings();
         initAudio();
         initSceneLights();
+    }
+    
+    private void initMainEntities(){
+        arkanoid = new Arkanoid(assetManager);
+        arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
+        ball = new Breaker(assetManager);
+        ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
+        
+        spaceship = new Spaceship(assetManager);
+        //spaceship.addControl(new SpaceshipControl());
+        
+        
+        breakerBarNode.attachChild(arkanoid);
+//        spaceship.createTurbo();
+        breakerBarNode.attachChild(ball);
+        
+        app.getRootNode().attachChild(breakerBarNode);
+
     }
     
     private void configureCameraSettings(){

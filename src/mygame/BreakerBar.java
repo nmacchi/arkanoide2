@@ -30,7 +30,8 @@ public class BreakerBar extends Geometry{
     private static float maxRightLimit = 0.60f;
 //    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
-    
+    protected String activePower;
+    protected boolean powerupActivated;
     
     public BreakerBar(){
         
@@ -47,6 +48,22 @@ public class BreakerBar extends Geometry{
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    public String getActivePower() {
+        return activePower;
+    }
+
+    public void setActivePower(String activePower) {
+        this.activePower = activePower;
+    }
+
+    public boolean isPowerupActivated() {
+        return powerupActivated;
+    }
+
+    public void setPowerupActivated(boolean powerupActivated) {
+        this.powerupActivated = powerupActivated;
     }
     
     

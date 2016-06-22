@@ -36,6 +36,7 @@ public class Bullet extends Geometry{
         
         instanceCount++;
         calculatePosition();
+        
         addControl(new BulletsControl(rootNode));
     } 
     

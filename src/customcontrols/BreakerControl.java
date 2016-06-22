@@ -28,7 +28,7 @@ import states.GamePlayAppState;
 public class BreakerControl extends AbstractControl implements Savable, Cloneable {
 
     private Node rootNode;
-    private BreakerBar breakerBar;
+//    private BreakerBar breakerBar;
     private Breaker breaker;
     
     private AppStateManager stateManager;  
@@ -36,9 +36,9 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     BreakerControl() {
     }
 
-    public BreakerControl(Node rootNode, BreakerBar breakerBar, AppStateManager stateManager) {
+    public BreakerControl(Node rootNode, AppStateManager stateManager) {
         this.rootNode = rootNode;
-        this.breakerBar = breakerBar;
+//        this.breakerBar = breakerBar;
         this.stateManager = stateManager;
     }
 

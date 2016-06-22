@@ -30,27 +30,28 @@ public class PowerupType {
     }
     
     private void selectType(){
-        int pick = random.nextInt(Powerup.PowerTypes.values().length);
-       
-        switch(Powerup.PowerTypes.values()[pick]){
+//        int pick = random.nextInt(PowerTypes.values().length);
+        int pick = 4; //TEST
+        
+        switch(PowerTypes.values()[pick]){
             case EXPAND:
-                this.name = Powerup.PowerTypes.values()[pick].toString();
+                this.name = PowerTypes.values()[pick].toString();
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_blue.png", false));
                 break;
             case CATCH:
-                this.name = Powerup.PowerTypes.values()[pick].toString();        
+                this.name = PowerTypes.values()[pick].toString();        
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_green.png", false));
                 break;
             case LIFE:
-                this.name = Powerup.PowerTypes.values()[pick].toString();
+                this.name = PowerTypes.values()[pick].toString();
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_gray.png", false));
                 break;
             case SLOWER:
-                this.name = Powerup.PowerTypes.values()[pick].toString();
+                this.name = PowerTypes.values()[pick].toString();
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_light_blue.png", false));
                 break;
             case FIRE:
-                this.name = Powerup.PowerTypes.values()[pick].toString();
+                this.name = PowerTypes.values()[pick].toString();
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_red.png", false));
                 break;
         }
