@@ -50,7 +50,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
     @Override
     protected void controlUpdate(float tpf) {
-        if (breakerBar.isBallShooted()) {
+        if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
             breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
 
 

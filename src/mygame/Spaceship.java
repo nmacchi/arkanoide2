@@ -22,15 +22,13 @@ public class Spaceship extends BreakerBar{
     private Bullet bullet1, bullet2;
     private float cooldownTime;
     private static float timeToWait = 0.25f;
-    
-    private ParticleEmitter turbo;
+   
     private ParticleEmitter turbo1;
     private ParticleEmitter turbo2;
     
     public Spaceship(AssetManager assetManager){
         super(assetManager);
         createSpaceship();
-        turbo = new SpaceshipFlame(assetManager).getSpaceshipFire();
     }
     
     private void createSpaceship(){
@@ -43,6 +41,8 @@ public class Spaceship extends BreakerBar{
         rotate(0f,1.60f,0f);
         
         setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
+        
+        //createTurbo();
     }
     
     private void createBullets(){
@@ -70,9 +70,11 @@ public class Spaceship extends BreakerBar{
         this.cooldownTime -= tpf;
     }
 
-    public ParticleEmitter getTurbo() {
-        return turbo;
+    public void createTurbo(){
+        turbo1 = new SpaceshipFlame(assetManager, this.getWorldTranslation()).getSpaceshipFire();
+        turbo2 = new SpaceshipFlame(assetManager, this.getWorldTranslation()).getSpaceshipFire();
+        
+        this.getParent().attachChild(turbo1);
+        this.getParent().attachChild(turbo2);
     }
-    
-    
 }

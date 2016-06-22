@@ -23,9 +23,11 @@ public class BreakerBar extends Geometry{
     protected AssetManager assetManager;
 //    protected boolean ballShooted;
     protected float speed = 0.7f;
-    private Vector3f position;
-    private static Vector3f direction = new Vector3f().set(Vector3f.UNIT_X);
+//    private Vector3f position;
+    private static Vector3f direction = new Vector3f();
     
+    private static float maxLeftLimit = -0.60f;
+    private static float maxRightLimit = 0.60f;
 //    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
     
@@ -183,5 +185,15 @@ public class BreakerBar extends Geometry{
     public static Vector3f getDirection() {
         return direction;
     }
+
+    public static float getMaxLeftLimit() {
+        return maxLeftLimit;
+    }
+
+    public static float getMaxRightLimit() {
+        return maxRightLimit;
+    }
+    
+    
     
 }

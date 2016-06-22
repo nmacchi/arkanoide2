@@ -22,7 +22,8 @@ public class Breaker extends Geometry  {
     private static float speed = 0.5f;
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.08f, 1f);
     private Vector3f direction;
-
+    
+    
     
     public Breaker(AssetManager assetManager){
         super("Breaker", new Sphere(16, 16, 0.022f, true, false));
@@ -36,7 +37,6 @@ public class Breaker extends Geometry  {
         material.setFloat("Shininess", 32f);
         
         setLocalTranslation(initialPosition);
-        this.direction = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y + 1, 0);
     }
     
     public Vector3f getDirection() {
@@ -63,5 +63,8 @@ public class Breaker extends Geometry  {
         return initialPosition;
     }
     
+    public void setInitialDirection(){
+        this.direction = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y + 1, 0);
+    }
     
 }

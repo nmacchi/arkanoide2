@@ -29,6 +29,8 @@ import mygame.Spaceship;
  */
 public class GamePlayAppState extends AbstractAppState{
     
+    private boolean gameStarted;
+    
     private static int INITIAL_DEFAULT_LIVES = 3;
     
     private int currentLives;
@@ -64,10 +66,13 @@ public class GamePlayAppState extends AbstractAppState{
         spaceship = new Spaceship(app.getAssetManager());
         spaceship.addControl(new SpaceshipControl());
         
-        breakerBarNode.attachChild(arkanoid);
+        
+        breakerBarNode.attachChild(spaceship);
+        spaceship.createTurbo();
         breakerBarNode.attachChild(ball);
         
         ((SimpleApplication)app).getRootNode().attachChild(breakerBarNode);
+
 //        ((SimpleApplication)app).getRootNode().attachChild(ball);
         
         InputAppState inputState = new InputAppState();
@@ -146,26 +151,34 @@ public class GamePlayAppState extends AbstractAppState{
         restLife();
   
         //Set entities to initial position
-        ((BreakerBar)app.getRootNode().getChild("BreakerBar")).removeFromParent();
-        ((Breaker)app.getRootNode().getChild("Breaker")).removeFromParent();
-        
+        ((Node)app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
         
         //Call GUI state for update
         stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
               
         //Hacer algun efecto de explosion
         
-        app.getRootNode().attachChild(getArkanoid());
-        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-        arkanoid.setBallShooted(Boolean.FALSE);
-        app.getRootNode().attachChild(getBall());
+        
+        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
+//        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
+        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
         ball.setLocalTranslation(Breaker.getInitialPosition());
-
+        
+        setGameStarted(Boolean.FALSE);
     }
 
     public Spaceship getSpaceship() {
         return spaceship;
     }
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
+    }
+    
     
     
 }

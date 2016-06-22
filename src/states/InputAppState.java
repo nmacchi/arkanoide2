@@ -13,8 +13,8 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import mygame.Arkanoid;
 import mygame.Breaker;
@@ -31,26 +31,26 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     private Arkanoid arkanoid;
     private Breaker ball;
     private Spaceship spaceship;
+    private AppStateManager stateManager;
     
-    //TEST
     private Node rootNode;
+    private float xPosition;
     private Vector3f direction;
-    private float rangeLimit;
-    private float maxLeftLimit = -0.60f;
-    private float maxRightLimit = 0.60f;
     
     SimpleApplication app; 
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-
+        
         this.app = (SimpleApplication)app;
+        this.rootNode = this.app.getRootNode();
         this.inputManager = ((SimpleApplication) app).getInputManager();
+        this.stateManager = stateManager;
+        
         this.arkanoid = stateManager.getState(GamePlayAppState.class).getArkanoid();
         this.ball = stateManager.getState(GamePlayAppState.class).getBall();
         this.spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
-        this.rootNode = this.app.getRootNode();
         
         this.direction = BreakerBar.getDirection();
         
@@ -74,21 +74,18 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     }
 
     public void onAnalog(String name, float value, float tpf) {
-//        arkanoid.move(name, value, ball);
-        //spaceship.move(name, value, ball);
-        
         direction.set(Vector3f.UNIT_X).normalizeLocal();
-        if(name.equals(InputMapping.LEFT.name()) && rangeLimit >= maxLeftLimit){
+        if(name.equals(InputMapping.LEFT.name()) && xPosition >= BreakerBar.getMaxLeftLimit()){
             direction.multLocal(-0.7f * tpf);
             ((Node)rootNode.getChild("BreakerBarNode")).move(direction);
         }
         
-        if(name.equals(InputMapping.RIGHT.name()) && rangeLimit <= maxRightLimit){
+        if(name.equals(InputMapping.RIGHT.name()) && xPosition <= BreakerBar.getMaxRightLimit()){
              direction.multLocal(0.7f * tpf);  
             ((Node)rootNode.getChild("BreakerBarNode")).move(direction);
         }
         
-        rangeLimit = ((BreakerBar)rootNode.getChild("BreakerBar")).getWorldTranslation().x; 
+        xPosition = ((Geometry)rootNode.getChild("BreakerBar")).getWorldTranslation().x; 
         
 //        if (name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0) {
 //                spaceship.fire();
@@ -96,10 +93,11 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
-        if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !arkanoid.isBallShooted()) {
+        if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
             ball.setLocalTranslation(ball.getWorldTranslation());
+            ball.setInitialDirection();
             rootNode.attachChild(ball);
-            arkanoid.setBallShooted(Boolean.TRUE);
+            stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
         }
         
 //        if (name.equals(InputMapping.SHOOT.name())) {

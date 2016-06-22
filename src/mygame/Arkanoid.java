@@ -17,7 +17,7 @@ public class Arkanoid extends BreakerBar{
     
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f);
   
-    protected boolean ballShooted;
+//    protected boolean ballShooted;
     
     public Arkanoid(){}
     
@@ -46,13 +46,13 @@ public class Arkanoid extends BreakerBar{
 //        return direction;
 //    }
     
-     public boolean isBallShooted() {
-        return ballShooted;
-    }
-
-    public final void setBallShooted(boolean ballShooted) {
-        this.ballShooted = ballShooted;
-    }
+//     public boolean isBallShooted() {
+//        return ballShooted;
+//    }
+//
+//    public final void setBallShooted(boolean ballShooted) {
+//        this.ballShooted = ballShooted;
+//    }
     
     
     

@@ -21,9 +21,15 @@ public class SpaceshipFlame {
     private ParticleEmitter spaceshipFire;
     private Vector3f position;
     
-    public SpaceshipFlame(AssetManager assetManager){
+    private static int instanceCount;
+    
+    public SpaceshipFlame(AssetManager assetManager, Vector3f spaceshipPos){
         this.assetManager = assetManager;
+        this.position = spaceshipPos;
+        
         createFlame();
+        instanceCount++;
+        calculateFlamePosition();
     }
     
     private void createFlame(){
@@ -39,18 +45,27 @@ public class SpaceshipFlame {
         spaceshipFire.setImagesY(2); // 2x2 texture animation
         spaceshipFire.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f)); // red
         spaceshipFire.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
-        spaceshipFire.setStartSize(0.09f);
-        spaceshipFire.setEndSize(0.08f);
+        spaceshipFire.setStartSize(0.039f);
+        spaceshipFire.setEndSize(0.038f);
         spaceshipFire.setGravity(0, 0.3f, 0);
         spaceshipFire.setLowLife(0.5f);
-        spaceshipFire.setHighLife(1.2f);
+        spaceshipFire.setHighLife(0.8f);
+        
+//        calculateFlamePosition();
     }
 
     public ParticleEmitter getSpaceshipFire() {
         return spaceshipFire;
     }
     
-    public void calculateFlamePosition(){
-        
+    private void calculateFlamePosition(){
+//        position.setY(position.getY() - 0.020f);
+        if((instanceCount % 2) == 0){
+            System.out.println("LLEGA1");
+            spaceshipFire.setLocalTranslation(position.setX(position.getX() - 0.50f)); //LEFT
+        }else{
+            System.out.println("LLEGA2");
+            spaceshipFire.setLocalTranslation(position.setX(position.getX())); //RIGHT
+        }
     }
 }
