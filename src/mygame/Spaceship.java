@@ -23,8 +23,8 @@ public class Spaceship extends BreakerBar{
     private float cooldownTime;
     private static float timeToWait = 0.25f;
    
-    private ParticleEmitter turbo1;
-    private ParticleEmitter turbo2;
+    private ParticleEmitter flamming1;
+    private ParticleEmitter flamming2;
     private Node localNode = new Node("FlameEffect");
     
     public Spaceship(AssetManager assetManager){
@@ -71,14 +71,13 @@ public class Spaceship extends BreakerBar{
         this.cooldownTime -= tpf;
     }
 
-    public void createTurbo(){
-        turbo1 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
-        turbo2 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
+    public void addFlammingFX(){
+        flamming1 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
+        flamming2 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
         
-        localNode.attachChild(turbo1);
-        localNode.attachChild(turbo2);
+        localNode.attachChild(flamming1);
+        localNode.attachChild(flamming2);
         
         this.getParent().attachChild(localNode);
-        //this.getParent().attachChild(turbo2);
     }
 }

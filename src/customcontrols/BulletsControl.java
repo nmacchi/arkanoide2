@@ -36,7 +36,7 @@ public class BulletsControl extends AbstractControl{
     
     @Override
     protected void controlUpdate(float tpf) {
-        spatial.setLocalTranslation(spatial.getLocalTranslation().x, spatial.getLocalTranslation().y + tpf*Bullet.getBulletSpeed(), spatial.getLocalTranslation().z);
+        spatial.setLocalTranslation(spatial.getWorldTranslation().x, spatial.getWorldTranslation().y + tpf*Bullet.getBulletSpeed(), spatial.getWorldTranslation().z);
         
         CollisionResults results = new CollisionResults();
         

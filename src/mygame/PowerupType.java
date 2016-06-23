@@ -8,7 +8,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import java.util.Random;
-import static mygame.Powerup.PowerTypes.EXPAND;
 
 /**
  *
@@ -31,8 +30,7 @@ public class PowerupType {
     
     private void selectType(){
 //        int pick = random.nextInt(PowerTypes.values().length);
-        int pick = 4; //TEST
-        
+        int pick = 4;
         switch(PowerTypes.values()[pick]){
             case EXPAND:
                 this.name = PowerTypes.values()[pick].toString();

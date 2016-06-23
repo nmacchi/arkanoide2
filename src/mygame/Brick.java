@@ -89,8 +89,7 @@ public class Brick extends Geometry {
         for (int i = 0; i <= numSurprises; i++) {
 
             while (!hasPowerup) {
-                //Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
-                Brick brick = (Brick) bricksNode.getChild(i);//TEST
+                Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
                 
                 //Only commonBrick could have rewards
                 if(brick instanceof CommonBrick){

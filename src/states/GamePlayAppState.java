@@ -14,9 +14,12 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import customcontrols.ArkanoidExplosionFXControl;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
+import effects.ArkanoidExplosion;
 import mygame.Arkanoid;
 import mygame.Breaker;
 import mygame.Spaceship;
@@ -158,18 +161,21 @@ public class GamePlayAppState extends AbstractAppState{
         restLife();
   
         //Set entities to initial position
+        Vector3f position = ((Geometry)((Node)app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
         ((Node)app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
         
         //Call GUI state for update
         stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
               
         //Hacer algun efecto de explosion
+        ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
+//        app.getRootNode().attachChild(explosionFX.getExplosionEffect());
+        explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
         
-        
-        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
+//        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
 //        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
-        ball.setLocalTranslation(Breaker.getInitialPosition());
+//        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
+//        ball.setLocalTranslation(Breaker.getInitialPosition());
         
         setGameStarted(Boolean.FALSE);
     }
