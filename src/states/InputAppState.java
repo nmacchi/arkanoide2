@@ -32,32 +32,31 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     private Breaker ball;
     private Spaceship spaceship;
     private AppStateManager stateManager;
-    
     private Node rootNode;
     private float xPosition;
     private Vector3f direction;
-    
-    SimpleApplication app; 
-    
+    SimpleApplication app;
+
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        
-        this.app = (SimpleApplication)app;
+
+        this.app = (SimpleApplication) app;
         this.rootNode = this.app.getRootNode();
         this.inputManager = ((SimpleApplication) app).getInputManager();
         this.stateManager = stateManager;
-        
+
         this.arkanoid = stateManager.getState(GamePlayAppState.class).getArkanoid();
         this.ball = stateManager.getState(GamePlayAppState.class).getBall();
         this.spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
-        
+
         this.direction = BreakerBar.getDirection();
-        
+
         addInputMappings();
     }
 
     public enum InputMapping {
+
         LEFT, RIGHT, SHOOT
     }
 
@@ -75,46 +74,53 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
 
     public void onAnalog(String name, float value, float tpf) {
         direction.set(Vector3f.UNIT_X).normalizeLocal();
-        if(name.equals(InputMapping.LEFT.name()) && xPosition >= BreakerBar.getMaxLeftLimit()){
+        if (name.equals(InputMapping.LEFT.name()) && xPosition >= BreakerBar.getMaxLeftLimit()) {
             direction.multLocal(-0.7f * tpf);
-            ((Node)rootNode.getChild("BreakerBarNode")).move(direction);
+            ((Node) rootNode.getChild("BreakerBarNode")).move(direction);
         }
-        
-        if(name.equals(InputMapping.RIGHT.name()) && xPosition <= BreakerBar.getMaxRightLimit()){
-             direction.multLocal(0.7f * tpf);  
-            ((Node)rootNode.getChild("BreakerBarNode")).move(direction);
+
+        if (name.equals(InputMapping.RIGHT.name()) && xPosition <= BreakerBar.getMaxRightLimit()) {
+            direction.multLocal(0.7f * tpf);
+            ((Node) rootNode.getChild("BreakerBarNode")).move(direction);
         }
-        
-        xPosition = ((Geometry)rootNode.getChild("BreakerBar")).getWorldTranslation().x; 
-        
-//        if(stateManager.getState(GamePlayAppState.class).isGameStarted()){
-//            if(name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0){
-//                spaceship.fire();
-//            }   
-//        }
-        
-        
-//        if (stateManager.getState(GamePlayAppState.class).isGameStarted()){
-//            (name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0
-//                }) {
-//                spaceship.fire();
-//        }
+
+        xPosition = ((Geometry) rootNode.getChild("BreakerBar")).getWorldTranslation().x;
+
+        if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Spaceship) {
+            if (name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0) {
+                spaceship.fire();
+            }
+        }
+
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
-        if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
-            ball.setLocalTranslation(ball.getWorldTranslation());
-            ball.setInitialDirection();
-            rootNode.attachChild(ball);
-            stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+        if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Arkanoid) {
+            if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+                ball.setLocalTranslation(ball.getWorldTranslation());
+                ball.setInitialDirection();
+                rootNode.attachChild(ball);
+                stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+            }
         }
-        
-//        if (name.equals(InputMapping.SHOOT.name())) {
-//            if(isPressed && spaceship.getCooldownTime() <= 0){
-//                spaceship.fire(app.getRootNode());
-//            }
-//            
-////            arkanoid.createSpaceship(arkanoid.getLocalTranslation());
-//        }
+    }
+
+    @Override
+    public void cleanup() {
+        super.cleanup();
+        removeInputMappings();
+    }
+
+    private void removeInputMappings() {
+        for (InputMapping i : InputMapping.values()) {
+            inputManager.removeListener(this);
+        }
+    }
+    
+    @Override
+    public void update(float tpf) {
+        if(!isEnabled()){
+            System.out.println("HOLA");
+        }
     }
 }

@@ -42,6 +42,7 @@ public class BulletsControl extends AbstractControl{
         
         rootNode.collideWith(spatial.getWorldBound(), results);
         if(results.size() > 0){
+            System.out.println("LLEGA");
             CollisionResult collision = results.getClosestCollision();
             
             if(((Node)collision.getGeometry().getParent()).getName().equals("BricksNode")){

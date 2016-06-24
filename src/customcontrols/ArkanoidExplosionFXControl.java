@@ -58,6 +58,7 @@ public class ArkanoidExplosionFXControl extends AbstractControl {
             ((ParticleEmitter)explosionEffect.getChild("Shockwave")).killAllParticles();
             
             explosionEffect.removeControl(this);
+            explosionEffect.removeFromParent();
         }
     }
 

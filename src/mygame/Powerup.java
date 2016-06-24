@@ -25,7 +25,7 @@ public class Powerup extends Geometry {
     private float speed = 2f;
     private int points;
     
-    PowerupType type;
+    private PowerupType type;
  
     private static Random random = new Random();
     

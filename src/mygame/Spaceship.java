@@ -47,11 +47,11 @@ public class Spaceship extends BreakerBar{
     }
     
     private void createBullets(){
-        bullet1 = new Bullet(assetManager, getLocalTranslation(), this.getParent());
-        bullet2 = new Bullet(assetManager, getLocalTranslation(), this.getParent());  
+        bullet1 = new Bullet(assetManager, getWorldTranslation(), this.getParent().getParent());
+        bullet2 = new Bullet(assetManager, getWorldTranslation(), this.getParent().getParent());  
         
-        this.getParent().attachChild(bullet1);
-        this.getParent().attachChild(bullet2);
+        this.getParent().getParent().attachChild(bullet1);
+        this.getParent().getParent().attachChild(bullet2);
     }
     
     public void fire(){

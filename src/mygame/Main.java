@@ -2,8 +2,6 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.ParticleMesh;
-import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 
@@ -15,6 +13,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import states.GameGuiAppState;
 import states.GamePlayAppState;
+import states.InputAppState;
 
 /**
  * test
@@ -122,6 +121,16 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     public void simpleUpdate(float tpf) {
 //        smoke.emitAllParticles();
         //TODO: add update code
+        
+        if(stateManager.getState(GamePlayAppState.class).getCurrentLives() == 0){
+//            stateManager.detach(stateManager.getState(GamePlayAppState.class).getInputState());
+            stateManager.detach(stateManager.getState(InputAppState.class));
+        }
+//        
+        if(((Node)rootNode.getChild("BricksNode")).getChildren().isEmpty()){
+//            stateManager.detach(stateManager.getState(GamePlayAppState.class).getInputState());
+            stateManager.detach(stateManager.getState(InputAppState.class));
+        }
     }
 
     @Override

@@ -26,79 +26,69 @@ import mygame.Spaceship;
 
 /**
  * Init principal entities, audio effects and key inputs
- * 
+ *
  * @author nicolas
  */
-public class GamePlayAppState extends AbstractAppState{
-    
+public class GamePlayAppState extends AbstractAppState {
+
     private boolean gameStarted;
-    
     private static int INITIAL_DEFAULT_LIVES = 3;
-    
     private int currentLives;
     private int score;
-    
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Arkanoid arkanoid;
     private Breaker ball;
     private Spaceship spaceship;
-    
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
     InputAppState inputState;
-    
     private AudioNode audio_crash;
     private AudioNode audio_rebound;
-    
     private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
-    
+    private int state;
+    private float timeElapsed;
+    private static float timePaused = 5f;
+
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        
+
         this.stateManager = stateManager;
-        this.app = (SimpleApplication)app;
-        this.assetManager = ((SimpleApplication)app).getAssetManager();
-        
+        this.app = (SimpleApplication) app;
+        this.assetManager = ((SimpleApplication) app).getAssetManager();
+
         currentLives = INITIAL_DEFAULT_LIVES;
-        
+
         initMainEntities();
-        
-        
-//        ((SimpleApplication)app).getRootNode().attachChild(ball);
-        
+
         inputState = new InputAppState();
         stateManager.attach(inputState);
-        
+
         configureCameraSettings();
         initAudio();
         initSceneLights();
     }
-    
-    private void initMainEntities(){
+
+    private void initMainEntities() {
         arkanoid = new Arkanoid(assetManager);
         arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
         ball = new Breaker(assetManager);
         ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
-        
         spaceship = new Spaceship(assetManager);
-        //spaceship.addControl(new SpaceshipControl());
-        
-        
+
         breakerBarNode.attachChild(arkanoid);
-//        spaceship.createTurbo();
         breakerBarNode.attachChild(ball);
-        
+
         app.getRootNode().attachChild(breakerBarNode);
 
     }
-    
-    private void configureCameraSettings(){
+
+    private void configureCameraSettings() {
         app.getFlyByCamera().setEnabled(false);
         app.getCamera().setLocation(CAM_LOCATION);
     }
-    
+
     private void initAudio() {
         audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
         audio_crash.setPositional(false);
@@ -112,19 +102,19 @@ public class GamePlayAppState extends AbstractAppState{
         audio_rebound.setVolume(2);
         app.getRootNode().attachChild(audio_rebound);
     }
-    
-    private void initSceneLights(){
+
+    private void initSceneLights() {
         DirectionalLight sun = new DirectionalLight();
         sun.setColor(ColorRGBA.White.mult(0.7f));
- 
+
         sun.setDirection(app.getCamera().getDirection().normalizeLocal());
         app.getRootNode().addLight(sun);
-        
+
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White);
         app.getRootNode().addLight(al);
     }
-    
+
     public Arkanoid getArkanoid() {
         return arkanoid;
     }
@@ -132,7 +122,7 @@ public class GamePlayAppState extends AbstractAppState{
     public Breaker getBall() {
         return ball;
     }
-    
+
     public int getCurrentLives() {
         return currentLives;
     }
@@ -140,11 +130,11 @@ public class GamePlayAppState extends AbstractAppState{
     public void setCurrentLives(int currentLives) {
         this.currentLives = currentLives;
     }
-    
-    public void restLife(){
+
+    public void restLife() {
         this.currentLives--;
     }
-    
+
     public int getScore() {
         return score;
     }
@@ -154,39 +144,35 @@ public class GamePlayAppState extends AbstractAppState{
         stateManager.getState(GameGuiAppState.class).updateScoreIndicator();
     }
 
-    public String getFormattedScore(){
+    public String getFormattedScore() {
         return String.format("%08d", score);
     }
-    
-    public void reset(){
-        stateManager.detach(inputState);
-        
+
+    public void reset() {
         restLife();
-        
         //Call GUI state for update
         stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
-        
-        //Set entities to initial position
-        Vector3f position = ((Geometry)((Node)app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
-        ((Node)app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
-        
-        
-              
-        //Hacer algun efecto de explosion
-        //ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
-//        app.getRootNode().attachChild(explosionFX.getExplosionEffect());
-        //explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
-        
-        
-        
-        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
+        stateManager.detach(inputState);
+//        setEnabled(Boolean.FALSE); // set to pause game
+//        
+//        boolean done = false;
+
+
+        Vector3f position = ((Geometry) ((Node) app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
+        ((Node) app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
+//            
+
+//        
+        ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
+        explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
+//     
+
+        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
         arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
+        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
         ball.setLocalTranslation(Breaker.getInitialPosition());
-        
-        //Call GUI state for update
-        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
-        
+
+        stateManager.attach(inputState);
         setGameStarted(Boolean.FALSE);
     }
 
@@ -200,8 +186,25 @@ public class GamePlayAppState extends AbstractAppState{
 
     public void setGameStarted(boolean gameStarted) {
         this.gameStarted = gameStarted;
+        stateManager.detach(inputState);
     }
+
+//    @Override
+//    public void update(float tpf) {
+//        System.out.println(isEnabled());
+//        if(isEnabled() == false){
+//            timeElapsed += tpf;
+//            System.out.println(isEnabled());
+//            if(timeElapsed > timePaused){
+//                stateManager.attach(inputState);
+//                app.getRootNode().detachChildNamed("explosionFX");
+//                setEnabled(true);
+//            }
+//            
+//        }
+//    }
     
-    
-    
+    public InputAppState getInputState() {
+        return inputState;
+    }
 }
