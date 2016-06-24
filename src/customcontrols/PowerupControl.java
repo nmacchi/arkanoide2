@@ -48,13 +48,14 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
         spatial.rotate(0, 0, tpf * rotationSpeed);
         spatial.setLocalTranslation(spatial.getLocalTranslation().x, spatial.getLocalTranslation().y - tpf / translationSpeed, spatial.getLocalTranslation().z);
 
-        if ((Geometry) rootNode.getChild("BreakerBar") != null) {
-            spatial.collideWith(((Geometry) rootNode.getChild("Floor")).getWorldBound(), results);
-            if (results.size() != 0) {
-                spatial.removeFromParent();
-                results.clear();
-            }
 
+        spatial.collideWith(((Geometry) rootNode.getChild("Floor")).getWorldBound(), results);
+        if (results.size() != 0) {
+            spatial.removeFromParent();
+            results.clear();
+        }
+
+        if ((Geometry) rootNode.getChild("BreakerBar") != null) {
             spatial.collideWith(((Geometry) rootNode.getChild("BreakerBar")).getWorldBound(), results);
             if (results.size() != 0) {
                 Geometry g = ((Geometry) rootNode.getChild("BreakerBar"));
@@ -65,6 +66,7 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
                 stateManager.getState(GamePlayAppState.class).setScore(((Powerup) spatial).getPoints());
                 spatial.removeFromParent();
             }
+
         }
 
 

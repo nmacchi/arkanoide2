@@ -46,6 +46,7 @@ public class GamePlayAppState extends AbstractAppState{
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
+    InputAppState inputState;
     
     private AudioNode audio_crash;
     private AudioNode audio_rebound;
@@ -67,7 +68,7 @@ public class GamePlayAppState extends AbstractAppState{
         
 //        ((SimpleApplication)app).getRootNode().attachChild(ball);
         
-        InputAppState inputState = new InputAppState();
+        inputState = new InputAppState();
         stateManager.attach(inputState);
         
         configureCameraSettings();
@@ -158,24 +159,33 @@ public class GamePlayAppState extends AbstractAppState{
     }
     
     public void reset(){
+        stateManager.detach(inputState);
+        
         restLife();
-  
+        
+        //Call GUI state for update
+        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
+        
         //Set entities to initial position
         Vector3f position = ((Geometry)((Node)app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
         ((Node)app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
         
-        //Call GUI state for update
-        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
+        
               
         //Hacer algun efecto de explosion
-        ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
+        //ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
 //        app.getRootNode().attachChild(explosionFX.getExplosionEffect());
-        explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
+        //explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
         
-//        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
-//        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-//        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
-//        ball.setLocalTranslation(Breaker.getInitialPosition());
+        
+        
+        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
+        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
+        ((Node)app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
+        ball.setLocalTranslation(Breaker.getInitialPosition());
+        
+        //Call GUI state for update
+        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
         
         setGameStarted(Boolean.FALSE);
     }

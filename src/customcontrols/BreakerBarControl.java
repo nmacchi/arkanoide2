@@ -41,8 +41,10 @@ public class BreakerBarControl extends AbstractControl {
     @Override
     protected void controlUpdate(float tpf) {
         String powerType = (((Arkanoid) spatial).getActivePower());
+        System.out.println(powerType);
         if (powerType != null) {
-            if (powerType.equals("FIRE") && !(((Arkanoid) spatial).getActivePower().equals("FIRE"))) {
+            if (powerType.equals("FIRE")) {
+                
                 ((Arkanoid)spatial).setPowerupActivated(Boolean.TRUE);
                 
                 Vector3f position = ((Arkanoid) spatial).getWorldTranslation(); //Get arkanoid current position

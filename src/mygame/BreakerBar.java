@@ -30,7 +30,7 @@ public class BreakerBar extends Geometry{
     private static float maxRightLimit = 0.60f;
 //    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f); 
     
-    protected String activePower;
+    protected String activePower = "NONE";
     protected boolean powerupActivated;
     
     public BreakerBar(){
