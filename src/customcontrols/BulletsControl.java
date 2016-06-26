@@ -22,9 +22,11 @@ public class BulletsControl extends AbstractControl{
     
 //    Bullet bullet;
     Node rootNode;
+    CollisionResults results;
     
     public BulletsControl(Node rootNode){
         this.rootNode = rootNode;
+        this.results = new CollisionResults();
     }
     
     @Override
@@ -38,19 +40,20 @@ public class BulletsControl extends AbstractControl{
     protected void controlUpdate(float tpf) {
         spatial.setLocalTranslation(spatial.getWorldTranslation().x, spatial.getWorldTranslation().y + tpf*Bullet.getBulletSpeed(), spatial.getWorldTranslation().z);
         
-        CollisionResults results = new CollisionResults();
-        
         rootNode.collideWith(spatial.getWorldBound(), results);
         if(results.size() > 0){
-            System.out.println("LLEGA");
             CollisionResult collision = results.getClosestCollision();
             
             if(((Node)collision.getGeometry().getParent()).getName().equals("BricksNode")){
                 spatial.removeFromParent();
+                spatial.removeControl(this);
+                
                 Brick brick = (Brick)collision.getGeometry();
                 brick.removeBrick(rootNode, brick);
                 
             }
+            
+            results.clear();
         }
     }
 

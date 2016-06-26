@@ -34,7 +34,7 @@ public class Arkanoid extends BreakerBar{
         setMaterial(geometry.getMaterial());
         
         setLocalTranslation(initialPosition);
-        scale(0.06f, 0.07f, 0.045f);
+        scale(0.095f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
     }
 

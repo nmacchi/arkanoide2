@@ -38,10 +38,10 @@ public class Spaceship extends BreakerBar{
         setMesh(geometry.getMesh());
         setMaterial(geometry.getMaterial());
         
-        scale(0.06f, 0.07f, 0.045f);
+        scale(0.095f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
         
-        //setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
+        setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
         
 //        createTurbo();
     }

@@ -17,9 +17,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import mygame.Breaker;
-import mygame.BreakerBar;
 import mygame.Brick;
 import states.GamePlayAppState;
+import states.InputAppState;
 
 /**
  *
@@ -62,7 +62,11 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 CollisionResult collision = results.getClosestCollision();
                 
                 if (collision.getGeometry().getName().equals("Floor")) {
-                    stateManager.getState(GamePlayAppState.class).reset();
+//                    stateManager.getState(GamePlayAppState.class).reset();
+                    stateManager.detach(stateManager.getState(InputAppState.class));
+                    stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
+                    stateManager.getState(GamePlayAppState.class).setStopGame(Boolean.TRUE);
+                    
 
                 } else if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
                     Triangle tri = new Triangle();

@@ -48,7 +48,7 @@ public class SpaceshipFlame {
         spaceshipFire.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
         spaceshipFire.setStartSize(0.039f);
         spaceshipFire.setEndSize(0.038f);
-        spaceshipFire.setGravity(0, 0.3f, 0);
+        spaceshipFire.setGravity(0, 0.5f, 0);
         spaceshipFire.setLowLife(0.5f);
         spaceshipFire.setHighLife(1.2f);
         spaceshipFire.setParticlesPerSec(100);
