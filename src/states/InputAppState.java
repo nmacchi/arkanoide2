@@ -16,10 +16,10 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import mygame.Arkanoid;
-import mygame.Breaker;
-import mygame.BreakerBar;
-import mygame.Spaceship;
+import mygame.entities.Arkanoid;
+import mygame.entities.Breaker;
+import mygame.entities.BreakerBar;
+import mygame.entities.Spaceship;
 
 /**
  *
@@ -61,11 +61,10 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     }
 
     public void addInputMappings() {
-        inputManager.addMapping(InputMapping.LEFT.name(), new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping(InputMapping.RIGHT.name(), new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping(InputMapping.SHOOT.name(), new KeyTrigger(KeyInput.KEY_SPACE));
-
-
+        if(!inputManager.hasMapping(InputMapping.LEFT.name())) inputManager.addMapping(InputMapping.LEFT.name(), new KeyTrigger(KeyInput.KEY_LEFT));
+        if(!inputManager.hasMapping(InputMapping.RIGHT.name())) inputManager.addMapping(InputMapping.RIGHT.name(), new KeyTrigger(KeyInput.KEY_RIGHT));
+        if(!inputManager.hasMapping(InputMapping.SHOOT.name())) inputManager.addMapping(InputMapping.SHOOT.name(), new KeyTrigger(KeyInput.KEY_SPACE));
+        
         for (InputMapping i : InputMapping.values()) {
             inputManager.addListener(this, i.name());
         }
@@ -99,7 +98,9 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
             if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
                 ball.setLocalTranslation(ball.getWorldTranslation());
                 ball.setInitialDirection();
+
                 rootNode.attachChild(ball);
+
                 stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
             }
         }
@@ -114,13 +115,6 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     private void removeInputMappings() {
         for (InputMapping i : InputMapping.values()) {
             inputManager.removeListener(this);
-        }
-    }
-    
-    @Override
-    public void update(float tpf) {
-        if(!isEnabled()){
-            System.out.println("HOLA");
         }
     }
 }

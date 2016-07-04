@@ -13,7 +13,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import mygame.Arkanoid;
+import mygame.entities.Arkanoid;
 import mygame.Powerup;
 import states.GamePlayAppState;
 

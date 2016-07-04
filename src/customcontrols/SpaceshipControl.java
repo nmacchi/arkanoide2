@@ -7,7 +7,7 @@ package customcontrols;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
-import mygame.Spaceship;
+import mygame.entities.Spaceship;
 
 /**
  *

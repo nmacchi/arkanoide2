@@ -16,7 +16,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import mygame.Breaker;
+import mygame.entities.Breaker;
 import mygame.Brick;
 import states.GamePlayAppState;
 import states.InputAppState;

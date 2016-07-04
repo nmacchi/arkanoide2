@@ -8,6 +8,7 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
@@ -51,6 +52,11 @@ public class BulletsControl extends AbstractControl{
                 Brick brick = (Brick)collision.getGeometry();
                 brick.removeBrick(rootNode, brick);
                 
+            }
+            
+            if(collision.getGeometry().getName().equals("TopBar")){
+                spatial.removeFromParent();
+                spatial.removeControl(this);
             }
             
             results.clear();

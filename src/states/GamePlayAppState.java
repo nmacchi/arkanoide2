@@ -20,9 +20,9 @@ import customcontrols.ArkanoidExplosionFXControl;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
 import effects.ArkanoidExplosion;
-import mygame.Arkanoid;
-import mygame.Breaker;
-import mygame.Spaceship;
+import mygame.entities.Arkanoid;
+import mygame.entities.Breaker;
+import mygame.entities.Spaceship;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -35,20 +35,24 @@ public class GamePlayAppState extends AbstractAppState {
     private static int INITIAL_DEFAULT_LIVES = 3;
     private int currentLives;
     private int score;
+    
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Arkanoid arkanoid;
     private Breaker ball;
     private Spaceship spaceship;
+    
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
     InputAppState inputState;
+    
     private AudioNode audio_crash;
     private AudioNode audio_rebound;
     private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
+    
     private int state;
     private float timeElapsed;
-    private static float timePaused = 5f;
+    private boolean stopGame;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -150,22 +154,9 @@ public class GamePlayAppState extends AbstractAppState {
 
     public void reset() {
         restLife();
+        
         //Call GUI state for update
         stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
-        stateManager.detach(inputState);
-//        setEnabled(Boolean.FALSE); // set to pause game
-//        
-//        boolean done = false;
-
-
-        Vector3f position = ((Geometry) ((Node) app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
-        ((Node) app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
-//            
-
-//        
-        ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
-        explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
-//     
 
         ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
         arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
@@ -173,7 +164,8 @@ public class GamePlayAppState extends AbstractAppState {
         ball.setLocalTranslation(Breaker.getInitialPosition());
 
         stateManager.attach(inputState);
-        setGameStarted(Boolean.FALSE);
+        timeElapsed = 0;
+        state = 0;
     }
 
     public Spaceship getSpaceship() {
@@ -186,25 +178,43 @@ public class GamePlayAppState extends AbstractAppState {
 
     public void setGameStarted(boolean gameStarted) {
         this.gameStarted = gameStarted;
-        stateManager.detach(inputState);
     }
 
-//    @Override
-//    public void update(float tpf) {
-//        System.out.println(isEnabled());
-//        if(isEnabled() == false){
-//            timeElapsed += tpf;
-//            System.out.println(isEnabled());
-//            if(timeElapsed > timePaused){
-//                stateManager.attach(inputState);
-//                app.getRootNode().detachChildNamed("explosionFX");
-//                setEnabled(true);
-//            }
-//            
-//        }
-//    }
-    
+    @Override
+    public void update(float tpf) {
+        if (isStopGame()) {
+            timeElapsed += tpf / 1;
+
+            if (state == 0) {
+
+                Vector3f position = ((Geometry) ((Node) app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
+                
+                ((Node) app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
+                app.getRootNode().detachChildNamed("Breaker");
+
+                ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
+                explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
+
+                state = 1;
+            }
+
+            if (timeElapsed >= 4f) {
+                setStopGame(Boolean.FALSE);
+                app.getRootNode().detachChildNamed("explosionFX");
+                reset();
+            }
+        }
+    }
+
     public InputAppState getInputState() {
         return inputState;
+    }
+
+    public boolean isStopGame() {
+        return stopGame;
+    }
+
+    public void setStopGame(boolean stopGame) {
+        this.stopGame = stopGame;
     }
 }

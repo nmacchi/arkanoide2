@@ -52,7 +52,7 @@ public class SpaceshipFlame {
         spaceshipFire.setLowLife(0.5f);
         spaceshipFire.setHighLife(1.2f);
         spaceshipFire.setParticlesPerSec(100);
-        spaceshipFire.setNumParticles(1000);
+//        spaceshipFire.setNumParticles(500);
         spaceshipFire.setLocalTranslation(position);
 
     }

@@ -12,8 +12,8 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import mygame.Arkanoid;
-import mygame.Spaceship;
+import mygame.entities.Arkanoid;
+import mygame.entities.Spaceship;
 import states.GamePlayAppState;
 
 /**
@@ -49,25 +49,9 @@ public class BreakerBarControl extends AbstractControl {
                 ((Arkanoid) spatial).setCurrentPower("FIRE");
                 
                 Vector3f position = ((Arkanoid) spatial).getLocalTranslation(); //Get arkanoid current position
-
-                ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren(); //Remove arakanoid from parent
-
-                //Get the spaceship model for arkanoid replace
-                Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
-                spaceship.setLocalTranslation(position);
-                spaceship.addControl(new SpaceshipControl());
-
-                ((Node) rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
-                spaceship.addFlammingFX();
-                
-                
+                ((Arkanoid) spatial).transformToSpaceship(stateManager, (Node)rootNode.getChild("BreakerBarNode"), position);   
             }
         }
-
-
-//       CollisionResults results = new CollisionResults();
-
-
     }
 
     @Override
