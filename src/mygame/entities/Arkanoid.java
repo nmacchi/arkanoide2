@@ -18,7 +18,7 @@ import states.GamePlayAppState;
 public class Arkanoid extends BreakerBar{
     
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f);
-  
+    
 //    protected boolean ballShooted;
     
     public Arkanoid(){}
@@ -26,12 +26,13 @@ public class Arkanoid extends BreakerBar{
     public Arkanoid(AssetManager assetManager){
         super(assetManager);
         createArkanoid();
+        this.width = calculateGeometryWidth();
     }
     
     private void createArkanoid(){
         Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
         
-        setName("BreakerBar");
+        //setName("BreakerBar");
         setMesh(geometry.getMesh());
         setMaterial(geometry.getMaterial());
         

@@ -5,6 +5,7 @@
 package mygame;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResult;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -66,5 +67,5 @@ public class Breaker extends Geometry  {
     public void setInitialDirection(){
         this.direction = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y + 1, 0);
     }
-    
+  
 }

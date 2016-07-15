@@ -13,6 +13,7 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
@@ -68,11 +69,12 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     stateManager.getState(GamePlayAppState.class).setStopGame(Boolean.TRUE);
                     
 
-                } else if (!collision.getGeometry().getName().equals("Breaker") && !collision.getGeometry().getName().equals("Thing")) {
-                    Triangle tri = new Triangle();
-                    collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
-
-                    changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
+                } else if (!collision.getGeometry().getName().equals("Breaker") 
+                        && !collision.getGeometry().getName().equals("Thing")
+                        && !collision.getGeometry().getName().equals("BreakerBar")) {
+                   
+                    breaker.changeDirection(collision);
+                    //changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
 
                     if (collision.getGeometry() instanceof Brick) {
                         Brick brick = (Brick)collision.getGeometry();
@@ -88,9 +90,10 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void changeDirection(Vector3f normal, Vector3f direction) {
-        breaker.setDirection(direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2)));
-    }
+//    private void changeDirection(Vector3f normal, Vector3f direction) {
+//        breaker.setDirection(direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2)));
+//    }
+    
 
 //    private void changeDirection(Vector3f direction) {
 //        System.out.println("llega");
@@ -121,4 +124,10 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 //            brick.getFX().executeFX(rootNode);
 //        }
 //    }
+    
+    private void calculateImpactZone(Geometry arkanoide){
+        float x = arkanoide.getWorldTranslation().x;
+        
+        
+    }
 }

@@ -5,6 +5,7 @@
 package mygame.entities;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import mygame.PowerupType;
@@ -26,6 +27,7 @@ public class BreakerBar extends Geometry{
     protected PowerupType PowerupType;
     protected String activePower;
     protected String currentPower;
+    protected float width;
     
     public BreakerBar(){
         
@@ -80,6 +82,31 @@ public class BreakerBar extends Geometry{
         this.currentPower = currentPower;
     }
     
+    public float calculateGeometryWidth(){
+        return ((BoundingBox)this.getWorldBound()).getXExtent();
+    }
     
+    public float getWidth(){
+        return this.width;
+    }
+    
+    public String evaluateImpactZone(float xBallPosition){
+        String impact = "";
+        
+        if(xBallPosition == this.getWorldTranslation().x){
+            impact = "middle";
+        }
+        
+        if(xBallPosition >= (this.getWorldTranslation().x - width/2) &&  xBallPosition <= (this.getWorldTranslation().x - ((width/2) + 0.02f))){
+            impact = "Left";
+        }
+        
+        if(xBallPosition <= (this.getWorldTranslation().x + width/2) && xBallPosition >= (this.getWorldTranslation().x - ((width/2) - 0.02f))){
+            impact = "Right";
+        }
+        
+        return impact;
+    
+    }
     
 }

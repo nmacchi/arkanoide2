@@ -5,13 +5,13 @@
 package mygame.entities;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResult;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
-import customcontrols.BreakerControl;
 
 /**
  *
@@ -65,6 +65,15 @@ public class Breaker extends Geometry  {
     
     public void setInitialDirection(){
         this.direction = new Vector3f(getLocalTranslation().x + 1, getLocalTranslation().y + 1, 0);
+    }
+    
+    public void changeDirection(CollisionResult collision) {
+        Triangle tri = new Triangle();
+        collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
+        
+        Vector3f normal = tri.getNormal().normalizeLocal();
+        
+        setDirection(direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2)));
     }
     
 }
