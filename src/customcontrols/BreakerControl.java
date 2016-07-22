@@ -8,8 +8,6 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
-import com.jme3.math.Triangle;
-
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -19,6 +17,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import mygame.entities.Breaker;
 import mygame.Brick;
+import mygame.entities.BreakerBar;
 import states.GamePlayAppState;
 import states.InputAppState;
 
@@ -29,7 +28,7 @@ import states.InputAppState;
 public class BreakerControl extends AbstractControl implements Savable, Cloneable {
 
     private Node rootNode;
-//    private BreakerBar breakerBar;
+    private CollisionResults results = new CollisionResults();
     private Breaker breaker;
     
     private AppStateManager stateManager;  
@@ -53,9 +52,9 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     protected void controlUpdate(float tpf) {
         if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
             breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
-
-
-            CollisionResults results = new CollisionResults();
+            
+            
+            results.clear();
 
             rootNode.collideWith(breaker.getWorldBound(), results);
             if (results.size() > 0) {
@@ -79,6 +78,16 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     if (collision.getGeometry() instanceof Brick) {
                         Brick brick = (Brick)collision.getGeometry();
                         brick.removeBrick(rootNode, (Brick) collision.getGeometry());
+                    }
+                }else if(collision.getGeometry().getName().equals("BreakerBar")){
+                    String zone = ((BreakerBar)collision.getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
+                    
+                    if(zone.equals("Left") || zone.equals("Right")){
+                        breaker.getDirection().negateLocal();
+                    }else if(zone.equals("Center")){
+                        breaker.setDirection(Vector3f.UNIT_Y);
+                    }else{
+                        breaker.changeDirection(collision);
                     }
                 }
             }

@@ -93,18 +93,20 @@ public class BreakerBar extends Geometry{
     public String evaluateImpactZone(float xBallPosition){
         String impact = "";
         
-        if(xBallPosition == this.getWorldTranslation().x){
-            impact = "middle";
+        System.out.println("Ball position: " + xBallPosition + " - " + "Center: " + this.getWorldTranslation().x);
+        
+        if(xBallPosition >= (this.getWorldTranslation().x - 0.01f) &&  xBallPosition <= (this.getWorldTranslation().x + 0.01f)){
+            impact = "Center";
         }
         
-        if(xBallPosition >= (this.getWorldTranslation().x - width/2) &&  xBallPosition <= (this.getWorldTranslation().x - ((width/2) + 0.02f))){
+        if(xBallPosition >= (this.getWorldTranslation().x - width) &&  xBallPosition <= (this.getWorldTranslation().x - width + 0.04f)){
             impact = "Left";
         }
         
-        if(xBallPosition <= (this.getWorldTranslation().x + width/2) && xBallPosition >= (this.getWorldTranslation().x - ((width/2) - 0.02f))){
+        if(xBallPosition <= (this.getWorldTranslation().x + width) && xBallPosition >= (this.getWorldTranslation().x + width - 0.04f)){
             impact = "Right";
         }
-        
+        System.out.println(impact);
         return impact;
     
     }

@@ -25,7 +25,7 @@ public class BreakerBarControl extends AbstractControl {
 
 //    private BreakerBar breakerBar;
     //private CollisionResults results = new CollisionResults();
-    CollisionResults results = new CollisionResults();
+    private CollisionResults results = new CollisionResults();
     private Node rootNode;
     private AppStateManager stateManager;
 
@@ -47,28 +47,28 @@ public class BreakerBarControl extends AbstractControl {
     protected void controlUpdate(float tpf) {
         results.clear();
         
-        rootNode.getChild("Breaker").collideWith(spatial.getWorldBound(), results);
-        if(results.size() > 0){
-            CollisionResult collision = results.getClosestCollision();
-            
-            System.out.println(collision.getGeometry().getName());
-            if(collision.getGeometry().getName().equals("Breaker")){
-                String zone = evaluateImpactZone(collision.getGeometry().getLocalTranslation().getX());
-                
-                if(zone.equals("Left") || zone.equals("Right")){
-                    ((Breaker)collision.getGeometry()).getDirection().negateLocal();
-                }else{
-                    ((Breaker)collision.getGeometry()).changeDirection(collision);
-                }
-                
-                
-                    
-                
-                
-                
-            }
-            
-        }
+//        rootNode.getChild("Breaker").collideWith(spatial.getWorldBound(), results);
+//        if(results.size() > 0){
+//            CollisionResult collision = results.getClosestCollision();
+//            
+//            System.out.println(collision.getGeometry().getName());
+//            if(collision.getGeometry().getName().equals("Breaker")){
+//                String zone = evaluateImpactZone(collision.getGeometry().getLocalTranslation().getX());
+//                
+//                if(zone.equals("Left") || zone.equals("Right")){
+//                    ((Breaker)collision.getGeometry()).getDirection().negateLocal();
+//                }else{
+//                    ((Breaker)collision.getGeometry()).changeDirection(collision);
+//                }
+//                
+//                
+//                    
+//                
+//                
+//                
+//            }
+//            
+//        }
         
         
         
@@ -91,23 +91,5 @@ public class BreakerBarControl extends AbstractControl {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
-    private String evaluateImpactZone(float xBallPosition){
-        String impact = "";
-        
-        if(xBallPosition == spatial.getWorldTranslation().x){
-            impact = "Middle";
-        }
-        
-        if(xBallPosition >= (spatial.getWorldTranslation().x - width/2) &&  xBallPosition <= (spatial.getWorldTranslation().x - ((width/2) + 0.01f))){
-            impact = "Left";
-        }
-        
-        if(xBallPosition <= (spatial.getWorldTranslation().x + width/2) && xBallPosition >= (spatial.getWorldTranslation().x - ((width/2) - 0.01f))){
-            impact = "Right";
-        }
-        
-        return impact;
-    
-    }
+
 }
