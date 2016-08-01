@@ -59,28 +59,27 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             rootNode.collideWith(breaker.getWorldBound(), results);
             if (results.size() > 0) {
 
-                CollisionResult collision = results.getClosestCollision();
+                CollisionResult collisionResult = results.getClosestCollision();
+                String collision = collisionResult.getGeometry().getName();
                 
-                if (collision.getGeometry().getName().equals("Floor")) {
+                if (collision.equals("Floor")) {
 //                    stateManager.getState(GamePlayAppState.class).reset();
                     stateManager.detach(stateManager.getState(InputAppState.class));
                     stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
                     stateManager.getState(GamePlayAppState.class).setStopGame(Boolean.TRUE);
                     
 
-                } else if (!collision.getGeometry().getName().equals("Breaker") 
-                        && !collision.getGeometry().getName().equals("Thing")
-                        && !collision.getGeometry().getName().equals("BreakerBar")) {
+                } else if (!collision.equals("Breaker") && !collision.equals("Thing") && !collision.equals("BreakerBar")) {
                    
-                    breaker.changeDirection(collision);
+                    breaker.changeDirection(collisionResult);
                     //changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
 
-                    if (collision.getGeometry() instanceof Brick) {
-                        Brick brick = (Brick)collision.getGeometry();
-                        brick.removeBrick(rootNode, (Brick) collision.getGeometry());
+                    if (collisionResult.getGeometry() instanceof Brick) {
+                        Brick brick = (Brick)collisionResult.getGeometry();
+                        brick.removeBrick(rootNode, (Brick) collisionResult.getGeometry());
                     }
-                }else if(collision.getGeometry().getName().equals("BreakerBar")){
-                    String zone = ((BreakerBar)collision.getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
+                }else if(collision.equals("BreakerBar")){
+                    String zone = ((BreakerBar)collisionResult.getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
                     
                     if(zone.equals("Left") || zone.equals("Right")){
                         breaker.getDirection().negateLocal();

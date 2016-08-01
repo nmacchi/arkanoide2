@@ -74,26 +74,34 @@ public class Breaker extends Geometry  {
     }
     
     public void changeDirection(CollisionResult collision, String zone) {
-        if(needsToBeReflected(zone, collision.getGeometry().getName()){
+        
+        if(zone.equals("Left") || zone.equals("Right")){
+            setDirection(rotateVector(this.getDirection().negateLocal()));
+        }else if(zone.equals("Center")){
+            setDirection(Vector3f.UNIT_Y);
+        }else{
+            
+            if(collision.getGeometry().getName().equals("BreakerBar")){
+                setDirection(rotateVector(v));
+            }else{
+                setDirection(v);
+            }
+            
             
         }
         
         
-        Triangle tri = new Triangle();
-        collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
         
-        Vector3f normal = tri.getNormal().normalizeLocal();
-        Vector3f v = direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2));
-        
-        
-        
-        setDirection(v);
     }   
     
-    private void rotateReflectiveVector(Vector3f v){
+    
+    
+    private Vector3f rotateVector(Vector3f v){
         Quaternion quat = new Quaternion();
         quat.fromAngleAxis(FastMath.DEG_TO_RAD * getRandomAngle(), Vector3f.UNIT_Z);
         quat.mult(v,v);
+        
+        return v;
     }
     
     
@@ -103,15 +111,13 @@ public class Breaker extends Geometry  {
         return angle;
     }
     
-    private boolean needsToBeReflected(String zone, String collideWidth){
-        if(collideWidth.equals("BreakerBar")){
-            if(zone.equals("Left") || zone.equals("Right")){
-                this.getDirection().negateLocal();
-            }else if(zone.equals("Center")){
-                this.setDirection(Vector3f.UNIT_Y);    
-            }
-
-            rotateReflectiveVector(this.getDirection());
-        }
+    public void reflectVector(){
+        Triangle tri = new Triangle();
+            collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
+        
+            Vector3f normal = tri.getNormal().normalizeLocal();
+            Vector3f v = direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2));
+            
     }
+ 
 }
