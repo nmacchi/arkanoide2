@@ -136,23 +136,23 @@ public class Brick extends Geometry {
         return FX;
     }
     
-    public void removeBrick(Node rootNode, Brick brick){
+    public void removeBrick(Node rootNode/*, Brick brick*/){
         countHits();
 
         if (getCountHits() >= getHardness()) {
             
             stateManager.getState(GamePlayAppState.class).setScore(getPoints());
             
-            if (brick instanceof CommonBrick) {
-                if (((CommonBrick) brick).isHasPowerup()) {
-                    Powerup powerup = ((CommonBrick) brick).getPowerup();
+            if (this instanceof CommonBrick) {
+                if (((CommonBrick) this).isHasPowerup()) {
+                    Powerup powerup = ((CommonBrick) this).getPowerup();
                     powerup.addControl(new PowerupControl(rootNode, stateManager));
                     rootNode.attachChild(powerup);
                 }
             }
             
-            brick.removeFromParent();
-            brick.getFX().executeFX(rootNode);
+            removeFromParent();
+//            brick.getFX().executeFX(rootNode);
         }
     }
     

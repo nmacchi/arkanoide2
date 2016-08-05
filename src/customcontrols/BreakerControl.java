@@ -5,19 +5,22 @@
 package customcontrols;
 
 import com.jme3.app.state.AppStateManager;
-import com.jme3.collision.CollisionResult;
+import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
-import com.jme3.math.Vector3f;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import mygame.entities.Breaker;
+import com.jme3.scene.shape.Line;
 import mygame.Brick;
-import mygame.entities.BreakerBar;
+import mygame.entities.Breaker;
 import states.GamePlayAppState;
 import states.InputAppState;
 
@@ -32,14 +35,20 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     private Breaker breaker;
     
     private AppStateManager stateManager;  
+    private AssetManager assetManager;
+    
+    private Ray r; 
     
     BreakerControl() {
     }
 
-    public BreakerControl(Node rootNode, AppStateManager stateManager) {
+    public BreakerControl(Node rootNode, AppStateManager stateManager, AssetManager assetManager) {
         this.rootNode = rootNode;
-//        this.breakerBar = breakerBar;
         this.stateManager = stateManager;
+        this.assetManager = assetManager;
+        
+        this.r = new Ray();
+//        this.r.setLimit(1f);
     }
 
     @Override
@@ -51,45 +60,91 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     @Override
     protected void controlUpdate(float tpf) {
         if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+            rootNode.detachChildNamed("line");
+            r.setOrigin(breaker.getLocalTranslation());
+            r.setDirection(breaker.getDirection());
+            
+//            System.out.println("Origen: " +r.getOrigin());
+//            System.out.println("Direccion: " +r.getDirection());
+            
+            Line l = new Line(breaker.getLocalTranslation(), breaker.getDirection());
+            Geometry line = new Geometry("line", l);
+            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            m.setColor("Color",ColorRGBA.Blue);
+            line.setMaterial(m);
+            
+            rootNode.attachChild(line);
+            
             breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
             
-            
-            results.clear();
+            rootNode.getChild("BricksNode").collideWith(breaker.getWorldBound(), results);
+            if(results.size() > 0){
+                //Colisiona con uno de los ladrillos
+                breaker.setDirection(breaker.reflectVector(results.getClosestCollision()));
 
-            rootNode.collideWith(breaker.getWorldBound(), results);
-            if (results.size() > 0) {
-
-                CollisionResult collisionResult = results.getClosestCollision();
-                String collision = collisionResult.getGeometry().getName();
+                if (results.getClosestCollision().getGeometry() instanceof Brick) {
+                    ((Brick)results.getClosestCollision().getGeometry()).removeBrick(rootNode);
+                }
                 
-                if (collision.equals("Floor")) {
-//                    stateManager.getState(GamePlayAppState.class).reset();
+                results.clear();
+            }
+            
+            rootNode.getChild("Gamefield").collideWith(breaker.getWorldBound(), results);
+            if(results.size() > 0){
+                //Colisiona contra las paredes o el suelo
+                if(results.getClosestCollision().getGeometry().getName().equals("Floor")){
                     stateManager.detach(stateManager.getState(InputAppState.class));
                     stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
                     stateManager.getState(GamePlayAppState.class).setStopGame(Boolean.TRUE);
-                    
-
-                } else if (!collision.equals("Breaker") && !collision.equals("Thing") && !collision.equals("BreakerBar")) {
-                   
-                    breaker.changeDirection(collisionResult);
-                    //changeDirection(tri.getNormal().normalizeLocal(), breaker.getDirection());
-
-                    if (collisionResult.getGeometry() instanceof Brick) {
-                        Brick brick = (Brick)collisionResult.getGeometry();
-                        brick.removeBrick(rootNode, (Brick) collisionResult.getGeometry());
-                    }
-                }else if(collision.equals("BreakerBar")){
-                    String zone = ((BreakerBar)collisionResult.getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
-                    
-                    if(zone.equals("Left") || zone.equals("Right")){
-                        breaker.getDirection().negateLocal();
-                    }else if(zone.equals("Center")){
-                        breaker.setDirection(Vector3f.UNIT_Y);
-                    }else{
-                        breaker.changeDirection(collision);
-                    }
+                }else{
+                    breaker.setDirection(breaker.reflectVector(results.getClosestCollision()));    
                 }
+                
+                results.clear();
             }
+            
+//            breaker.collideWith(((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0)).getWorldBound(), results);
+           //((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0)).getModelBound().collideWith(breaker, results);
+            ((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild("shape")).collideWith(r, results);
+            if(results.size() > 0){
+                System.out.println(results.getClosestCollision().getContactPoint());
+                System.out.println(results.getClosestCollision().getGeometry().getName());
+//                String zone = ((BreakerBar)results.getClosestCollision().getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
+//                breaker.changeDirection(results.getClosestCollision(), zone);
+                
+                results.clear();
+            }
+            
+//            rootNode.collideWith(breaker.getWorldBound(), results);
+//            if (results.size() > 0) {
+//
+//                CollisionResult collisionResult = results.getClosestCollision();
+//                String collision = collisionResult.getGeometry().getName();
+                //System.out.println("**** " + collision + " ****");
+//                if (collision.equals("Floor")) {
+////                    stateManager.getState(GamePlayAppState.class).reset();
+//                    stateManager.detach(stateManager.getState(InputAppState.class));
+//                    stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
+//                    stateManager.getState(GamePlayAppState.class).setStopGame(Boolean.TRUE);
+//                    
+
+//                } else if (!collision.equals("Breaker") && !collision.equals("Thing") && !collision.equals("BreakerBar")) {
+                    
+                    //Colisiona con uno de los ladrillos
+//                    breaker.setDirection(breaker.reflectVector(collisionResult));
+//
+//                    if (collisionResult.getGeometry() instanceof Brick) {
+//                        Brick brick = (Brick)collisionResult.getGeometry();
+//                        brick.removeBrick(rootNode, (Brick) collisionResult.getGeometry());
+//                    }
+//                }else if(collision.equals("BreakerBar")){
+//                    String zone = ((BreakerBar)collisionResult.getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
+//                    breaker.changeDirection(collisionResult, zone);
+//                }
+                
+                results.clear();
+                
+            //}
         }
     }
 

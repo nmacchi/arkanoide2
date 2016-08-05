@@ -12,10 +12,13 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.WireBox;
 import customcontrols.ArkanoidExplosionFXControl;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
@@ -78,14 +81,18 @@ public class GamePlayAppState extends AbstractAppState {
         arkanoid = new Arkanoid(assetManager);
         arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
         ball = new Breaker(assetManager);
-        ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
+        ball.addControl(new BreakerControl(app.getRootNode(), stateManager, assetManager));
         spaceship = new Spaceship(assetManager);
 
         breakerBarNode.attachChild(arkanoid);
         breakerBarNode.attachChild(ball);
-
+        
+        putBox(arkanoid.getLocalTranslation(), 0.5f, ColorRGBA.Yellow);
+        
         app.getRootNode().attachChild(breakerBarNode);
-
+        
+        
+        
     }
 
     private void configureCameraSettings() {
@@ -216,5 +223,26 @@ public class GamePlayAppState extends AbstractAppState {
 
     public void setStopGame(boolean stopGame) {
         this.stopGame = stopGame;
+    }
+    
+    
+    
+       /**
+     * TEST
+     */
+    
+    
+    public void putBox(Vector3f pos, float size, ColorRGBA color){
+        putShape(new WireBox(0.10f, 0.02f, 0.08f), color).setLocalTranslation(pos);
+    }
+    
+     public Geometry putShape(Mesh shape, ColorRGBA color){
+        Geometry g = new Geometry("shape", shape);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", color);
+        g.setMaterial(mat);
+        breakerBarNode.attachChild(g);
+        return g;
     }
 }
