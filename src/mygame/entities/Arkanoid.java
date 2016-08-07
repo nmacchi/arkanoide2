@@ -40,7 +40,7 @@ public class Arkanoid extends BreakerBar{
         //setName("BreakerBar");
         setMesh(geometry.getMesh());
         setMaterial(geometry.getMaterial());
-        getMesh().setBound(new BoundingBox());
+//        getMesh().setBound(new BoundingBox());
         
         setLocalTranslation(initialPosition);
         scale(0.095f, 0.07f, 0.045f);

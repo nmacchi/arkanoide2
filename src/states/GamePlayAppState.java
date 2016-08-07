@@ -87,7 +87,8 @@ public class GamePlayAppState extends AbstractAppState {
         breakerBarNode.attachChild(arkanoid);
         breakerBarNode.attachChild(ball);
         
-        putBox(arkanoid.getLocalTranslation(), 0.5f, ColorRGBA.Yellow);
+        
+//        putBox(arkanoid.getLocalTranslation(), 0.5f, ColorRGBA.Yellow);
         
         app.getRootNode().attachChild(breakerBarNode);
         
@@ -242,6 +243,7 @@ public class GamePlayAppState extends AbstractAppState {
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", color);
         g.setMaterial(mat);
+        
         breakerBarNode.attachChild(g);
         return g;
     }

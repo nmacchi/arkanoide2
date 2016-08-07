@@ -37,8 +37,6 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     private AppStateManager stateManager;  
     private AssetManager assetManager;
     
-    private Ray r; 
-    
     BreakerControl() {
     }
 
@@ -46,9 +44,6 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
         this.rootNode = rootNode;
         this.stateManager = stateManager;
         this.assetManager = assetManager;
-        
-        this.r = new Ray();
-//        this.r.setLimit(1f);
     }
 
     @Override
@@ -60,22 +55,25 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     @Override
     protected void controlUpdate(float tpf) {
         if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
-            rootNode.detachChildNamed("line");
+//            rootNode.detachChildNamed("line");
+            
+            breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
+            
+            Ray r = new Ray();
             r.setOrigin(breaker.getLocalTranslation());
             r.setDirection(breaker.getDirection());
             
 //            System.out.println("Origen: " +r.getOrigin());
-//            System.out.println("Direccion: " +r.getDirection());
+//            System.out.println("Direccion r: " +r.getDirection());
+//            System.out.println("Direccion b: " +breaker.getDirection());
             
-            Line l = new Line(breaker.getLocalTranslation(), breaker.getDirection());
-            Geometry line = new Geometry("line", l);
-            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            m.setColor("Color",ColorRGBA.Blue);
-            line.setMaterial(m);
+//            Geometry line = new Geometry("line", new Line(r.getOrigin(), r.getDirection().mult(0.0025f)));
+//            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//            m.setColor("Color",ColorRGBA.Blue);
+//            line.setMaterial(m);
             
-            rootNode.attachChild(line);
+//            rootNode.attachChild(line);
             
-            breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
             
             rootNode.getChild("BricksNode").collideWith(breaker.getWorldBound(), results);
             if(results.size() > 0){
@@ -103,12 +101,23 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 results.clear();
             }
             
+            
+//            ((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild("BreakerBar")).collideWith(r, results);
+//            if(results.size() > 0){
+//                System.out.println(results.getClosestCollision());
+//            }
+            
 //            breaker.collideWith(((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0)).getWorldBound(), results);
            //((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0)).getModelBound().collideWith(breaker, results);
-            ((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild("shape")).collideWith(r, results);
+            
+            
+            
+//            ((Geometry)rootNode.getChild("BreakerBar")).getModelBound().collideWith(breaker, results);
+            ((Geometry)rootNode.getChild("BreakerBar")).getModelBound().collideWith(r, results);
             if(results.size() > 0){
-                System.out.println(results.getClosestCollision().getContactPoint());
-                System.out.println(results.getClosestCollision().getGeometry().getName());
+//                System.out.println(results.getClosestCollision().getContactPoint());
+                
+                System.out.println(results.getClosestCollision().getDistance());
 //                String zone = ((BreakerBar)results.getClosestCollision().getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
 //                breaker.changeDirection(results.getClosestCollision(), zone);
                 
@@ -188,9 +197,5 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 //        }
 //    }
     
-    private void calculateImpactZone(Geometry arkanoide){
-        float x = arkanoide.getWorldTranslation().x;
-        
-        
-    }
+    
 }

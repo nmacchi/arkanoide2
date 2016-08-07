@@ -24,6 +24,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     
     
     private Node bricks;
+    private Node gamefield;
     ParticleEmitter smoke;
     
     public static void main(String[] args) {
@@ -35,7 +36,9 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     public void simpleInitApp() {
         
         bricks = new Node("BricksNode");
+        gamefield = new Node("Gamefield");
         rootNode.attachChild(bricks);
+        rootNode.attachChild(gamefield);
        
         initScene();
         makeWall();
@@ -88,7 +91,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
         geomFloor.setMaterial(matFloor);
         geomFloor.setCullHint(CullHint.Always);
-        rootNode.attachChild(geomFloor);
+        gamefield.attachChild(geomFloor);
 
         //Bars
         Material matBars = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -100,21 +103,21 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
         geomLeftBar.setMaterial(matBars);
 
-        rootNode.attachChild(geomLeftBar);
+        gamefield.attachChild(geomLeftBar);
 
         Box rightBar = new Box(0.025f, 0.60f, 0.025f);
         Geometry geomRightBar = new Geometry("RightBar", rightBar);
         geomRightBar.setLocalTranslation(new Vector3f(0.75f, 0.60f, 1f));
 
         geomRightBar.setMaterial(matBars);
-        rootNode.attachChild(geomRightBar);
+        gamefield.attachChild(geomRightBar);
 
         Box topBar = new Box(0.85f, 0.025f, 0.025f);
         Geometry geomTopBar = new Geometry("TopBar", topBar);
         geomTopBar.setLocalTranslation(new Vector3f(0.0f, 1.2f, 1f));
 
         geomTopBar.setMaterial(matBars);
-        rootNode.attachChild(geomTopBar);
+        gamefield.attachChild(geomTopBar);
     }
 
     @Override
