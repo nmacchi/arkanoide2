@@ -25,6 +25,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     
     private Node bricks;
     private Node gamefield;
+    private Node powerupsNode;
     ParticleEmitter smoke;
     
     public static void main(String[] args) {
@@ -37,8 +38,10 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         
         bricks = new Node("BricksNode");
         gamefield = new Node("Gamefield");
+        powerupsNode = new Node("PowerupsNode");
         rootNode.attachChild(bricks);
         rootNode.attachChild(gamefield);
+        rootNode.attachChild(powerupsNode);
        
         initScene();
         makeWall();

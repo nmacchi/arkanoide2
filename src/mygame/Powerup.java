@@ -34,7 +34,7 @@ public class Powerup extends Geometry {
         
         Geometry pill = (Geometry) ((Node) assetManager.loadModel("Models/pill/Sphere.001.mesh.j3o")).getChild(0);
         setMesh(pill.getMesh());
-        setName("Thing");
+        setName("Powerup");
 
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setBoolean("UseMaterialColors", true);

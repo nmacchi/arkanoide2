@@ -147,7 +147,7 @@ public class Brick extends Geometry {
                 if (((CommonBrick) this).isHasPowerup()) {
                     Powerup powerup = ((CommonBrick) this).getPowerup();
                     powerup.addControl(new PowerupControl(rootNode, stateManager));
-                    rootNode.attachChild(powerup);
+                    ((Node)rootNode.getChild("PowerupsNode")).attachChild(powerup);
                 }
             }
             

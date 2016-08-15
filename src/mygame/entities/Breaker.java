@@ -95,12 +95,19 @@ public class Breaker extends Geometry {
         return angle;
     }
 
-    public Vector3f reflectVector(CollisionResult collision) {
-        Triangle tri = new Triangle();
-        collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
+    public Vector3f reflectVector(CollisionResult collision) {            
+        Vector3f v;
+        
+        if(collision.getGeometry() != null){
+            Triangle tri = new Triangle();
+            collision.getGeometry().getMesh().getTriangle(collision.getTriangleIndex(), tri);
 
-        Vector3f normal = tri.getNormal().normalizeLocal();
-        Vector3f v = direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2));
+            Vector3f normal = tri.getNormal().normalizeLocal();
+            v = direction.negate().add(normal.mult(normal.dot(direction.negate())).add(direction).mult(2));
+        }else{
+            v = direction.setY(getDirection().getY() * -1);
+        }
+        
 
         return v.normalizeLocal();
     }

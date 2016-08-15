@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class PowerupType {
     
-    enum PowerTypes{EXPAND,CATCH,LIFE,SLOWER,FIRE}
+    public enum PowerTypes{EXPAND,CATCH,LIFE,SLOWER,FIRE}
     
     private static Random random = new Random();
 

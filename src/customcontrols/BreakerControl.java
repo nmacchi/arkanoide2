@@ -6,11 +6,8 @@ package customcontrols;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -18,9 +15,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import com.jme3.scene.shape.Line;
 import mygame.Brick;
 import mygame.entities.Breaker;
+import mygame.entities.BreakerBar;
 import states.GamePlayAppState;
 import states.InputAppState;
 
@@ -36,6 +33,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     
     private AppStateManager stateManager;  
     private AssetManager assetManager;
+    
+    private Ray r = new Ray();
     
     BreakerControl() {
     }
@@ -59,7 +58,6 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             
             breaker.move(breaker.getDirection().mult(tpf * Breaker.getSpeed()));
             
-            Ray r = new Ray();
             r.setOrigin(breaker.getLocalTranslation());
             r.setDirection(breaker.getDirection());
             
@@ -116,7 +114,11 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             ((Geometry)rootNode.getChild("BreakerBar")).getModelBound().collideWith(r, results);
             if(results.size() > 0){
 //                System.out.println(results.getClosestCollision().getContactPoint());
-                
+                if(results.getClosestCollision().getDistance() <= 0.05f){
+                    String zone = ((BreakerBar)rootNode.getChild("BreakerBar")).evaluateImpactZone(results.getClosestCollision().getContactPoint().x);
+                    breaker.changeDirection(results.getClosestCollision(), zone);
+                    
+                }
                 System.out.println(results.getClosestCollision().getDistance());
 //                String zone = ((BreakerBar)results.getClosestCollision().getGeometry()).evaluateImpactZone(breaker.getLocalTranslation().getX());
 //                breaker.changeDirection(results.getClosestCollision(), zone);

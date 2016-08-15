@@ -6,7 +6,6 @@ package customcontrols;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bounding.BoundingBox;
-import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -14,8 +13,10 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import mygame.entities.Breaker;
+import mygame.Powerup;
+import mygame.PowerupType;
 import mygame.entities.Arkanoid;
+import states.GamePlayAppState;
 
 /**
  *
@@ -46,6 +47,22 @@ public class BreakerBarControl extends AbstractControl {
     @Override
     protected void controlUpdate(float tpf) {
         results.clear();
+        
+        rootNode.getChild("PowerupsNode").collideWith(spatial.getWorldBound(), results);
+        if(results.size()>0){
+            Powerup powerup = (Powerup)results.getClosestCollision().getGeometry();
+            stateManager.getState(GamePlayAppState.class).setScore(powerup.getPoints());
+            
+            String catchedPowerup = powerup.getType().getName();
+            if(PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup)){
+                
+                Vector3f position = spatial.getLocalTranslation(); //Get arkanoid current position
+                ((Arkanoid) spatial).transformToSpaceship(stateManager, (Node)rootNode.getChild("BreakerBarNode"), position);   
+                
+            }
+            
+            
+        }
         
 //        rootNode.getChild("Breaker").collideWith(spatial.getWorldBound(), results);
 //        if(results.size() > 0){
