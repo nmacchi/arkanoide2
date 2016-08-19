@@ -14,6 +14,8 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -40,6 +42,7 @@ public class GamePlayAppState extends AbstractAppState {
     private int score;
     
     private Node breakerBarNode = new Node("BreakerBarNode");
+    private Node breakerNode = new Node("BreakerNode");
     private Arkanoid arkanoid;
     private Breaker ball;
     private Spaceship spaceship;
@@ -81,19 +84,14 @@ public class GamePlayAppState extends AbstractAppState {
         arkanoid = new Arkanoid(assetManager);
         arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
         ball = new Breaker(assetManager);
-        ball.addControl(new BreakerControl(app.getRootNode(), stateManager, assetManager));
+        ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
         spaceship = new Spaceship(assetManager);
 
         breakerBarNode.attachChild(arkanoid);
         breakerBarNode.attachChild(ball);
-        
-        
-//        putBox(arkanoid.getLocalTranslation(), 0.5f, ColorRGBA.Yellow);
-        
+ 
         app.getRootNode().attachChild(breakerBarNode);
-        
-        
-        
+        app.getRootNode().attachChild(breakerNode);
     }
 
     private void configureCameraSettings() {
@@ -145,6 +143,10 @@ public class GamePlayAppState extends AbstractAppState {
 
     public void restLife() {
         this.currentLives--;
+    }
+    
+    public void addLife(){
+        this.currentLives++;
     }
 
     public int getScore() {
@@ -226,25 +228,27 @@ public class GamePlayAppState extends AbstractAppState {
         this.stopGame = stopGame;
     }
     
-    
-    
-       /**
-     * TEST
-     */
-    
-    
-    public void putBox(Vector3f pos, float size, ColorRGBA color){
-        putShape(new WireBox(0.10f, 0.02f, 0.08f), color).setLocalTranslation(pos);
-    }
-    
-     public Geometry putShape(Mesh shape, ColorRGBA color){
-        Geometry g = new Geometry("shape", shape);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setWireframe(true);
-        mat.setColor("Color", color);
-        g.setMaterial(mat);
+    public void addExtraBalls(){ 
+        Vector3f position = ball.getWorldTranslation(); 
+        Vector3f currentDirection = ball.getDirection();
+        Vector3f direction1 = new Vector3f();
+        Vector3f direction2 = new Vector3f();
         
-        breakerBarNode.attachChild(g);
-        return g;
+        Quaternion quat = new Quaternion();
+        quat.fromAngleAxis(FastMath.PI * 10 / 180, Vector3f.UNIT_Z);
+        quat.mult(currentDirection, direction1);
+
+        quat.fromAngleAxis(FastMath.PI * -10 / 180, Vector3f.UNIT_Z);
+        quat.mult(currentDirection, direction2);
+        
+        Breaker extraBall1 = new Breaker(assetManager, position, ball.getSpeed(), direction1);
+        Breaker extraBall2 = new Breaker(assetManager, position, ball.getSpeed(), direction2);
+        
+        extraBall1.addControl(new BreakerControl(app.getRootNode(), stateManager));
+        breakerNode.attachChild(extraBall1);
+        extraBall2.addControl(new BreakerControl(app.getRootNode(), stateManager));
+        breakerNode.attachChild(extraBall2);
     }
+    
+
 }

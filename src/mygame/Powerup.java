@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public class Powerup extends Geometry {
     
-    enum PowerTypes{EXPAND,CATCH,LIFE,SLOWER,FIRE}
+//    enum PowerTypes{EXPAND,CATCH,LIFE,SLOWER,FIRE}
     
     private static int DEFAULT_POINTS = 75;
     private float speed = 2f;

@@ -99,7 +99,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
                 ball.setLocalTranslation(ball.getWorldTranslation());
                 ball.setInitialDirection();
 
-                rootNode.attachChild(ball);
+                ((Node)rootNode.getChild("BreakerNode")).attachChild(ball);
 
                 stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
             }

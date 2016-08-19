@@ -26,7 +26,7 @@ public class BreakerBar extends Geometry{
     
     protected PowerupType PowerupType;
     protected String activePower;
-    protected String currentPower;
+    private static String currentPower;
     protected float width;
     
     public BreakerBar(){
@@ -74,12 +74,12 @@ public class BreakerBar extends Geometry{
         return maxRightLimit;
     }
 
-    public String getCurrentPower() {
+    public static String getCurrentPower() {
         return currentPower;
     }
 
-    public void setCurrentPower(String currentPower) {
-        this.currentPower = currentPower;
+    public static void setCurrentPower(String currentPower) {
+        BreakerBar.currentPower = currentPower;
     }
     
     public float calculateGeometryWidth(){
@@ -104,7 +104,6 @@ public class BreakerBar extends Geometry{
         if(xBallPosition <= (this.getWorldTranslation().x + width) && xBallPosition >= (this.getWorldTranslation().x + width - 0.04f)){
             impact = "Right";
         }
-        System.out.println(impact);
         return impact;
     
     }

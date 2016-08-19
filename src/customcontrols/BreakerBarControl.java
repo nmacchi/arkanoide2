@@ -16,6 +16,9 @@ import com.jme3.scene.control.AbstractControl;
 import mygame.Powerup;
 import mygame.PowerupType;
 import mygame.entities.Arkanoid;
+import mygame.entities.Breaker;
+import mygame.entities.BreakerBar;
+import states.GameGuiAppState;
 import states.GamePlayAppState;
 
 /**
@@ -46,23 +49,51 @@ public class BreakerBarControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        results.clear();
-        
+        //TODO: Verificar si ya hay un poder aplicado 
+      
         rootNode.getChild("PowerupsNode").collideWith(spatial.getWorldBound(), results);
         if(results.size()>0){
+            System.out.println("llega");
+            
             Powerup powerup = (Powerup)results.getClosestCollision().getGeometry();
             stateManager.getState(GamePlayAppState.class).setScore(powerup.getPoints());
             
+            String arkanoidCurrentPower = BreakerBar.getCurrentPower();
             String catchedPowerup = powerup.getType().getName();
-            if(PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup)){
+            
+            if(PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
+                
+                BreakerBar.setCurrentPower(catchedPowerup);
                 
                 Vector3f position = spatial.getLocalTranslation(); //Get arkanoid current position
                 ((Arkanoid) spatial).transformToSpaceship(stateManager, (Node)rootNode.getChild("BreakerBarNode"), position);   
                 
             }
             
+            //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
+            if(PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
+                BreakerBar.setCurrentPower(catchedPowerup);
+                
+                GamePlayAppState gpap = stateManager.getState(GamePlayAppState.class);
+                gpap.addLife();
+                stateManager.getState(GameGuiAppState.class).updateLivesIndicator(stateManager.getApplication(), gpap.getCurrentLives());  
+            }
             
+            
+            if(PowerupType.PowerTypes.SLOWER.name().equals(catchedPowerup)){
+                ((Breaker)rootNode.getChild("Breaker")).decreaseSpeed();
+            }
+            
+            if(PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup)){
+                stateManager.getState(GamePlayAppState.class).addExtraBalls();
+            }
+            
+            
+            powerup.removeFromParent();
+           
         }
+        
+        results.clear();
         
 //        rootNode.getChild("Breaker").collideWith(spatial.getWorldBound(), results);
 //        if(results.size() > 0){

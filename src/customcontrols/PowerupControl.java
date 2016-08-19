@@ -27,7 +27,9 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
     private static float translationSpeed = 3f;
     private Node rootNode;
     private AppStateManager stateManager;
-
+    
+    CollisionResults results = new CollisionResults();
+    
     public PowerupControl() {
     }
 
@@ -44,7 +46,6 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
 
     @Override
     protected void controlUpdate(float tpf) {
-        CollisionResults results = new CollisionResults();
         spatial.rotate(0, 0, tpf * rotationSpeed);
         spatial.setLocalTranslation(spatial.getLocalTranslation().x, spatial.getLocalTranslation().y - tpf / translationSpeed, spatial.getLocalTranslation().z);
 
