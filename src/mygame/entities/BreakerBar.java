@@ -26,7 +26,7 @@ public class BreakerBar extends Geometry{
     
     protected PowerupType PowerupType;
     protected String activePower;
-    private static String currentPower;
+    private static String currentPower = "";
     protected float width;
     
     public BreakerBar(){

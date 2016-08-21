@@ -5,7 +5,6 @@
 package customcontrols;
 
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
 import com.jme3.math.Ray;
@@ -16,6 +15,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import mygame.Brick;
+import mygame.PowerupType;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
 import states.GamePlayAppState;
@@ -35,6 +35,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     
     private Ray r = new Ray();
     
+    private float timer;
+    
     BreakerControl() {
     }
 
@@ -52,8 +54,18 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     @Override
     protected void controlUpdate(float tpf) {
         if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
-
+            
             breaker.move(breaker.getDirection().mult(tpf * breaker.getSpeed()));
+            
+            if(BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())){
+                timer += tpf;
+                
+                if(timer >= 10f){
+                    BreakerBar.setCurrentPower("");
+                    breaker.setSpeed(Breaker.getInitialSpeed());
+                    timer = 0f;
+                }
+            }
             
             r.setOrigin(breaker.getLocalTranslation());
             r.setDirection(breaker.getDirection());

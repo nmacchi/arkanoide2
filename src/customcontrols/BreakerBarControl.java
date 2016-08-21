@@ -63,7 +63,7 @@ public class BreakerBarControl extends AbstractControl {
             
             if(PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
                 
-                BreakerBar.setCurrentPower(catchedPowerup);
+                
                 
                 Vector3f position = spatial.getLocalTranslation(); //Get arkanoid current position
                 ((Arkanoid) spatial).transformToSpaceship(stateManager, (Node)rootNode.getChild("BreakerBarNode"), position);   
@@ -71,9 +71,7 @@ public class BreakerBarControl extends AbstractControl {
             }
             
             //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
-            if(PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
-                BreakerBar.setCurrentPower(catchedPowerup);
-                
+            if(PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup)){
                 GamePlayAppState gpap = stateManager.getState(GamePlayAppState.class);
                 gpap.addLife();
                 stateManager.getState(GameGuiAppState.class).updateLivesIndicator(stateManager.getApplication(), gpap.getCurrentLives());  
@@ -84,54 +82,17 @@ public class BreakerBarControl extends AbstractControl {
                 ((Breaker)rootNode.getChild("Breaker")).decreaseSpeed();
             }
             
-            if(PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup)){
+            if(PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
                 stateManager.getState(GamePlayAppState.class).addExtraBalls();
             }
             
-            
+            BreakerBar.setCurrentPower(catchedPowerup);
             powerup.removeFromParent();
            
         }
         
         results.clear();
         
-//        rootNode.getChild("Breaker").collideWith(spatial.getWorldBound(), results);
-//        if(results.size() > 0){
-//            CollisionResult collision = results.getClosestCollision();
-//            
-//            System.out.println(collision.getGeometry().getName());
-//            if(collision.getGeometry().getName().equals("Breaker")){
-//                String zone = evaluateImpactZone(collision.getGeometry().getLocalTranslation().getX());
-//                
-//                if(zone.equals("Left") || zone.equals("Right")){
-//                    ((Breaker)collision.getGeometry()).getDirection().negateLocal();
-//                }else{
-//                    ((Breaker)collision.getGeometry()).changeDirection(collision);
-//                }
-//                
-//                
-//                    
-//                
-//                
-//                
-//            }
-//            
-//        }
-        
-        
-        
-//        String activePower = (((Arkanoid) spatial).getActivePower());
-////        System.out.println(activePower);
-//        if (activePower != null) {
-//            if (activePower.equals("FIRE")) {
-//                
-//                ((Arkanoid) spatial).setActivePower(null);
-//                ((Arkanoid) spatial).setCurrentPower("FIRE");
-//                
-//                Vector3f position = ((Arkanoid) spatial).getLocalTranslation(); //Get arkanoid current position
-//                ((Arkanoid) spatial).transformToSpaceship(stateManager, (Node)rootNode.getChild("BreakerBarNode"), position);   
-//            }
-//        }
     }
 
     @Override
