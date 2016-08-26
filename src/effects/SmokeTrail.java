@@ -10,7 +10,6 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 
 /**
@@ -19,14 +18,13 @@ import com.jme3.scene.Node;
  */
 public class SmokeTrail{
     private AssetManager assetManager;
-    
     private ParticleEmitter smoketrail;
     
     private static final int COUNT_FACTOR = 1;
     private static final float COUNT_FACTOR_F = 1f;
     
     private Vector3f position;
-
+    
     public SmokeTrail(AssetManager assetManager, Vector3f position){
         this.assetManager = assetManager;
         this.position = position;

@@ -15,6 +15,9 @@ import customcontrols.PowerupControl;
 import effects.SmokeTrail;
 import java.util.Random;
 import states.GamePlayAppState;
+import states.ScriptAppState;
+import triggers.PlayEffect;
+import triggers.Trigger;
 
 /**
  *
@@ -151,9 +154,42 @@ public class Brick extends Geometry {
                 }
             }
             
+            Node parent = this.getParent();
             removeFromParent();
+            
+            executeEffect(parent, this.getLocalTranslation());
 //            brick.getFX().executeFX(rootNode);
         }
+    }
+    
+    private void executeEffect(Node parent, Vector3f position){
+        final PlayEffect smoketrailEffect = new PlayEffect();
+        smoketrailEffect.setEffect(FX.getSmoketrail());
+        smoketrailEffect.setEmitAllParticles(true);
+        
+        parent.attachChild(smoketrailEffect.getEffect());
+        
+        Trigger explosionTimer = new Trigger();
+        explosionTimer.addTimerEvent(0f, new Trigger.TimerEvent() {
+
+            public Object[] call() {
+                smoketrailEffect.trigger();
+                return null;
+            }
+        });
+        
+        explosionTimer.addTimerEvent(2.5f, new Trigger.TimerEvent() {
+
+            public Object[] call() {
+                smoketrailEffect.stop();
+                return null;
+            }
+        });
+        
+        ScriptAppState scriptAppState = new ScriptAppState();
+        stateManager.attach(scriptAppState);
+        
+        scriptAppState.addTriggerObject(explosionTimer);
     }
     
     
