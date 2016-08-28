@@ -16,27 +16,34 @@ public class PlayEffect implements TriggerInterface{
     private ParticleEmitter effect;
     private boolean enabled = true;
     
+    public PlayEffect(ParticleEmitter effect){
+        this.effect = effect;
+    }
+    
+    
     public void update(float tpf) {
-       
+     
     }
 
     public void trigger() {
-        System.out.println("LLEGA");
+        
         if(enabled){
-            
+            emitAllParticles = true;
             onTrigger();
-            
         }
     }
 
     public void onTrigger() {
         if(emitAllParticles){
             effect.emitAllParticles();
+            enabled = false;
         }
     }
 
     public void stop(){
+        System.out.println("FIN EFECTO");
         effect.killAllParticles();
+        effect.removeFromParent();
     }
     
     public boolean isEmitAllParticles() {

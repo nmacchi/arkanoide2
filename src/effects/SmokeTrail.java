@@ -63,8 +63,8 @@ public class SmokeTrail{
         return position;
     }
     
-    public void executeFX(Node rootNode){
-        rootNode.attachChild(smoketrail);
+    public void execute(){
+//        node.attachChild(smoketrail);
         smoketrail.emitAllParticles();
     }
 }

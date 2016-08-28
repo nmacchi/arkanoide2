@@ -12,22 +12,22 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
-import com.jme3.scene.debug.WireBox;
 import customcontrols.ArkanoidExplosionFXControl;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
 import effects.ArkanoidExplosion;
+import effects.SmokeTrail;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.Spaceship;
+import triggers.PlayEffect;
+import triggers.Trigger;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -51,6 +51,7 @@ public class GamePlayAppState extends AbstractAppState {
     SimpleApplication app;
     AssetManager assetManager;
     InputAppState inputState;
+    ScriptAppState scriptAppState;
     
     private AudioNode audio_crash;
     private AudioNode audio_rebound;
@@ -203,13 +204,65 @@ public class GamePlayAppState extends AbstractAppState {
                 app.getRootNode().detachChildNamed("Breaker");
 
                 ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
-                explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
-
+//                explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
+                
+                
+                final PlayEffect flashFX = new PlayEffect(explosionFX.getFlash());
+                final PlayEffect sparkFX = new PlayEffect(explosionFX.getSpark());
+                final PlayEffect smoketrailFX = new PlayEffect(explosionFX.getSmoketrail());
+                final PlayEffect debrisFX = new PlayEffect(explosionFX.getDebris());
+                final PlayEffect shockwaveFX = new PlayEffect(explosionFX.getShockwave());
+                final PlayEffect flameFX = new PlayEffect(explosionFX.getFlame());
+                final PlayEffect roundsparkFX = new PlayEffect(explosionFX.getRoundspark());
+       
+                
+                Trigger explosionTrigger = new Trigger();
+                explosionTrigger.addTimerEvent(0.25f, new Trigger.TimerEvent() {
+                    public Object[] call() {
+                        flashFX.trigger();
+                        sparkFX.trigger();
+                        smoketrailFX.trigger();
+                        debrisFX.trigger();
+                        shockwaveFX.trigger();
+                        
+                        return null;
+                    }     
+                });
+                
+                explosionTrigger.addTimerEvent(0.3f, new Trigger.TimerEvent() {
+                    public Object[] call() {
+                        flameFX.trigger();
+                        roundsparkFX.trigger();
+                        
+                        return null;
+                    }     
+                });
+                
+                explosionTrigger.addTimerEvent(3f, new Trigger.TimerEvent() {
+                    public Object[] call() {
+                        flashFX.stop();
+                        sparkFX.stop();
+                        smoketrailFX.stop();
+                        debrisFX.stop();
+                        shockwaveFX.stop();
+                        flameFX.stop();
+                        roundsparkFX.stop();
+                        
+                        return null;
+                    }     
+                });
+                
+                
+                scriptAppState = new ScriptAppState();
+                stateManager.attach(scriptAppState);
+                scriptAppState.addTriggerObject(explosionTrigger);
+                
                 state = 1;
             }
 
             if (timeElapsed >= 4f) {
                 setStopGame(Boolean.FALSE);
+                stateManager.detach(scriptAppState);
                 app.getRootNode().detachChildNamed("explosionFX");
                 reset();
             }
@@ -250,5 +303,12 @@ public class GamePlayAppState extends AbstractAppState {
         breakerNode.attachChild(extraBall2);
     }
     
+    
+    //TODO: LLevarlo a un estado en el que una vez finalizado el effecto lo elimine completamente
+    public void executeEffect(Vector3f position, Node parent){
+         SmokeTrail effect = new SmokeTrail(assetManager, position);
+         parent.attachChild(effect.getSmoketrail());
+         effect.execute();
+    }
 
 }

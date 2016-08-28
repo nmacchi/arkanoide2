@@ -53,7 +53,7 @@ public class BreakerBarControl extends AbstractControl {
       
         rootNode.getChild("PowerupsNode").collideWith(spatial.getWorldBound(), results);
         if(results.size()>0){
-            System.out.println("llega");
+           
             
             Powerup powerup = (Powerup)results.getClosestCollision().getGeometry();
             stateManager.getState(GamePlayAppState.class).setScore(powerup.getPoints());

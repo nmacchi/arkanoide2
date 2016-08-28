@@ -15,11 +15,13 @@ import triggers.Trigger;
  */
 public class ScriptAppState extends AbstractAppState{
     
+    float timer;
     private List<Trigger> triggerObjects = new ArrayList<Trigger>();
 
     @Override
     public void update(float tpf){
         if(isEnabled()){
+            
             for(Trigger triggerObject : triggerObjects){
                 triggerObject.update(tpf);
             }

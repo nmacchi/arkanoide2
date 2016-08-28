@@ -64,7 +64,7 @@ public class Brick extends Geometry {
         count++;
         
         //create FX
-        FX = new SmokeTrail(assetManager, position);
+        //FX = new SmokeTrail(assetManager, position);
     }
 
     public static float getWidth() {
@@ -139,7 +139,7 @@ public class Brick extends Geometry {
         return FX;
     }
     
-    public void removeBrick(Node rootNode/*, Brick brick*/){
+    public boolean removeBrick(){
         countHits();
 
         if (getCountHits() >= getHardness()) {
@@ -149,28 +149,28 @@ public class Brick extends Geometry {
             if (this instanceof CommonBrick) {
                 if (((CommonBrick) this).isHasPowerup()) {
                     Powerup powerup = ((CommonBrick) this).getPowerup();
-                    powerup.addControl(new PowerupControl(rootNode, stateManager));
-                    ((Node)rootNode.getChild("PowerupsNode")).attachChild(powerup);
+                    powerup.addControl(new PowerupControl(this.getParent().getParent(), stateManager));
+                    ((Node)this.getParent().getParent().getChild("PowerupsNode")).attachChild(powerup);
                 }
             }
             
-            Node parent = this.getParent();
-            removeFromParent();
             
-            executeEffect(parent, this.getLocalTranslation());
-//            brick.getFX().executeFX(rootNode);
+            removeFromParent();
+            return true;
         }
+        
+        return false;
     }
     
-    private void executeEffect(Node parent, Vector3f position){
+    /*private void executeEffect(Node parent, Vector3f position){
         final PlayEffect smoketrailEffect = new PlayEffect();
         smoketrailEffect.setEffect(FX.getSmoketrail());
-        smoketrailEffect.setEmitAllParticles(true);
+        
         
         parent.attachChild(smoketrailEffect.getEffect());
         
         Trigger explosionTimer = new Trigger();
-        explosionTimer.addTimerEvent(0f, new Trigger.TimerEvent() {
+        explosionTimer.addTimerEvent(0.05f, new Trigger.TimerEvent() {
 
             public Object[] call() {
                 smoketrailEffect.trigger();
@@ -178,7 +178,7 @@ public class Brick extends Geometry {
             }
         });
         
-        explosionTimer.addTimerEvent(2.5f, new Trigger.TimerEvent() {
+        explosionTimer.addTimerEvent(smoketrailEffect.getEffect().getHighLife(), new Trigger.TimerEvent() {
 
             public Object[] call() {
                 smoketrailEffect.stop();
@@ -186,11 +186,19 @@ public class Brick extends Geometry {
             }
         });
         
+//        explosionTimer.addTimerEvent(2.5f, new Trigger.TimerEvent() {
+//
+//            public Object[] call() {
+//                smoketrailEffect.stop();
+//                return null;
+//            }
+//        });
+        
         ScriptAppState scriptAppState = new ScriptAppState();
         stateManager.attach(scriptAppState);
         
         scriptAppState.addTriggerObject(explosionTimer);
-    }
+    }*/
     
     
 }
