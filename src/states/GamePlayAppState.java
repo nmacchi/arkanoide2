@@ -4,12 +4,14 @@
  */
 package states;
 
+import effects.ScriptAppState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
@@ -18,16 +20,16 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import customcontrols.ArkanoidExplosionFXControl;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
-import effects.ArkanoidExplosion;
-import effects.SmokeTrail;
+import effects.VisualEffects;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.Spaceship;
-import triggers.PlayEffect;
-import triggers.Trigger;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -60,6 +62,7 @@ public class GamePlayAppState extends AbstractAppState {
     private int state;
     private float timeElapsed;
     private boolean stopGame;
+    private VisualEffects visualEffects;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -79,6 +82,7 @@ public class GamePlayAppState extends AbstractAppState {
         configureCameraSettings();
         initAudio();
         initSceneLights();
+        loadVisualFX();
     }
 
     private void initMainEntities() {
@@ -124,6 +128,10 @@ public class GamePlayAppState extends AbstractAppState {
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White);
         app.getRootNode().addLight(al);
+    }
+    
+    private void loadVisualFX(){
+        visualEffects = new VisualEffects(assetManager);
     }
 
     public Arkanoid getArkanoid() {
@@ -193,7 +201,9 @@ public class GamePlayAppState extends AbstractAppState {
 
     @Override
     public void update(float tpf) {
+        
         if (isStopGame()) {
+             System.out.println("Remover estado");
             timeElapsed += tpf / 1;
 
             if (state == 0) {
@@ -203,11 +213,21 @@ public class GamePlayAppState extends AbstractAppState {
                 ((Node) app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
                 app.getRootNode().detachChildNamed("Breaker");
 
-                ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
+//                ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
 //                explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
                 
+               
+                Map<Float, List<String>> customTriggerEffect = new HashMap<Float, List<String>>();
                 
-                final PlayEffect flashFX = new PlayEffect(explosionFX.getFlash());
+                customTriggerEffect.put(0.25f, Arrays.asList(VisualEffects.FLASH, VisualEffects.SPARK,VisualEffects.SMOKETRAIL, VisualEffects.DEBRIS, VisualEffects.SHOCKWAVE));
+                customTriggerEffect.put(0.3f, Arrays.asList(VisualEffects.FLAME, VisualEffects.ROUNDSPARK));
+                customTriggerEffect.put(3f, Arrays.asList(VisualEffects.FLASH, VisualEffects.SPARK,VisualEffects.SMOKETRAIL, VisualEffects.DEBRIS, VisualEffects.SHOCKWAVE,VisualEffects.FLAME, VisualEffects.ROUNDSPARK));
+                
+                ScriptAppState appState = new ScriptAppState(stateManager);
+                appState.setCustomTriggerEffect(customTriggerEffect);
+                stateManager.attach(appState);
+                
+                /*final PlayEffect flashFX = new PlayEffect(explosionFX.getFlash());
                 final PlayEffect sparkFX = new PlayEffect(explosionFX.getSpark());
                 final PlayEffect smoketrailFX = new PlayEffect(explosionFX.getSmoketrail());
                 final PlayEffect debrisFX = new PlayEffect(explosionFX.getDebris());
@@ -256,13 +276,13 @@ public class GamePlayAppState extends AbstractAppState {
                 scriptAppState = new ScriptAppState();
                 stateManager.attach(scriptAppState);
                 scriptAppState.addTriggerObject(explosionTrigger);
-                
+                */
                 state = 1;
             }
 
             if (timeElapsed >= 4f) {
                 setStopGame(Boolean.FALSE);
-                stateManager.detach(scriptAppState);
+                //stateManager.detach(scriptAppState);
                 app.getRootNode().detachChildNamed("explosionFX");
                 reset();
             }
@@ -306,9 +326,37 @@ public class GamePlayAppState extends AbstractAppState {
     
     //TODO: LLevarlo a un estado en el que una vez finalizado el effecto lo elimine completamente
     public void executeEffect(Vector3f position, Node parent){
-         SmokeTrail effect = new SmokeTrail(assetManager, position);
-         parent.attachChild(effect.getSmoketrail());
-         effect.execute();
+       ParticleEmitter debris = visualEffects.getDebris();
+       debris.setLocalTranslation(position);
+       
+       app.getRootNode().attachChild(debris);
+       debris.emitAllParticles();
+        
+        
+        /*final PlayEffect debrisFX = new PlayEffect(visualEffects.getDebris()); 
+        debrisFX.getEffect().setLocalTranslation(position);
+        
+        Trigger explosionTrigger = new Trigger();
+                explosionTrigger.addTimerEvent(0.1f, new Trigger.TimerEvent() {
+                    public Object[] call() {
+                        debrisFX.trigger();
+                        
+                        return null;
+                    }     
+                });
+        
+                
+        explosionTrigger.addTimerEvent(0.75f, new Trigger.TimerEvent() {
+                    public Object[] call() {
+                         debrisFX.stop();
+                        
+                        return null;
+                    }     
+                });        
+                
+        scriptAppState = new ScriptAppState();
+        stateManager.attach(scriptAppState);
+        scriptAppState.addTriggerObject(explosionTrigger);*/
     }
 
 }

@@ -99,17 +99,19 @@ public class Breaker extends Geometry {
     public void changeDirection(CollisionResult collision, String zone) {
 
         if (zone.equals("Left") || zone.equals("Right")) {
-            setDirection(rotateVector(this.getDirection().negateLocal()));
-        } else if (zone.equals("Center")) {
+            setDirection(rotateVector(this.getDirection().negateLocal(), -15));
+        }else if (zone.equals("Right")){
+            setDirection(rotateVector(this.getDirection().negateLocal(), 15));
+        }else if (zone.equals("Center")) {
             setDirection(Vector3f.UNIT_Y);
         } else {
             setDirection(reflectVector(collision));
         }
     }
 
-    private Vector3f rotateVector(Vector3f v) {
+    private Vector3f rotateVector(Vector3f v, int angle) {
         Quaternion quat = new Quaternion();
-        quat.fromAngleAxis(FastMath.PI * 10 / 180, Vector3f.UNIT_Z);
+        quat.fromAngleAxis(FastMath.PI * angle / 180, Vector3f.UNIT_Z);
         quat.mult(v, v);
         
         return v;

@@ -13,14 +13,17 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import customcontrols.ArkanoidExplosionFXControl;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author nicolas.macchi
  */
 public class ArkanoidExplosion {
-
+    
+    
+    
     private Node explosionEffect = new Node("explosionFX");
     private ParticleEmitter flame, flash, spark, roundspark, smoketrail, debris,
             shockwave;
@@ -69,7 +72,7 @@ public class ArkanoidExplosion {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flame.setMaterial(mat);
-        flame.setLocalTranslation(position);
+        //flame.setLocalTranslation(position);
         explosionEffect.attachChild(flame);
     }
 
@@ -93,7 +96,7 @@ public class ArkanoidExplosion {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flash.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flash.setMaterial(mat);
-        flash.setLocalTranslation(position);
+        //flash.setLocalTranslation(position);
         explosionEffect.attachChild(flash);
     }
 
@@ -116,7 +119,7 @@ public class ArkanoidExplosion {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/roundspark.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         roundspark.setMaterial(mat);
-        roundspark.setLocalTranslation(position);
+        //roundspark.setLocalTranslation(position);
         explosionEffect.attachChild(roundspark);
     }
 
@@ -138,7 +141,7 @@ public class ArkanoidExplosion {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/spark.png"));
         spark.setMaterial(mat);
-        spark.setLocalTranslation(position);
+        //spark.setLocalTranslation(position);
         explosionEffect.attachChild(spark);
     }
 
@@ -162,7 +165,7 @@ public class ArkanoidExplosion {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/smoketrail.png"));
         smoketrail.setMaterial(mat);
-        smoketrail.setLocalTranslation(position);
+        //smoketrail.setLocalTranslation(position);
         explosionEffect.attachChild(smoketrail);
     }
 
@@ -188,7 +191,7 @@ public class ArkanoidExplosion {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/Debris.png"));
         debris.setMaterial(mat);
-        debris.setLocalTranslation(position);
+        //debris.setLocalTranslation(position);
         explosionEffect.attachChild(debris);
     }
 
@@ -213,7 +216,7 @@ public class ArkanoidExplosion {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/shockwave.png"));
         shockwave.setMaterial(mat);
-        shockwave.setLocalTranslation(position);
+        //shockwave.setLocalTranslation(position);
         explosionEffect.attachChild(shockwave);
         
         

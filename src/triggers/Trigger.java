@@ -52,6 +52,7 @@ public class Trigger implements TriggerInterface {
             if(time > maxTime){
                 System.out.println("entra una y otra y otra vez");
                 running = false;
+                enabled = false;
             }
             
             lastTime = time;
@@ -80,4 +81,14 @@ public class Trigger implements TriggerInterface {
             maxTime = time;
         }
     }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+    
+    
 }

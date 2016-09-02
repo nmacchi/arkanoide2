@@ -43,7 +43,7 @@ public class PlayEffect implements TriggerInterface{
     public void stop(){
         System.out.println("FIN EFECTO");
         effect.killAllParticles();
-        effect.removeFromParent();
+//        effect.removeFromParent();
     }
     
     public boolean isEmitAllParticles() {
