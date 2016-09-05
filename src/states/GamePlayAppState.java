@@ -326,8 +326,7 @@ public class GamePlayAppState extends AbstractAppState {
     
     //TODO: LLevarlo a un estado en el que una vez finalizado el effecto lo elimine completamente
     public void executeEffect(Vector3f position, Node parent){
-       ParticleEmitter debris = visualEffects.getDebris();
-       debris.setLocalTranslation(position);
+       ParticleEmitter debris = VisualEffects.getDebris(position);
        
        app.getRootNode().attachChild(debris);
        debris.emitAllParticles();

@@ -35,7 +35,7 @@ public class VisualEffects {
 
     private static Node explosionEffect = new Node("explosionFX");
     private static ParticleEmitter flame, flash, spark, roundspark, smoketrail, debris, shockwave;
-    private AssetManager assetManager;
+    private static AssetManager assetManager;
     
     private static final int COUNT_FACTOR = 1;
     private static final float COUNT_FACTOR_F = 1f;
@@ -44,21 +44,21 @@ public class VisualEffects {
     
     public VisualEffects(AssetManager assetManager){
         
-        this.assetManager = assetManager;
+        VisualEffects.assetManager = assetManager;
         
-        createFlame();
-        createFlash();
-        createRoundSpark();
-        createSpark();
-        createSmokeTrail();
-        createDebris();
-        createShockwave();
+//        createFlame();
+//        createFlash();
+//        createRoundSpark();
+//        createSpark();
+//        createSmokeTrail();
+//        createDebris();
+//        createShockwave();
         
-        explosionEffect.setLocalScale(0.5f);
+//        explosionEffect.setLocalScale(0.5f);
     }
     
     
-    private void createFlame() {
+    private static ParticleEmitter createFlame(Vector3f position) {
         flame = new ParticleEmitter("Flame", EMITTER_TYPE, 32 * COUNT_FACTOR);
         flame.setSelectRandomImage(true);
         flame.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1f / COUNT_FACTOR_F)));
@@ -78,11 +78,12 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flame.setMaterial(mat);
-        //flame.setLocalTranslation(position);
-        effectsMap.put(FLAME, flame);
+        flame.setLocalTranslation(position);
+
+        return flame;
     }
 
-    private void createFlash() {
+    private static ParticleEmitter createFlash(Vector3f position) {
         flash = new ParticleEmitter("Flash", EMITTER_TYPE, 24 * COUNT_FACTOR);
         flash.setSelectRandomImage(true);
         flash.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1f / COUNT_FACTOR_F)));
@@ -102,11 +103,13 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flash.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flash.setMaterial(mat);
-        //flash.setLocalTranslation(position);
-        effectsMap.put(FLASH, flash);
+        flash.setLocalTranslation(position);
+//        effectsMap.put(FLASH, flash);
+        
+        return flash;
     }
 
-    private void createRoundSpark() {
+    private static ParticleEmitter createRoundSpark(Vector3f position) {
         roundspark = new ParticleEmitter("RoundSpark", EMITTER_TYPE, 20 * COUNT_FACTOR);
         roundspark.setStartColor(new ColorRGBA(1f, 0.29f, 0.34f, (float) (1.0 / COUNT_FACTOR_F)));
         roundspark.setEndColor(new ColorRGBA(0, 0, 0, (float) (0.5f / COUNT_FACTOR_F)));
@@ -125,11 +128,13 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/roundspark.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         roundspark.setMaterial(mat);
-        //roundspark.setLocalTranslation(position);
-        effectsMap.put(ROUNDSPARK, roundspark);
+        roundspark.setLocalTranslation(position);
+//        effectsMap.put(ROUNDSPARK, roundspark);
+        
+        return roundspark;
     }
 
-    private void createSpark() {
+    private static ParticleEmitter createSpark(Vector3f position) {
         spark = new ParticleEmitter("Spark", ParticleMesh.Type.Triangle, 30 * COUNT_FACTOR);
         spark.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1.0f / COUNT_FACTOR_F)));
         spark.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
@@ -147,11 +152,13 @@ public class VisualEffects {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/spark.png"));
         spark.setMaterial(mat);
-        //spark.setLocalTranslation(position);
-        effectsMap.put(SPARK, spark);
+        spark.setLocalTranslation(position);
+//        effectsMap.put(SPARK, spark);
+        
+        return spark;
     }
 
-    private void createSmokeTrail() {
+    private static ParticleEmitter createSmokeTrail(Vector3f position) {
         smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
         smoketrail.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1.0f / COUNT_FACTOR_F)));
         smoketrail.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
@@ -171,11 +178,13 @@ public class VisualEffects {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/smoketrail.png"));
         smoketrail.setMaterial(mat);
-        //smoketrail.setLocalTranslation(position);
-        effectsMap.put(SMOKETRAIL, smoketrail);
+        smoketrail.setLocalTranslation(position);
+//        effectsMap.put(SMOKETRAIL, smoketrail);
+        
+        return smoketrail;
     }
 
-    private void createDebris() {
+    private static ParticleEmitter createDebris(Vector3f position) {
         debris = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 15 * COUNT_FACTOR);
         debris.setSelectRandomImage(true);
         debris.setRandomAngle(true);
@@ -197,11 +206,13 @@ public class VisualEffects {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/Debris.png"));
         debris.setMaterial(mat);
-        //debris.setLocalTranslation(position);
-        effectsMap.put(DEBRIS, debris);
+        debris.setLocalTranslation(position);
+//        effectsMap.put(DEBRIS, debris);
+        
+        return debris;
     }
 
-    private void createShockwave() {
+    private static ParticleEmitter createShockwave(Vector3f position) {
         shockwave = new ParticleEmitter("Shockwave", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
         shockwave.setRandomAngle(true);
         shockwave.setFaceNormal(Vector3f.UNIT_Y);
@@ -222,38 +233,39 @@ public class VisualEffects {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/shockwave.png"));
         shockwave.setMaterial(mat);
-        //shockwave.setLocalTranslation(position);
-        effectsMap.put(SHOCKWAVE, shockwave);
+        shockwave.setLocalTranslation(position);
+//        effectsMap.put(SHOCKWAVE, shockwave);
         
-    }
-
-
-    public static ParticleEmitter getFlame() {
-        return flame;
-    }
-
-    public static ParticleEmitter getFlash() {
-        return flash;
-    }
-
-    public static ParticleEmitter getSpark() {
-        return spark;
-    }
-
-    public static ParticleEmitter getRoundspark() {
-        return roundspark;
-    }
-
-    public static ParticleEmitter getSmoketrail() {
-        return smoketrail;
-    }
-
-    public static ParticleEmitter getDebris() {
-        return debris;
-    }
-
-    public static ParticleEmitter getShockwave() {
         return shockwave;
+    }
+
+
+    public static ParticleEmitter getFlame(Vector3f position) {
+        return createFlame(position);
+    }
+
+    public static ParticleEmitter getFlash(Vector3f position) {
+        return createFlash(position);
+    }
+
+    public static ParticleEmitter getSpark(Vector3f position) {
+        return createSpark(position);
+    }
+
+    public static ParticleEmitter getRoundspark(Vector3f position) {
+        return createRoundSpark(position);
+    }
+
+    public static ParticleEmitter getSmoketrail(Vector3f position) {
+        return createSmokeTrail(position);
+    }
+
+    public static ParticleEmitter getDebris(Vector3f position) {
+        return createDebris(position);
+    }
+
+    public static ParticleEmitter getShockwave(Vector3f position) {
+        return createShockwave(position);
     }
 
     public static Node getExplosionEffect() {
