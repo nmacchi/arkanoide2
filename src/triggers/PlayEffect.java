@@ -4,7 +4,9 @@
  */
 package triggers;
 
+import com.jme3.app.state.AppStateManager;
 import com.jme3.effect.ParticleEmitter;
+import states.GamePlayAppState;
 
 /**
  *
@@ -15,9 +17,11 @@ public class PlayEffect implements TriggerInterface{
     private boolean emitAllParticles;
     private ParticleEmitter effect;
     private boolean enabled = true;
+    private AppStateManager stateManager; 
     
-    public PlayEffect(ParticleEmitter effect){
+    public PlayEffect(ParticleEmitter effect, AppStateManager stateManager){
         this.effect = effect;
+        this.stateManager = stateManager;
     }
     
     
@@ -35,6 +39,7 @@ public class PlayEffect implements TriggerInterface{
 
     public void onTrigger() {
         if(emitAllParticles){
+            stateManager.getState(GamePlayAppState.class).getApp().getRootNode().attachChild(effect);
             effect.emitAllParticles();
             enabled = false;
         }

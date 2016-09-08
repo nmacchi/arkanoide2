@@ -20,7 +20,7 @@ import triggers.Trigger;
  */
 public class ScriptAppState extends AbstractAppState{
     private AppStateManager stateManager;
-    private Map<Float, List<String>> customTriggerEffect;
+    private Map<Float, List<ParticleEmitter>> customTriggerEffect;
     
     
     private boolean triggerRunning;
@@ -36,11 +36,10 @@ public class ScriptAppState extends AbstractAppState{
         if(isEnabled()){
             
             for(Trigger triggerObject : triggerObjects){
-                System.out.println("LLEGA11111111111111");
                 triggerObject.update(tpf);
             }
             
-            checkNonRunningTriggers();
+           checkNonRunningTriggers();
         }
     }
     
@@ -52,17 +51,15 @@ public class ScriptAppState extends AbstractAppState{
         Iterator<Float> it = customTriggerEffect.keySet().iterator();
         
         while(it.hasNext()){
-            final List<PlayEffect> playEffectsList = new ArrayList<PlayEffect>();
+            //final List<PlayEffect> playEffectsList = new ArrayList<PlayEffect>();
             
-            float time = it.next();
-            List<String> effectsNamesList = customTriggerEffect.get(time);
+            final float time = it.next();
             
-            fillPlayEffects(effectsNamesList, playEffectsList);
-            
+         
             customTrigger.addTimerEvent(time, new Trigger.TimerEvent(){
                  public Object[] call(){
                      
-                     for(PlayEffect playEffect : playEffectsList){
+                     for(PlayEffect playEffect : getPlayEffectsList(customTriggerEffect.get(time))){
                          playEffect.trigger();
                      }
                      return null;
@@ -74,10 +71,14 @@ public class ScriptAppState extends AbstractAppState{
         
     }
     
-    private void fillPlayEffects(List<String> effectsNames, List<PlayEffect> playEffectsList){
-        for(String effect: effectsNames){
-            playEffectsList.add(new PlayEffect(VisualEffects.getEffectsMap().get(effect)));
+    private List<PlayEffect> getPlayEffectsList(List<ParticleEmitter> effects){
+        List<PlayEffect> playEffectsList = new ArrayList<PlayEffect>();
+        
+        for(ParticleEmitter effect: effects){
+            playEffectsList.add(new PlayEffect(effect, stateManager));
         }
+        
+        return playEffectsList;
     }
     
     private void checkNonRunningTriggers(){
@@ -90,8 +91,8 @@ public class ScriptAppState extends AbstractAppState{
         }
         
         if(!triggerRunning){
-            System.out.println("DISABLE STATE");
             this.setEnabled(false);
+            stateManager.detach(this);
         }
         
     }
@@ -105,11 +106,11 @@ public class ScriptAppState extends AbstractAppState{
         this.triggerObjects.add(triggerObject);
     }
 
-    public Map<Float, List<String>> getCustomTriggerEffect() {
+    public Map<Float, List<ParticleEmitter>> getCustomTriggerEffect() {
         return customTriggerEffect;
     }
 
-    public void setCustomTriggerEffect(Map<Float, List<String>> customTriggerEffect) {
+    public void setCustomTriggerEffect(Map<Float, List<ParticleEmitter>> customTriggerEffect) {
         this.customTriggerEffect = customTriggerEffect;
     }
     

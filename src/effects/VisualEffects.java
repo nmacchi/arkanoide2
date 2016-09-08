@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class VisualEffects {
     
-    private static Map<String, ParticleEmitter> effectsMap = new HashMap<String, ParticleEmitter>();
+//    private static Map<String, ParticleEmitter> effectsMap = new HashMap<String, ParticleEmitter>();
     
     public final static String FLASH = "Flash"; 
     public final static String FLAME = "Flame"; 
@@ -272,13 +272,13 @@ public class VisualEffects {
         return explosionEffect;
     }
 
-    public static Map<String, ParticleEmitter> getEffectsMap() {
+    /*public static Map<String, ParticleEmitter> getEffectsMap() {
         return effectsMap;
     }
 
     public static void setEffectsMap(Map<String, ParticleEmitter> effectsMap) {
         VisualEffects.effectsMap = effectsMap;
-    }
+    }*/
     
     
 }

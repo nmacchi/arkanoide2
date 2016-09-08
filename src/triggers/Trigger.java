@@ -35,7 +35,7 @@ public class Trigger implements TriggerInterface {
             while (it.hasNext()) {
                 
                 float t = it.next();
-                System.out.println("maxTime: " + maxTime + "time: " + time);
+            
                 if (t > lastTime && t <= time) {
                     
                     TimerEvent event = timerEvents.get(t);
