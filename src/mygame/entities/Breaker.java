@@ -6,6 +6,7 @@ package mygame.entities;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -14,6 +15,7 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Sphere;
+import effects.VisualEffects;
 import java.util.Random;
 
 /**
@@ -24,13 +26,17 @@ public class Breaker extends Geometry {
     
     private static float initialSpeed = 0.5f;
     private static float reducedSpeed = 0.25f;
+    private static final float maxSpeed = 1.5f;
+    
     private float speed;
     private static Vector3f initialPosition = new Vector3f(0.25f, 0.08f, 1f);
     private Vector3f direction;
     private static int MIN_ANGLE = -5;
     private static int MAX_ANGLE = 5;
     Random rdn = new Random();
-
+    
+    private int hits;
+    
     public Breaker(AssetManager assetManager) {
         super("Breaker", new Sphere(8, 8, 0.022f, true, false));
         createBallMaterial(assetManager);
@@ -140,6 +146,21 @@ public class Breaker extends Geometry {
         return v.normalizeLocal();
     }
     
+    public void countHit(){
+        if(speed < maxSpeed){
+            hits++;
+  
+            if(hits % 5 == 0){
+                speed += 0.05f;
+            }   
+        }
+    }
     
+    public void executeExplosionEffect(Vector3f position){
+        ParticleEmitter fx = VisualEffects.getBallExplosionEffect(position);
+        
+        this.getParent().attachChild(fx);
+        fx.emitAllParticles();
+    }
  
 }

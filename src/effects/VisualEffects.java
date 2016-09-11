@@ -22,8 +22,6 @@ import java.util.Map;
  */
 public class VisualEffects {
     
-//    private static Map<String, ParticleEmitter> effectsMap = new HashMap<String, ParticleEmitter>();
-    
     public final static String FLASH = "Flash"; 
     public final static String FLAME = "Flame"; 
     public final static String ROUNDSPARK = "Roundspark"; 
@@ -42,19 +40,8 @@ public class VisualEffects {
     private static final boolean POINT_SPRITE = true;
     private static final ParticleMesh.Type EMITTER_TYPE = POINT_SPRITE ? ParticleMesh.Type.Point : ParticleMesh.Type.Triangle;
     
-    public VisualEffects(AssetManager assetManager){
-        
+    public VisualEffects(AssetManager assetManager){        
         VisualEffects.assetManager = assetManager;
-        
-//        createFlame();
-//        createFlash();
-//        createRoundSpark();
-//        createSpark();
-//        createSmokeTrail();
-//        createDebris();
-//        createShockwave();
-        
-//        explosionEffect.setLocalScale(0.5f);
     }
     
     
@@ -104,7 +91,6 @@ public class VisualEffects {
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flash.setMaterial(mat);
         flash.setLocalTranslation(position);
-//        effectsMap.put(FLASH, flash);
         
         return flash;
     }
@@ -129,7 +115,6 @@ public class VisualEffects {
         mat.setBoolean("PointSprite", POINT_SPRITE);
         roundspark.setMaterial(mat);
         roundspark.setLocalTranslation(position);
-//        effectsMap.put(ROUNDSPARK, roundspark);
         
         return roundspark;
     }
@@ -153,7 +138,6 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/spark.png"));
         spark.setMaterial(mat);
         spark.setLocalTranslation(position);
-//        effectsMap.put(SPARK, spark);
         
         return spark;
     }
@@ -179,11 +163,66 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/smoketrail.png"));
         smoketrail.setMaterial(mat);
         smoketrail.setLocalTranslation(position);
-//        effectsMap.put(SMOKETRAIL, smoketrail);
         
         return smoketrail;
     }
+    
+    private static ParticleEmitter createBallExplosionEffect(Vector3f position) {
+        smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 55 * COUNT_FACTOR);
+        smoketrail.setStartColor(new ColorRGBA(1f, 1f, 1f, (float) (1.0f / COUNT_FACTOR_F)));
+        smoketrail.setEndColor(new ColorRGBA(1f, 1f, 1f, 0f));
+        smoketrail.setStartSize(.1f);
+        smoketrail.setEndSize(.03f);
 
+        smoketrail.setShape(new EmitterSphereShape(Vector3f.ZERO, 1f));
+        smoketrail.setFacingVelocity(true);
+        smoketrail.setParticlesPerSec(0);
+        smoketrail.setGravity(0, 1, 0);
+        smoketrail.setLowLife(.4f);
+        smoketrail.setHighLife(.9f);
+        smoketrail.setInitialVelocity(new Vector3f(0, 12, 0));
+        smoketrail.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 0, 2f));
+        smoketrail.setVelocityVariation(1);
+        smoketrail.setImagesX(1);
+        smoketrail.setImagesY(3);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/smoketrail.png"));
+        smoketrail.setMaterial(mat);
+        smoketrail.setLocalTranslation(position);
+        
+        return smoketrail;
+    }
+    
+    
+
+    private static ParticleEmitter createChangeEffect(Vector3f position) {
+        smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 75 * COUNT_FACTOR);
+        smoketrail.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1.0f / COUNT_FACTOR_F)));
+        smoketrail.setEndColor(new ColorRGBA(.4f, .22f, .12f, 0f));
+        smoketrail.setStartSize(.1f);
+        smoketrail.setEndSize(.03f);
+
+        smoketrail.setShape(new EmitterSphereShape(Vector3f.ZERO, 0.020f));
+        smoketrail.setFacingVelocity(true);
+        smoketrail.setParticlesPerSec(0);
+        smoketrail.setGravity(0, 0, 0);
+        smoketrail.setLowLife(.4f);
+        smoketrail.setHighLife(.6f);
+        smoketrail.setInitialVelocity(new Vector3f(0, 12, 0));
+        smoketrail.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2f, 0));
+        smoketrail.setVelocityVariation(1);
+        smoketrail.setImagesX(1);
+        smoketrail.setImagesY(3);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/smoketrail.png"));
+        smoketrail.setMaterial(mat);
+        smoketrail.setLocalTranslation(position);
+        
+        return smoketrail;
+    }
+    
+    
+   
     private static ParticleEmitter createDebris(Vector3f position) {
         debris = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 15 * COUNT_FACTOR);
         debris.setSelectRandomImage(true);
@@ -207,8 +246,7 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/Debris.png"));
         debris.setMaterial(mat);
         debris.setLocalTranslation(position);
-//        effectsMap.put(DEBRIS, debris);
-        
+
         return debris;
     }
 
@@ -234,7 +272,6 @@ public class VisualEffects {
         mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/shockwave.png"));
         shockwave.setMaterial(mat);
         shockwave.setLocalTranslation(position);
-//        effectsMap.put(SHOCKWAVE, shockwave);
         
         return shockwave;
     }
@@ -267,18 +304,18 @@ public class VisualEffects {
     public static ParticleEmitter getShockwave(Vector3f position) {
         return createShockwave(position);
     }
-
+    
+    public static ParticleEmitter getChangeEffect(Vector3f position) {
+        return createChangeEffect(position);
+    }
+    
+     public static ParticleEmitter getBallExplosionEffect(Vector3f position) {
+        return createBallExplosionEffect(position);
+    }
+    
     public static Node getExplosionEffect() {
         return explosionEffect;
     }
 
-    /*public static Map<String, ParticleEmitter> getEffectsMap() {
-        return effectsMap;
-    }
-
-    public static void setEffectsMap(Map<String, ParticleEmitter> effectsMap) {
-        VisualEffects.effectsMap = effectsMap;
-    }*/
-    
     
 }

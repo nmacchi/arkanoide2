@@ -254,6 +254,8 @@ public class GamePlayAppState extends AbstractAppState {
     }
     
     public void addExtraBalls(){ 
+        Node extraBallsNode = new Node("ExtraBalls");
+        
         Vector3f position = ball.getWorldTranslation(); 
         Vector3f currentDirection = ball.getDirection();
         Vector3f direction1 = new Vector3f();
@@ -270,9 +272,13 @@ public class GamePlayAppState extends AbstractAppState {
         Breaker extraBall2 = new Breaker(assetManager, position, ball.getSpeed(), direction2);
         
         extraBall1.addControl(new BreakerControl(app.getRootNode(), stateManager));
-        breakerNode.attachChild(extraBall1);
+        extraBallsNode.attachChild(extraBall1);
+//        breakerNode.attachChild(extraBall1);
         extraBall2.addControl(new BreakerControl(app.getRootNode(), stateManager));
-        breakerNode.attachChild(extraBall2);
+        extraBallsNode.attachChild(extraBall2);
+//        breakerNode.attachChild(extraBall2);
+        
+        app.getRootNode().attachChild(extraBallsNode);
     }
     
     

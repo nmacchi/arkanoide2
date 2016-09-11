@@ -82,9 +82,10 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     if(isRemoved){
                         stateManager.getState(GamePlayAppState.class).executeEffect(results.getClosestCollision().getGeometry().getLocalTranslation(), rootNode);
                     }
-                   
+                    
+                    breaker.countHit();
                 }
-
+                
                 results.clear();
             }
 
@@ -116,7 +117,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 if (results.getClosestCollision().getDistance() <= 0.05f) {
                     String zone = ((BreakerBar) rootNode.getChild("BreakerBar")).evaluateImpactZone(results.getClosestCollision().getContactPoint().x);
                     breaker.changeDirection(results.getClosestCollision(), zone);
-
+                    
+                    breaker.countHit();
                 }
                 results.clear();
             }
