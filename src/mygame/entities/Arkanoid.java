@@ -27,20 +27,25 @@ public class Arkanoid extends BreakerBar{
     public Arkanoid(AssetManager assetManager){
         super(assetManager);
         createArkanoid();
-        this.width = calculateGeometryWidth();
+        setLocalTranslation(initialPosition);
+    }
+    
+    public Arkanoid(AssetManager assetManager, Vector3f position){
+        super(assetManager);
+        createArkanoid();
+        setLocalTranslation(position);
     }
     
     private void createArkanoid(){
         Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
         
-        //setName("BreakerBar");
         setMesh(geometry.getMesh());
         setMaterial(geometry.getMaterial());
-//        getMesh().setBound(new BoundingBox());
         
-        setLocalTranslation(initialPosition);
         scale(0.095f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
+        
+        this.width = calculateGeometryWidth();
     }
 
     public static Vector3f getInitialPosition() {

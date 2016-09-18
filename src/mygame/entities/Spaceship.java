@@ -29,6 +29,8 @@ public class Spaceship extends BreakerBar{
     private ParticleEmitter flamming2;
     private Node localNode = new Node("FlameEffect");
     
+    public Spaceship(){};
+    
     public Spaceship(AssetManager assetManager){
         super(assetManager);
         createSpaceship();
