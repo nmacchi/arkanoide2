@@ -14,7 +14,7 @@ import mygame.PowerupType;
  *
  * @author nicolas
  */
-public class BreakerBar extends Geometry{
+public abstract class BreakerBar extends Geometry {
     
 
     protected AssetManager assetManager;
@@ -29,6 +29,7 @@ public class BreakerBar extends Geometry{
     private static String currentPower = "";
     protected float width;
     
+   
     public BreakerBar(){
         
     }
