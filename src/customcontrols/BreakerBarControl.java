@@ -21,10 +21,10 @@ import mygame.PowerupType;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
-import mygame.entities.BreakerBarFactory;
 import mygame.entities.Spaceship;
 import states.GameGuiAppState;
 import states.GamePlayAppState;
+import states.PlayerState;
 
 /**
  *
@@ -55,14 +55,17 @@ public class BreakerBarControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        //TODO: Verificar si ya hay un poder aplicado 
-
+          
+        if(spatial instanceof Spaceship){
+            ((Spaceship)spatial).restCooldownTime(tpf);
+        }
+        
         rootNode.getChild("PowerupsNode").collideWith(spatial.getWorldBound(), results);
         if (results.size() > 0) {
 
 
             Powerup powerup = (Powerup) results.getClosestCollision().getGeometry();
-            stateManager.getState(GamePlayAppState.class).setScore(powerup.getPoints());
+            stateManager.getState(PlayerState.class).setScore(powerup.getPoints());
 
             String arkanoidCurrentPower = BreakerBar.getCurrentPower();
             String catchedPowerup = powerup.getType().getName();
@@ -71,17 +74,26 @@ public class BreakerBarControl extends AbstractControl {
                 
                 verifyExtraBallActivated();
 
-                executeChangeEffect(spatial.getWorldTranslation());
+                
+                if((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0) instanceof Arkanoid){
+                    executeChangeEffect(spatial.getWorldTranslation());
+                    
+                    ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
+                    Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
+                    spaceship.setLocalTranslation(spatial.getLocalTranslation());
+                    ((Node)rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
+                }
+                
+                
+                //executeChangeEffect(spatial.getWorldTranslation());
 
-                ((Arkanoid) spatial).transformToSpaceship(stateManager, (Node) rootNode.getChild("BreakerBarNode"), spatial.getLocalTranslation());
+                //((Arkanoid) spatial).transformToSpaceship(stateManager, (Node) rootNode.getChild("BreakerBarNode"), spatial.getLocalTranslation());
 
             }
 
             //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
             if (PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup)) {
-                GamePlayAppState gpap = stateManager.getState(GamePlayAppState.class);
-                gpap.addLife();
-                stateManager.getState(GameGuiAppState.class).updateLivesIndicator(stateManager.getApplication(), gpap.getCurrentLives());
+                stateManager.getState(PlayerState.class).addLife();
             }
 
 
@@ -94,7 +106,7 @@ public class BreakerBarControl extends AbstractControl {
                     
                     ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
                     Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
-                    arkanoide.setLocalRotation(spatial.getLocalRotation());
+                    arkanoide.setLocalTranslation(spatial.getLocalTranslation());
                     ((Node)rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
                 }
                 
@@ -103,6 +115,16 @@ public class BreakerBarControl extends AbstractControl {
 
             if (PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
                 stateManager.getState(GamePlayAppState.class).addExtraBalls();
+                
+                
+                if((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0) instanceof Spaceship){
+                    executeChangeEffect(spatial.getWorldTranslation());
+                    
+                    ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
+                    Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
+                    arkanoide.setLocalTranslation(spatial.getLocalTranslation());
+                    ((Node)rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
+                }
             }
 
             BreakerBar.setCurrentPower(catchedPowerup);

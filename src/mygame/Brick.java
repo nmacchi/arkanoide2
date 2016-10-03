@@ -14,10 +14,7 @@ import com.jme3.scene.Node;
 import customcontrols.PowerupControl;
 import effects.SmokeTrail;
 import java.util.Random;
-import states.GamePlayAppState;
-import states.ScriptAppState;
-import triggers.PlayEffect;
-import triggers.Trigger;
+import states.PlayerState;
 
 /**
  *
@@ -144,7 +141,7 @@ public class Brick extends Geometry {
 
         if (getCountHits() >= getHardness()) {
             
-            stateManager.getState(GamePlayAppState.class).setScore(getPoints());
+            stateManager.getState(PlayerState.class).setScore(getPoints());
             
             if (this instanceof CommonBrick) {
                 if (((CommonBrick) this).isHasPowerup()) {

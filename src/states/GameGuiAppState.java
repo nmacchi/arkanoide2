@@ -42,7 +42,7 @@ public class GameGuiAppState extends AbstractAppState {
         
         initializeStateIndicator(app);
         initializeScoreIndicator(app, stateManager);
-        updateLivesIndicator(app, stateManager.getState(GamePlayAppState.class).getCurrentLives());   
+        updateLivesIndicator(app, stateManager.getState(PlayerState.class).getCurrentLives());   
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GameGuiAppState extends AbstractAppState {
         scoreIndicator.setSize(18f);      // font size
         scoreIndicator.setColor(ColorRGBA.White);
         scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
-        scoreIndicator.setText(stateManager.getState(GamePlayAppState.class).getFormattedScore());
+        scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
     
         ((SimpleApplication)app).getGuiNode().attachChild(scoreIndicator);
     }
@@ -119,6 +119,6 @@ public class GameGuiAppState extends AbstractAppState {
     }
     
     public void updateScoreIndicator(){
-        scoreIndicator.setText(stateManager.getState(GamePlayAppState.class).getFormattedScore());
+        scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
     }
 }
