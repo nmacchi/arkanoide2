@@ -36,6 +36,12 @@ public class Spaceship extends BreakerBar{
         createSpaceship();
     }
     
+    public Spaceship(AssetManager assetManager, Vector3f position){
+        super(assetManager);
+        createSpaceship();
+        setLocalTranslation(position);
+    }
+    
     private void createSpaceship(){
         Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/spaceship_model.j3o")).getChild(0);
         
@@ -47,7 +53,7 @@ public class Spaceship extends BreakerBar{
         
         //setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
 //        setLocalTranslation(position);
-        addControl(new SpaceshipControl());
+//        addControl(new SpaceshipControl());
     }
     
     private void createBullets(){
@@ -82,7 +88,8 @@ public class Spaceship extends BreakerBar{
         localNode.attachChild(flamming1);
         localNode.attachChild(flamming2);
         
-        parentNode.attachChild(localNode);
+        this.getParent().attachChild(localNode);
+//        parentNode.attachChild(localNode);
     }
 
 

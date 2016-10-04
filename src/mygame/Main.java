@@ -14,6 +14,7 @@ import com.jme3.scene.shape.Box;
 import states.GameGuiAppState;
 import states.GamePlayAppState;
 import states.InputAppState;
+import states.PlayerState;
 
 /**
  * test
@@ -125,16 +126,11 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleUpdate(float tpf) {
-//        smoke.emitAllParticles();
-        //TODO: add update code
-        
-        if(stateManager.getState(GamePlayAppState.class).getCurrentLives() == 0){
-//            stateManager.detach(stateManager.getState(GamePlayAppState.class).getInputState());
+        if(stateManager.getState(PlayerState.class).getCurrentLives() == 0){
             stateManager.detach(stateManager.getState(InputAppState.class));
         }
-//        
+
         if(((Node)rootNode.getChild("BricksNode")).getChildren().isEmpty()){
-//            stateManager.detach(stateManager.getState(GamePlayAppState.class).getInputState());
             stateManager.detach(stateManager.getState(InputAppState.class));
         }
     }

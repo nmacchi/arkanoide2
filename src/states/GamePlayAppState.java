@@ -39,9 +39,6 @@ import mygame.entities.Spaceship;
 public class GamePlayAppState extends AbstractAppState {
 
     private boolean gameStarted;
-    private static int INITIAL_DEFAULT_LIVES = 3;
-    private int currentLives;
-    private int score;
     
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Node breakerNode = new Node("BreakerNode");
@@ -52,7 +49,9 @@ public class GamePlayAppState extends AbstractAppState {
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
+    
     InputAppState inputState;
+    PlayerState playerState;
     ScriptAppState scriptAppState;
     
     private AudioNode audio_crash;
@@ -62,7 +61,7 @@ public class GamePlayAppState extends AbstractAppState {
     private int state;
     private float timeElapsed;
     private boolean stopGame;
-    private VisualEffects visualEffects;
+//    private VisualEffects visualEffects;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -72,17 +71,17 @@ public class GamePlayAppState extends AbstractAppState {
         this.app = (SimpleApplication) app;
         this.assetManager = ((SimpleApplication) app).getAssetManager();
 
-        currentLives = INITIAL_DEFAULT_LIVES;
-
         initMainEntities();
 
         inputState = new InputAppState();
         stateManager.attach(inputState);
-
+        
+        playerState = new PlayerState();
+        stateManager.attach(playerState);
+        
         configureCameraSettings();
         initAudio();
         initSceneLights();
-        loadVisualFX();
     }
 
     private void initMainEntities() {
@@ -130,10 +129,6 @@ public class GamePlayAppState extends AbstractAppState {
         app.getRootNode().addLight(al);
     }
     
-    private void loadVisualFX(){
-        visualEffects = new VisualEffects(assetManager);
-    }
-
     public Arkanoid getArkanoid() {
         return arkanoid;
     }
@@ -142,41 +137,9 @@ public class GamePlayAppState extends AbstractAppState {
         return ball;
     }
 
-    public int getCurrentLives() {
-        return currentLives;
-    }
-
-    public void setCurrentLives(int currentLives) {
-        this.currentLives = currentLives;
-    }
-
-    public void restLife() {
-        this.currentLives--;
-    }
-    
-    public void addLife(){
-        this.currentLives++;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score += score;
-        stateManager.getState(GameGuiAppState.class).updateScoreIndicator();
-    }
-
-    public String getFormattedScore() {
-        return String.format("%08d", score);
-    }
-
     public void reset() {
-        restLife();
+        playerState.restLife();
         
-        //Call GUI state for update
-        stateManager.getState(GameGuiAppState.class).updateLivesIndicator(app, currentLives);
-
         ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
         arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
         ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
