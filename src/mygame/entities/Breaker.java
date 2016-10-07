@@ -14,7 +14,9 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import customcontrols.BreakerControl;
 import effects.VisualEffects;
 import java.util.Random;
 
@@ -162,5 +164,49 @@ public class Breaker extends Geometry {
         this.getParent().attachChild(fx);
         fx.emitAllParticles();
     }
- 
+    
+    /**
+     * Create two extra balls
+     */
+    public void createExtraBalls(){
+        Vector3f position = ball.getWorldTranslation(); 
+        Vector3f currentDirection = ball.getDirection();
+        Vector3f direction1 = new Vector3f();
+        Vector3f direction2 = new Vector3f();
+        
+//        Quaternion quat = new Quaternion();
+//        quat.fromAngleAxis(FastMath.PI * 10 / 180, Vector3f.UNIT_Z);
+//        quat.mult(currentDirection, direction1);
+
+//        quat.fromAngleAxis(FastMath.PI * -10 / 180, Vector3f.UNIT_Z);
+//        quat.mult(currentDirection, direction2);
+        
+        Breaker extraBall1 = new Breaker(assetManager, position, ball.getSpeed(), direction1);
+        Breaker extraBall2 = new Breaker(assetManager, position, ball.getSpeed(), direction2);
+        
+        extraBall1.addControl(new BreakerControl(app.getRootNode(), stateManager));
+        extraBallsNode.attachChild(extraBall1);
+        extraBall2.addControl(new BreakerControl(app.getRootNode(), stateManager));
+        extraBallsNode.attachChild(extraBall2);
+        
+        Node extraBallsNode = new Node("ExtraBalls");
+        
+        for(int i = 0; i < 2; i++){
+            Vector3f newDirection = new Vector3f();
+            
+            Quaternion quat = new Quaternion();
+            
+            int rotationDegree;  
+            if(extraBallsNode.getChildren().isEmpty()){
+                rotationDegree = 10;
+            }else{
+                rotationDegree = -10;
+            } 
+            
+            quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
+            quat.mult(currentDirection, direction);
+        
+        
+        }
+    }
 }

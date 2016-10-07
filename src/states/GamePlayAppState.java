@@ -86,10 +86,11 @@ public class GamePlayAppState extends AbstractAppState {
 
     private void initMainEntities() {
         arkanoid = new Arkanoid(assetManager);
-        arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
         ball = new Breaker(assetManager);
+        
+        arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
         ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
-        spaceship = new Spaceship(assetManager);
+//        spaceship = new Spaceship(assetManager);
 
         breakerBarNode.attachChild(arkanoid);
         breakerBarNode.attachChild(ball);
@@ -177,14 +178,12 @@ public class GamePlayAppState extends AbstractAppState {
 
                 Vector3f position = ((Geometry) ((Node) app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
                 
+                //Reset entites
                 ((Node) app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
                 app.getRootNode().detachChildNamed("Breaker");
-
-//                ArkanoidExplosion explosionFX = new ArkanoidExplosion(assetManager, position, app.getRootNode());
-//                explosionFX.getExplosionEffect().addControl(new ArkanoidExplosionFXControl());
-                          
-                Map<Float, List<ParticleEmitter>> customTriggerEffect = new HashMap<Float, List<ParticleEmitter>>();
                 
+                //Build multiple effect trigger
+                Map<Float, List<ParticleEmitter>> customTriggerEffect = new HashMap<Float, List<ParticleEmitter>>();
                 customTriggerEffect.put(0.25f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getSpark(position),VisualEffects.getSmoketrail(position), VisualEffects.getDebris(position), VisualEffects.getShockwave(position)));
                 customTriggerEffect.put(0.3f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getRoundspark(position)));
                 
@@ -197,7 +196,6 @@ public class GamePlayAppState extends AbstractAppState {
 
             if (timeElapsed >= 4f) {
                 setStopGame(Boolean.FALSE);
-                //stateManager.detach(scriptAppState);
                 app.getRootNode().detachChildNamed("explosionFX");
                 reset();
             }
@@ -236,19 +234,10 @@ public class GamePlayAppState extends AbstractAppState {
         
         extraBall1.addControl(new BreakerControl(app.getRootNode(), stateManager));
         extraBallsNode.attachChild(extraBall1);
-//        breakerNode.attachChild(extraBall1);
         extraBall2.addControl(new BreakerControl(app.getRootNode(), stateManager));
         extraBallsNode.attachChild(extraBall2);
-//        breakerNode.attachChild(extraBall2);
         
         app.getRootNode().attachChild(extraBallsNode);
     }
     
-    
-    public void executeEffect(Vector3f position, Node parent){
-       ParticleEmitter debris = VisualEffects.getDebris(position);
-       
-       app.getRootNode().attachChild(debris);
-       debris.emitAllParticles(); 
-    }
 }

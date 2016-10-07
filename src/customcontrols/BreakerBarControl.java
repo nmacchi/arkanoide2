@@ -7,10 +7,11 @@ package customcontrols;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
@@ -22,7 +23,6 @@ import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
 import mygame.entities.Spaceship;
-import states.GameGuiAppState;
 import states.GamePlayAppState;
 import states.PlayerState;
 
@@ -75,7 +75,7 @@ public class BreakerBarControl extends AbstractControl {
                 verifyExtraBallActivated();
 
                 
-                if((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0) instanceof Arkanoid){
+                if(spatial instanceof Arkanoid){
                     executeChangeEffect(spatial.getWorldTranslation());
                     
                     ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
@@ -101,7 +101,7 @@ public class BreakerBarControl extends AbstractControl {
 
                 verifyExtraBallActivated();
                
-                if((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0) instanceof Spaceship){
+                if(spatial instanceof Spaceship){
                     executeChangeEffect(spatial.getWorldTranslation());
                     
                     ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
@@ -117,7 +117,7 @@ public class BreakerBarControl extends AbstractControl {
                 stateManager.getState(GamePlayAppState.class).addExtraBalls();
                 
                 
-                if((Geometry)((Node)rootNode.getChild("BreakerBarNode")).getChild(0) instanceof Spaceship){
+                if(spatial instanceof Spaceship){
                     executeChangeEffect(spatial.getWorldTranslation());
                     
                     ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
@@ -147,7 +147,32 @@ public class BreakerBarControl extends AbstractControl {
         rootNode.attachChild(fx);
         fx.emitAllParticles();
     }
-
+    
+    
+    private void addExtraBalls(){
+        Node node = (Node)rootNode.getChild("BreakerNode");
+        Breaker ball = (Breaker)rootNode.getChild("Breaker");
+        
+        for(int i = 0; i < 2; i++){
+            Quaternion quat = new Quaternion();
+            Vector3f direction = new Vector3f();
+            
+            int rotationDegree;  
+            if(node.getChildren().size() < 1){
+                rotationDegree = 10;
+            }else{
+                rotationDegree = -10;
+            } 
+            
+            quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
+            quat.mult(ball.getDirection(), direction);
+            
+            Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
+            extraBall.addControl(new BreakerControl(rootNode, stateManager));
+            rootNode.attachChild(extraBall);
+        }
+    }
+    
     private void verifyExtraBallActivated() {
         if ((Node) rootNode.getChild("ExtraBalls") != null) {
             //Eliminar las bolas extras 

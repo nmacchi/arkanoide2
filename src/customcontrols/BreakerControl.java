@@ -7,6 +7,7 @@ package customcontrols;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResults;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.export.Savable;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -17,6 +18,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import effects.SmokeTrail;
+import effects.VisualEffects;
 import mygame.Brick;
 import mygame.PowerupType;
 import mygame.entities.Breaker;
@@ -80,7 +82,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     boolean isRemoved = ((Brick) results.getClosestCollision().getGeometry()).removeBrick();
 
                     if(isRemoved){
-                        stateManager.getState(GamePlayAppState.class).executeEffect(results.getClosestCollision().getGeometry().getLocalTranslation(), rootNode);
+                        executeBrickExplosionFX(results.getClosestCollision().getGeometry().getLocalTranslation());
                     }
                     
                     breaker.countHit();
@@ -135,5 +137,12 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
         breaker.removeFromParent();
         breaker.removeControl(this);
     }
-
+    
+    
+    private void executeBrickExplosionFX(Vector3f position){
+        ParticleEmitter debris = VisualEffects.getDebris(results.getClosestCollision().getGeometry().getLocalTranslation());
+       
+        rootNode.attachChild(debris);
+        debris.emitAllParticles(); 
+    }
 }
