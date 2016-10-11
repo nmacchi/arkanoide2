@@ -50,7 +50,7 @@ public class BulletsControl extends AbstractControl{
                 spatial.removeControl(this);
                 
                 Brick brick = (Brick)collision.getGeometry();
-                //brick.removeBrick(rootNode, brick);
+                brick.removeBrick();
                 
             }
             

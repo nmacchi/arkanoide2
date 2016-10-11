@@ -79,12 +79,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 breaker.setDirection(breaker.reflectVector(results.getClosestCollision()));
 
                 if (results.getClosestCollision().getGeometry() instanceof Brick) {
-                    boolean isRemoved = ((Brick) results.getClosestCollision().getGeometry()).removeBrick();
+                    ((Brick) results.getClosestCollision().getGeometry()).removeBrick();
 
-                    if(isRemoved){
-                        executeBrickExplosionFX(results.getClosestCollision().getGeometry().getLocalTranslation());
-                    }
-                    
                     breaker.countHit();
                 }
                 
@@ -139,10 +135,4 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     }
     
     
-    private void executeBrickExplosionFX(Vector3f position){
-        ParticleEmitter debris = VisualEffects.getDebris(results.getClosestCollision().getGeometry().getLocalTranslation());
-       
-        rootNode.attachChild(debris);
-        debris.emitAllParticles(); 
-    }
 }

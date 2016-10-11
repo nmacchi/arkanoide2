@@ -174,16 +174,19 @@ public class BreakerBarControl extends AbstractControl {
     }
     
     private void verifyExtraBallActivated() {
-        if ((Node) rootNode.getChild("ExtraBalls") != null) {
-            //Eliminar las bolas extras 
-            List<Spatial> extraBalls = ((Node) rootNode.getChild("ExtraBalls")).getChildren();
+        Node breakerNode = (Node)rootNode.getChild("BreakerNode");
+        
+        //Hay mas de una bolita activa
+        if (breakerNode.getChildren().size() > 1) {
+             
+            List<Spatial> extraBalls = breakerNode.getChildren();
 
-            for (Spatial extraBall : extraBalls) {
-                ((Breaker) extraBall).executeExplosionEffect(extraBall.getWorldTranslation());
+            for (int i = 0; i < 2 ; i++){
+                //Eliminar las bolas extras
+                Breaker extraBall = (Breaker)extraBalls.get(0);
+                extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
                 extraBall.removeFromParent();
             }
-
-//            rootNode.detachChild((Node) rootNode.getChild("ExtraBalls"));
         }
     }
 }

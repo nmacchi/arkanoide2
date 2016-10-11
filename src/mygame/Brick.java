@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -13,6 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import customcontrols.PowerupControl;
 import effects.SmokeTrail;
+import effects.VisualEffects;
 import java.util.Random;
 import states.PlayerState;
 
@@ -136,7 +138,7 @@ public class Brick extends Geometry {
         return FX;
     }
     
-    public boolean removeBrick(){
+    public void removeBrick(){
         countHits();
 
         if (getCountHits() >= getHardness()) {
@@ -151,51 +153,19 @@ public class Brick extends Geometry {
                 }
             }
             
-            
+            executeExplosionEffect(this.getLocalTranslation());
             removeFromParent();
-            return true;
+//            return true;
         }
         
-        return false;
+//        return false;
     }
     
-    /*private void executeEffect(Node parent, Vector3f position){
-        final PlayEffect smoketrailEffect = new PlayEffect();
-        smoketrailEffect.setEffect(FX.getSmoketrail());
+    private void executeExplosionEffect(Vector3f position){
+        ParticleEmitter fx = VisualEffects.getBallExplosionEffect(position);
         
-        
-        parent.attachChild(smoketrailEffect.getEffect());
-        
-        Trigger explosionTimer = new Trigger();
-        explosionTimer.addTimerEvent(0.05f, new Trigger.TimerEvent() {
-
-            public Object[] call() {
-                smoketrailEffect.trigger();
-                return null;
-            }
-        });
-        
-        explosionTimer.addTimerEvent(smoketrailEffect.getEffect().getHighLife(), new Trigger.TimerEvent() {
-
-            public Object[] call() {
-                smoketrailEffect.stop();
-                return null;
-            }
-        });
-        
-//        explosionTimer.addTimerEvent(2.5f, new Trigger.TimerEvent() {
-//
-//            public Object[] call() {
-//                smoketrailEffect.stop();
-//                return null;
-//            }
-//        });
-        
-        ScriptAppState scriptAppState = new ScriptAppState();
-        stateManager.attach(scriptAppState);
-        
-        scriptAppState.addTriggerObject(explosionTimer);
-    }*/
-    
+        this.getParent().attachChild(fx);
+        fx.emitAllParticles();
+    }
     
 }
