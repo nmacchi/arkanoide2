@@ -126,13 +126,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleUpdate(float tpf) {
-        if(stateManager.getState(PlayerState.class).getCurrentLives() == 0){
-            stateManager.detach(stateManager.getState(InputAppState.class));
-        }
-
-        if(((Node)rootNode.getChild("BricksNode")).getChildren().isEmpty()){
-            stateManager.detach(stateManager.getState(InputAppState.class));
-        }
+        
     }
 
     @Override

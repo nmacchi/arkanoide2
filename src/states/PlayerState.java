@@ -22,7 +22,6 @@ public class PlayerState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        
         this.stateManager = stateManager;
         setCurrentLives(INITIAL_DEFAULT_LIVES);
     }
@@ -56,5 +55,12 @@ public class PlayerState extends AbstractAppState {
     
     public String getFormattedScore() {
         return String.format("%08d", score);
+    }
+    
+    @Override     
+    public void update(float tpf){
+        if(this.getCurrentLives() == 0 ){
+            stateManager.detach(stateManager.getState(InputAppState.class));
+        }
     }
 }

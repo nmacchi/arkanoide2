@@ -29,7 +29,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
 
     private InputManager inputManager;
     private Arkanoid arkanoid;
-    private Breaker ball;
+//    private Breaker ball;
     private Spaceship spaceship;
     private AppStateManager stateManager;
     private Node rootNode;
@@ -47,7 +47,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         this.stateManager = stateManager;
 
         this.arkanoid = stateManager.getState(GamePlayAppState.class).getArkanoid();
-        this.ball = stateManager.getState(GamePlayAppState.class).getBall();
+//        this.ball = stateManager.getState(GamePlayAppState.class).getBall();
         this.spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
 
         this.direction = BreakerBar.getDirection();
@@ -73,6 +73,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
 
     public void onAnalog(String name, float value, float tpf) {
         direction.set(Vector3f.UNIT_X).normalizeLocal();
+        
         if (name.equals(InputMapping.LEFT.name()) && xPosition >= BreakerBar.getMaxLeftLimit()) {
             direction.multLocal(-0.7f * tpf);
             ((Node) rootNode.getChild("BreakerBarNode")).move(direction);
@@ -84,18 +85,23 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         }
 
         xPosition = ((Geometry) rootNode.getChild("BreakerBar")).getWorldTranslation().x;
-
-        if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Spaceship) {
-            if (name.equals(InputMapping.SHOOT.name()) && spaceship.getCooldownTime() <= 0) {
-                spaceship.fire();
+        
+        if(name.equals(InputMapping.SHOOT.name())){
+            if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Spaceship) {
+                if (spaceship.getCooldownTime() <= 0) {
+                    spaceship.fire();
+                }
             }
+            
         }
+        
 
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
         if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Arkanoid) {
             if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+                Breaker ball = (Breaker)((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(1));
                 ball.setLocalTranslation(ball.getWorldTranslation());
                 ball.setInitialDirection();
 

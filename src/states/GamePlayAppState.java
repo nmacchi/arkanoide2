@@ -73,11 +73,10 @@ public class GamePlayAppState extends AbstractAppState {
 
         initMainEntities();
 
-        inputState = new InputAppState();
-        stateManager.attach(inputState);
-        
         playerState = new PlayerState();
-        stateManager.attach(playerState);
+        inputState = new InputAppState();
+        
+        stateManager.attachAll(playerState, inputState);
         
         configureCameraSettings();
         initAudio();
@@ -86,14 +85,14 @@ public class GamePlayAppState extends AbstractAppState {
 
     private void initMainEntities() {
         arkanoid = new Arkanoid(assetManager);
-        ball = new Breaker(assetManager);
+//        ball = new Breaker(assetManager);
+        spaceship = new Spaceship(assetManager);
         
         arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
         ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
-//        spaceship = new Spaceship(assetManager);
-
+        
         breakerBarNode.attachChild(arkanoid);
-        breakerBarNode.attachChild(ball);
+        breakerBarNode.attachChild(new Breaker(assetManager));
  
         app.getRootNode().attachChild(breakerBarNode);
         app.getRootNode().attachChild(breakerNode);
@@ -143,8 +142,8 @@ public class GamePlayAppState extends AbstractAppState {
         
         ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
         arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(ball);
-        ball.setLocalTranslation(Breaker.getInitialPosition());
+        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(new Breaker(assetManager));
+//        ball.setLocalTranslation(Breaker.getInitialPosition());
 
         stateManager.attach(inputState);
         timeElapsed = 0;
@@ -200,6 +199,13 @@ public class GamePlayAppState extends AbstractAppState {
                 reset();
             }
         }
+        
+        
+        
+
+        if(((Node)app.getRootNode().getChild("BricksNode")).getChildren().isEmpty()){
+            stateManager.detach(stateManager.getState(InputAppState.class));
+        }
     }
 
     public InputAppState getInputState() {
@@ -215,29 +221,27 @@ public class GamePlayAppState extends AbstractAppState {
     }
     
     public void addExtraBalls(){ 
-        Node extraBallsNode = new Node("ExtraBalls");
-        
-        Vector3f position = ball.getWorldTranslation(); 
-        Vector3f currentDirection = ball.getDirection();
-        Vector3f direction1 = new Vector3f();
-        Vector3f direction2 = new Vector3f();
-        
-        Quaternion quat = new Quaternion();
-        quat.fromAngleAxis(FastMath.PI * 10 / 180, Vector3f.UNIT_Z);
-        quat.mult(currentDirection, direction1);
+        Node node = (Node) app.getRootNode().getChild("BreakerNode");
+        Breaker ball = (Breaker) app.getRootNode().getChild("Breaker");
 
-        quat.fromAngleAxis(FastMath.PI * -10 / 180, Vector3f.UNIT_Z);
-        quat.mult(currentDirection, direction2);
-        
-        Breaker extraBall1 = new Breaker(assetManager, position, ball.getSpeed(), direction1);
-        Breaker extraBall2 = new Breaker(assetManager, position, ball.getSpeed(), direction2);
-        
-        extraBall1.addControl(new BreakerControl(app.getRootNode(), stateManager));
-        extraBallsNode.attachChild(extraBall1);
-        extraBall2.addControl(new BreakerControl(app.getRootNode(), stateManager));
-        extraBallsNode.attachChild(extraBall2);
-        
-        app.getRootNode().attachChild(extraBallsNode);
+        for (int i = 0; i < 2; i++) {
+            Quaternion quat = new Quaternion();
+            Vector3f direction = new Vector3f();
+
+            int rotationDegree;
+            if (node.getChildren().size() < 1) {
+                rotationDegree = 10;
+            } else {
+                rotationDegree = -10;
+            }
+
+            quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
+            quat.mult(ball.getDirection(), direction);
+
+            Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
+            extraBall.addControl(new BreakerControl(app.getRootNode(), stateManager));
+            app.getRootNode().attachChild(extraBall);
+        }
     }
     
 }

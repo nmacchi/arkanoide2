@@ -106,14 +106,14 @@ public class Breaker extends Geometry {
     
     public void changeDirection(CollisionResult collision, String zone) {
 
-        if (zone.equals("Left") || zone.equals("Right")) {
+        if (zone.equals("Left")) {
             setDirection(rotateVector(this.getDirection().negateLocal(), -15));
         }else if (zone.equals("Right")){
             setDirection(rotateVector(this.getDirection().negateLocal(), 15));
         }else if (zone.equals("Center")) {
             setDirection(Vector3f.UNIT_Y);
         } else {
-            setDirection(reflectVector(collision));
+            setDirection(rotateVector(new Vector3f(getDirection().x, getDirection().y * -1, getDirection().z), getRandomAngle()));
         }
     }
 
