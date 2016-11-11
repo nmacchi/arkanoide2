@@ -50,7 +50,6 @@ public class Trigger implements TriggerInterface {
             }
             
             if(time > maxTime){
-                System.out.println("entra una y otra y otra vez");
                 running = false;
                 enabled = false;
             }

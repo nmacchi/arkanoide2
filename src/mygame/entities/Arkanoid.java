@@ -53,16 +53,16 @@ public class Arkanoid extends BreakerBar{
     }
 
 
-    public void transformToSpaceship(AppStateManager stateManager, Node parentNode, Vector3f position){
-        parentNode.detachAllChildren();
-        
-        Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
-        spaceship.addControl(new BreakerBarControl(parentNode.getParent(), stateManager));
-        
-        spaceship.setLocalTranslation(position);
-        parentNode.attachChild(spaceship);
-        spaceship.addFlammingFX(parentNode);
-    }
+//    public void transformToSpaceship(AppStateManager stateManager, Node parentNode, Vector3f position){
+//        parentNode.detachAllChildren();
+//        
+//        Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
+//        spaceship.addControl(new BreakerBarControl(parentNode.getParent(), stateManager));
+//        
+//        spaceship.setLocalTranslation(position);
+//        parentNode.attachChild(spaceship);
+//        spaceship.addFlammingFX(parentNode);
+//    }
 
     
  

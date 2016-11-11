@@ -34,12 +34,14 @@ public class Spaceship extends BreakerBar{
     public Spaceship(AssetManager assetManager){
         super(assetManager);
         createSpaceship();
+       
     }
     
     public Spaceship(AssetManager assetManager, Vector3f position){
         super(assetManager);
         createSpaceship();
         setLocalTranslation(position);
+       
     }
     
     private void createSpaceship(){
@@ -81,7 +83,7 @@ public class Spaceship extends BreakerBar{
         this.cooldownTime -= tpf;
     }
 
-    public void addFlammingFX(Node parentNode){
+    public void addFlammingFX(){
         flamming1 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
         flamming2 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
         
@@ -89,7 +91,8 @@ public class Spaceship extends BreakerBar{
         localNode.attachChild(flamming2);
         
         this.getParent().attachChild(localNode);
-//        parentNode.attachChild(localNode);
+        flamming1.emitAllParticles();
+        flamming2.emitAllParticles();
     }
 
 

@@ -16,6 +16,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import customcontrols.BreakerControl;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
@@ -99,15 +100,19 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
+
         if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Arkanoid) {
             if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+               
                 Breaker ball = (Breaker)((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(1));
                 ball.setLocalTranslation(ball.getWorldTranslation());
                 ball.setInitialDirection();
 
                 ((Node)rootNode.getChild("BreakerNode")).attachChild(ball);
-
+                ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
+                
                 stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+                
             }
         }
     }

@@ -56,20 +56,6 @@ public class PowerupControl extends AbstractControl implements Savable, Cloneabl
             results.clear();
         }
 
-//        if ((Geometry) rootNode.getChild("BreakerBar") != null) {
-//            spatial.collideWith(((Geometry) rootNode.getChild("BreakerBar")).getWorldBound(), results);
-//            if (results.size() != 0) {
-//                Geometry g = ((Geometry) rootNode.getChild("BreakerBar"));
-//                if (g instanceof Arkanoid) {
-//                    ((Arkanoid) g).setActivePower(((Powerup) spatial).getType().getName());
-//                }
-//
-//                stateManager.getState(GamePlayAppState.class).setScore(((Powerup) spatial).getPoints());
-//                spatial.removeFromParent();
-//            }
-//
-//        }
-
 
     }
 

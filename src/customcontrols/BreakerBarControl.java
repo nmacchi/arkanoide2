@@ -32,14 +32,10 @@ import states.PlayerState;
  */
 public class BreakerBarControl extends AbstractControl {
 
-//    private BreakerBar breakerBar;
-    //private CollisionResults results = new CollisionResults();
     private CollisionResults results = new CollisionResults();
     private Node rootNode;
     private AppStateManager stateManager;
-//    private BreakerBarFactory breakerBarFactory;
-    
-//    private float width;
+
     public BreakerBarControl(Node rootNode, AppStateManager stateManager) {
         this.rootNode = rootNode;
         this.stateManager = stateManager;
@@ -49,90 +45,94 @@ public class BreakerBarControl extends AbstractControl {
     @Override
     public void setSpatial(Spatial spatial) {
         super.setSpatial(spatial);
-
-//        this.width = ((BoundingBox)spatial.getWorldBound()).getXExtent();
     }
 
     @Override
     protected void controlUpdate(float tpf) {
-          
-        if(spatial instanceof Spaceship){
-            ((Spaceship)spatial).restCooldownTime(tpf);
+        if (!stateManager.getState(GamePlayAppState.class).isGameStop()) {
+            if (spatial instanceof Spaceship) {
+                ((Spaceship) spatial).restCooldownTime(tpf);
+            }
+
+            rootNode.getChild("PowerupsNode").collideWith(spatial.getWorldBound(), results);
+            if (results.size() > 0) {
+
+
+                Powerup powerup = (Powerup) results.getClosestCollision().getGeometry();
+                stateManager.getState(PlayerState.class).setScore(powerup.getPoints());
+
+                String arkanoidCurrentPower = BreakerBar.getCurrentPower();
+                String catchedPowerup = powerup.getType().getName();
+
+                if (PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+
+                    verifyExtraBallActivated();
+
+
+                    if (spatial instanceof Arkanoid) {
+                        executeChangeEffect(spatial.getWorldTranslation());
+
+                        ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
+                        Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
+                        spaceship.setLocalTranslation(spatial.getLocalTranslation());
+                        spaceship.addControl(new SpaceshipControl());
+                        
+                        ((Node) rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
+                         spaceship.addFlammingFX();
+                    }
+
+
+                    //executeChangeEffect(spatial.getWorldTranslation());
+
+                    //((Arkanoid) spatial).transformToSpaceship(stateManager, (Node) rootNode.getChild("BreakerBarNode"), spatial.getLocalTranslation());
+
+                }
+
+                //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
+                if (PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup)) {
+                    stateManager.getState(PlayerState.class).addLife();
+                }
+
+
+                if (PowerupType.PowerTypes.SLOWER.name().equals(catchedPowerup)) {
+
+                    verifyExtraBallActivated();
+
+                    if (spatial instanceof Spaceship) {
+                        executeChangeEffect(spatial.getWorldTranslation());
+
+                        ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
+                        Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
+                        arkanoide.setLocalTranslation(spatial.getLocalTranslation());
+                        ((Node) rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
+                    }
+
+                    ((Breaker) rootNode.getChild("Breaker")).decreaseSpeed();
+                }
+
+                if (PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+                    stateManager.getState(GamePlayAppState.class).addExtraBalls();
+
+
+                    if (spatial instanceof Spaceship) {
+                        executeChangeEffect(spatial.getWorldTranslation());
+
+                        ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
+                        Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
+                        arkanoide.setLocalTranslation(spatial.getLocalTranslation());
+                        ((Node) rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
+                    }
+                }
+
+                BreakerBar.setCurrentPower(catchedPowerup);
+                powerup.removeFromParent();
+
+            }
+            results.clear();
         }
-        
-        rootNode.getChild("PowerupsNode").collideWith(spatial.getWorldBound(), results);
-        if (results.size() > 0) {
 
 
-            Powerup powerup = (Powerup) results.getClosestCollision().getGeometry();
-            stateManager.getState(PlayerState.class).setScore(powerup.getPoints());
 
-            String arkanoidCurrentPower = BreakerBar.getCurrentPower();
-            String catchedPowerup = powerup.getType().getName();
-
-            if (PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
-                
-                verifyExtraBallActivated();
-
-                
-                if(spatial instanceof Arkanoid){
-                    executeChangeEffect(spatial.getWorldTranslation());
-                    
-                    ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
-                    Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
-                    spaceship.setLocalTranslation(spatial.getLocalTranslation());
-                    ((Node)rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
-                }
-                
-                
-                //executeChangeEffect(spatial.getWorldTranslation());
-
-                //((Arkanoid) spatial).transformToSpaceship(stateManager, (Node) rootNode.getChild("BreakerBarNode"), spatial.getLocalTranslation());
-
-            }
-
-            //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
-            if (PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup)) {
-                stateManager.getState(PlayerState.class).addLife();
-            }
-
-
-            if (PowerupType.PowerTypes.SLOWER.name().equals(catchedPowerup)) {
-
-                verifyExtraBallActivated();
-               
-                if(spatial instanceof Spaceship){
-                    executeChangeEffect(spatial.getWorldTranslation());
-                    
-                    ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
-                    Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
-                    arkanoide.setLocalTranslation(spatial.getLocalTranslation());
-                    ((Node)rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
-                }
-                
-                ((Breaker) rootNode.getChild("Breaker")).decreaseSpeed();
-            }
-
-            if (PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
-                stateManager.getState(GamePlayAppState.class).addExtraBalls();
-                
-                
-                if(spatial instanceof Spaceship){
-                    executeChangeEffect(spatial.getWorldTranslation());
-                    
-                    ((Node)rootNode.getChild("BreakerBarNode")).detachAllChildren();               
-                    Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
-                    arkanoide.setLocalTranslation(spatial.getLocalTranslation());
-                    ((Node)rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
-                }
-            }
-
-            BreakerBar.setCurrentPower(catchedPowerup);
-            powerup.removeFromParent();
-
-        }
-
-        results.clear();
 
     }
 
@@ -147,43 +147,42 @@ public class BreakerBarControl extends AbstractControl {
         rootNode.attachChild(fx);
         fx.emitAllParticles();
     }
-    
-    
-    private void addExtraBalls(){
-        Node node = (Node)rootNode.getChild("BreakerNode");
-        Breaker ball = (Breaker)rootNode.getChild("Breaker");
-        
-        for(int i = 0; i < 2; i++){
+
+    private void addExtraBalls() {
+        Node node = (Node) rootNode.getChild("BreakerNode");
+        Breaker ball = (Breaker) rootNode.getChild("Breaker");
+
+        for (int i = 0; i < 2; i++) {
             Quaternion quat = new Quaternion();
             Vector3f direction = new Vector3f();
-            
-            int rotationDegree;  
-            if(node.getChildren().size() < 1){
+
+            int rotationDegree;
+            if (node.getChildren().size() < 1) {
                 rotationDegree = 10;
-            }else{
+            } else {
                 rotationDegree = -10;
-            } 
-            
+            }
+
             quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
             quat.mult(ball.getDirection(), direction);
-            
+
             Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
             extraBall.addControl(new BreakerControl(rootNode, stateManager));
             rootNode.attachChild(extraBall);
         }
     }
-    
+
     private void verifyExtraBallActivated() {
-        Node breakerNode = (Node)rootNode.getChild("BreakerNode");
-        
+        Node breakerNode = (Node) rootNode.getChild("BreakerNode");
+
         //Hay mas de una bolita activa
         if (breakerNode.getChildren().size() > 1) {
-             
+
             List<Spatial> extraBalls = breakerNode.getChildren();
 
-            for (int i = 0; i < 2 ; i++){
+            for (int i = 0; i < 2; i++) {
                 //Eliminar las bolas extras
-                Breaker extraBall = (Breaker)extraBalls.get(0);
+                Breaker extraBall = (Breaker) extraBalls.get(0);
                 extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
                 extraBall.removeFromParent();
             }

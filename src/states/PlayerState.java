@@ -60,7 +60,7 @@ public class PlayerState extends AbstractAppState {
     @Override     
     public void update(float tpf){
         if(this.getCurrentLives() == 0 ){
-            stateManager.detach(stateManager.getState(InputAppState.class));
+            stateManager.getState(GamePlayAppState.class).setGameFinished(Boolean.TRUE);
         }
     }
 }

@@ -5,20 +5,15 @@
 package customcontrols;
 
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResults;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.export.Savable;
 import com.jme3.math.Ray;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import effects.SmokeTrail;
-import effects.VisualEffects;
 import mygame.Brick;
 import mygame.PowerupType;
 import mygame.entities.Breaker;
@@ -57,7 +52,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     @Override
     protected void controlUpdate(float tpf) {
         if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
-
+            
             breaker.move(breaker.getDirection().mult(tpf * breaker.getSpeed()));
 
             if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())) {
@@ -98,7 +93,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
                         stateManager.detach(stateManager.getState(InputAppState.class));
                         stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
-                        stateManager.getState(GamePlayAppState.class).setStopGame(Boolean.TRUE);
+                        stateManager.getState(GamePlayAppState.class).setGameStop(Boolean.TRUE);
                     } else {
                         removeFromScene();
                     }

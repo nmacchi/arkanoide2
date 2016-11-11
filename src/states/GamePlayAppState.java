@@ -39,6 +39,8 @@ import mygame.entities.Spaceship;
 public class GamePlayAppState extends AbstractAppState {
 
     private boolean gameStarted;
+    private boolean gameFinished;
+    private boolean gameStop;
     
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Node breakerNode = new Node("BreakerNode");
@@ -50,17 +52,19 @@ public class GamePlayAppState extends AbstractAppState {
     SimpleApplication app;
     AssetManager assetManager;
     
+    GameGuiAppState guiAppState;
     InputAppState inputState;
     PlayerState playerState;
     ScriptAppState scriptAppState;
-    
+    LostLifeState lostLifeState;
+            
     private AudioNode audio_crash;
     private AudioNode audio_rebound;
     private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
     
-    private int state;
-    private float timeElapsed;
-    private boolean stopGame;
+//    private int state;
+//    private float timeElapsed;
+    
 //    private VisualEffects visualEffects;
 
     @Override
@@ -72,27 +76,34 @@ public class GamePlayAppState extends AbstractAppState {
         this.assetManager = ((SimpleApplication) app).getAssetManager();
 
         initMainEntities();
-
+        
+        lostLifeState = new LostLifeState(); 
+        guiAppState = new GameGuiAppState();
         playerState = new PlayerState();
         inputState = new InputAppState();
         
-        stateManager.attachAll(playerState, inputState);
+        
+        stateManager.attachAll(playerState, inputState, guiAppState, lostLifeState);
         
         configureCameraSettings();
         initAudio();
         initSceneLights();
+        initVisualEffects();
+    }
+    
+    private void initVisualEffects(){
+        VisualEffects ve = new VisualEffects(assetManager);
     }
 
     private void initMainEntities() {
         arkanoid = new Arkanoid(assetManager);
-//        ball = new Breaker(assetManager);
+        ball = new Breaker(assetManager);
         spaceship = new Spaceship(assetManager);
         
         arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
-        ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
         
         breakerBarNode.attachChild(arkanoid);
-        breakerBarNode.attachChild(new Breaker(assetManager));
+        breakerBarNode.attachChild(ball);
  
         app.getRootNode().attachChild(breakerBarNode);
         app.getRootNode().attachChild(breakerNode);
@@ -143,11 +154,10 @@ public class GamePlayAppState extends AbstractAppState {
         ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
         arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
         ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(new Breaker(assetManager));
-//        ball.setLocalTranslation(Breaker.getInitialPosition());
 
         stateManager.attach(inputState);
-        timeElapsed = 0;
-        state = 0;
+        this.setGameStop(Boolean.FALSE);
+
     }
 
     public Spaceship getSpaceship() {
@@ -169,41 +179,20 @@ public class GamePlayAppState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         
-        if (isStopGame()) {
-          
-            timeElapsed += tpf / 1;
-
-            if (state == 0) {
-
-                Vector3f position = ((Geometry) ((Node) app.getRootNode().getChild("BreakerBarNode")).getChild(0)).getWorldTranslation();
-                
-                //Reset entites
-                ((Node) app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
-                app.getRootNode().detachChildNamed("Breaker");
-                
-                //Build multiple effect trigger
-                Map<Float, List<ParticleEmitter>> customTriggerEffect = new HashMap<Float, List<ParticleEmitter>>();
-                customTriggerEffect.put(0.25f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getSpark(position),VisualEffects.getSmoketrail(position), VisualEffects.getDebris(position), VisualEffects.getShockwave(position)));
-                customTriggerEffect.put(0.3f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getRoundspark(position)));
-                
-                ScriptAppState appState = new ScriptAppState(stateManager);
-                appState.setCustomTriggerEffect(customTriggerEffect);
-                stateManager.attach(appState);
-                
-                state = 1;
-            }
-
-            if (timeElapsed >= 4f) {
-                setStopGame(Boolean.FALSE);
-                app.getRootNode().detachChildNamed("explosionFX");
-                reset();
-            }
+        //Exceute state when player lose a life
+        if (isGameStop() && !lostLifeState.isEnabled()) {
+            lostLifeState.setEnabled(Boolean.TRUE);
+        }    
+        
+        //Check if all bricks were removed
+        //TODO: Cuando no haya mas ladrillos pasar al proximo nivel
+        if(((Node)app.getRootNode().getChild("BricksNode")).getChildren().isEmpty()){
+            stateManager.detach(stateManager.getState(InputAppState.class));
         }
         
-        
-        
-
-        if(((Node)app.getRootNode().getChild("BricksNode")).getChildren().isEmpty()){
+        //Game is finished when player lose all his lifes
+        //TODO: Permitir cntinuar o salir (implementar un menu)
+        if(isGameFinished()){
             stateManager.detach(stateManager.getState(InputAppState.class));
         }
     }
@@ -212,13 +201,23 @@ public class GamePlayAppState extends AbstractAppState {
         return inputState;
     }
 
-    public boolean isStopGame() {
-        return stopGame;
+    public boolean isGameStop() {
+        return gameStop;
     }
 
-    public void setStopGame(boolean stopGame) {
-        this.stopGame = stopGame;
+    public void setGameStop(boolean gameStop) {
+        this.gameStop = gameStop;
     }
+
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public void setGameFinished(boolean gameFinished) {
+        this.gameFinished = gameFinished;
+    }
+    
+    
     
     public void addExtraBalls(){ 
         Node node = (Node) app.getRootNode().getChild("BreakerNode");

@@ -38,6 +38,8 @@ public class GameGuiAppState extends AbstractAppState {
         this.stateManager = stateManager;
 //        this.xPositionForLives = INITIAL_POSITION_LOCAL_NODE;
         
+        ((SimpleApplication)app).getGuiNode().attachChild(localNode);
+        
         initGUILights(app);
         
         initializeStateIndicator(app);
@@ -94,7 +96,7 @@ public class GameGuiAppState extends AbstractAppState {
             xPositionForLives += 50;
         }
         
-        ((SimpleApplication)app).getGuiNode().attachChild(localNode);
+        
         
     }
     

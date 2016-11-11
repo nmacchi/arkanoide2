@@ -47,16 +47,18 @@ public class BulletsControl extends AbstractControl{
             
             if(((Node)collision.getGeometry().getParent()).getName().equals("BricksNode")){
                 spatial.removeFromParent();
-                spatial.removeControl(this);
+                //spatial.removeControl(this);
                 
-                Brick brick = (Brick)collision.getGeometry();
-                brick.removeBrick();
+                ((Brick) collision.getGeometry()).removeBrick();
+                
+//                Brick brick = (Brick)collision.getGeometry();
+//                brick.removeBrick();
                 
             }
             
             if(collision.getGeometry().getName().equals("TopBar")){
                 spatial.removeFromParent();
-                spatial.removeControl(this);
+                //spatial.removeControl(this);
             }
             
             results.clear();
