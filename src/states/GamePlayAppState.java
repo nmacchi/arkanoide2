@@ -239,7 +239,7 @@ public class GamePlayAppState extends AbstractAppState {
 
             Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
             extraBall.addControl(new BreakerControl(app.getRootNode(), stateManager));
-            app.getRootNode().attachChild(extraBall);
+            node.attachChild(extraBall);
         }
     }
     

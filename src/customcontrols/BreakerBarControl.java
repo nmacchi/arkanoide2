@@ -71,11 +71,12 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Arkanoid) {
                         executeChangeEffect(spatial.getWorldTranslation());
-
+                           
                         ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
                         Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
                         spaceship.setLocalTranslation(spatial.getLocalTranslation());
                         spaceship.addControl(new SpaceshipControl());
+                        
                         
                         ((Node) rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
                          spaceship.addFlammingFX();
@@ -107,7 +108,7 @@ public class BreakerBarControl extends AbstractControl {
                         ((Node) rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
                     }
 
-                    ((Breaker) rootNode.getChild("Breaker")).decreaseSpeed();
+                    ((Breaker) ((Node)rootNode.getChild("BreakerNode")).getChild(0)).decreaseSpeed();
                 }
 
                 if (PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
@@ -148,30 +149,8 @@ public class BreakerBarControl extends AbstractControl {
         fx.emitAllParticles();
     }
 
-    private void addExtraBalls() {
-        Node node = (Node) rootNode.getChild("BreakerNode");
-        Breaker ball = (Breaker) rootNode.getChild("Breaker");
-
-        for (int i = 0; i < 2; i++) {
-            Quaternion quat = new Quaternion();
-            Vector3f direction = new Vector3f();
-
-            int rotationDegree;
-            if (node.getChildren().size() < 1) {
-                rotationDegree = 10;
-            } else {
-                rotationDegree = -10;
-            }
-
-            quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
-            quat.mult(ball.getDirection(), direction);
-
-            Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
-            extraBall.addControl(new BreakerControl(rootNode, stateManager));
-            rootNode.attachChild(extraBall);
-        }
-    }
-
+    
+    
     private void verifyExtraBallActivated() {
         Node breakerNode = (Node) rootNode.getChild("BreakerNode");
 

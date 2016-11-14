@@ -162,7 +162,7 @@ public class Brick extends Geometry {
     }
     
     private void executeExplosionEffect(Vector3f position){
-        ParticleEmitter fx = VisualEffects.getBallExplosionEffect(position);
+        ParticleEmitter fx = VisualEffects.getDebris(position);
         
         this.getParent().attachChild(fx);
         fx.emitAllParticles();

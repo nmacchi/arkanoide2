@@ -47,7 +47,7 @@ public class BulletsControl extends AbstractControl{
             
             if(((Node)collision.getGeometry().getParent()).getName().equals("BricksNode")){
                 spatial.removeFromParent();
-                //spatial.removeControl(this);
+                spatial.removeControl(this);
                 
                 ((Brick) collision.getGeometry()).removeBrick();
                 
@@ -58,7 +58,7 @@ public class BulletsControl extends AbstractControl{
             
             if(collision.getGeometry().getName().equals("TopBar")){
                 spatial.removeFromParent();
-                //spatial.removeControl(this);
+                spatial.removeControl(this);
             }
             
             results.clear();
