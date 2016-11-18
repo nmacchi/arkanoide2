@@ -194,11 +194,11 @@ public class VisualEffects {
         smoketrail.setShape(new EmitterSphereShape(Vector3f.ZERO, 1f));
         smoketrail.setFacingVelocity(true);
         smoketrail.setParticlesPerSec(0);
-        smoketrail.setGravity(0, 1, 0);
+        smoketrail.setGravity(0, 0, 0);
         smoketrail.setLowLife(.4f);
-        smoketrail.setHighLife(.9f);
+        smoketrail.setHighLife(.6f);
         smoketrail.setInitialVelocity(new Vector3f(0, 12, 0));
-        smoketrail.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 0, 2f));
+        smoketrail.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2f, 0));
         smoketrail.setVelocityVariation(1);
         smoketrail.setImagesX(1);
         smoketrail.setImagesY(3);

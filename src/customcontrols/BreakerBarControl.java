@@ -71,11 +71,12 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Arkanoid) {
                         executeChangeEffect(spatial.getWorldTranslation());
-
+                           
                         ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
                         Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
                         spaceship.setLocalTranslation(spatial.getLocalTranslation());
                         spaceship.addControl(new SpaceshipControl());
+                        
                         
                         ((Node) rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
                          spaceship.addFlammingFX();
@@ -107,7 +108,7 @@ public class BreakerBarControl extends AbstractControl {
                         ((Node) rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
                     }
 
-                    ((Breaker) rootNode.getChild("Breaker")).decreaseSpeed();
+                    ((Breaker) ((Node)rootNode.getChild("BreakerNode")).getChild(0)).decreaseSpeed();
                 }
 
                 if (PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
