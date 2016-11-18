@@ -29,9 +29,6 @@ import mygame.entities.Spaceship;
 public class InputAppState extends AbstractAppState implements AnalogListener, ActionListener {
 
     private InputManager inputManager;
-    private Arkanoid arkanoid;
-//    private Breaker ball;
-    private Spaceship spaceship;
     private AppStateManager stateManager;
     private Node rootNode;
     private float xPosition;
@@ -46,10 +43,6 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         this.rootNode = this.app.getRootNode();
         this.inputManager = ((SimpleApplication) app).getInputManager();
         this.stateManager = stateManager;
-
-        this.arkanoid = stateManager.getState(GamePlayAppState.class).getArkanoid();
-//        this.ball = stateManager.getState(GamePlayAppState.class).getBall();
-        this.spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
 
         this.direction = BreakerBar.getDirection();
 
@@ -88,29 +81,23 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         xPosition = ((Geometry) rootNode.getChild("BreakerBar")).getWorldTranslation().x;
         
         if(name.equals(InputMapping.SHOOT.name())){
-            if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Spaceship) {
-                if (spaceship.getCooldownTime() <= 0) {
-                    spaceship.fire();
+            if (rootNode.getChild("BreakerBar") instanceof Spaceship) {
+                if (((Spaceship)rootNode.getChild("BreakerBar")).getCooldownTime() <= 0) {
+                    ((Spaceship)rootNode.getChild("BreakerBar")).fire();
                 }
             }
             
         }
         
-
+        
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
 
         if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Arkanoid) {
             if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
-               
-                Breaker ball = (Breaker)((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(1));
-                ball.setLocalTranslation(ball.getWorldTranslation());
-                ball.setInitialDirection();
-
-                ((Node)rootNode.getChild("BreakerNode")).attachChild(ball);
-                ball.addControl(new BreakerControl(app.getRootNode(), stateManager));
-                
+             
+                ((Breaker) rootNode.getChild("Breaker")).release(stateManager);
                 stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
                 
             }

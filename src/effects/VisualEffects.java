@@ -32,21 +32,23 @@ public class VisualEffects {
     
 
     private static Node explosionEffect = new Node("explosionFX");
-    private static ParticleEmitter flame, flash, spark, roundspark, smoketrail, debris, shockwave;
+    //private static ParticleEmitter flame, flash, spark, roundspark, smoketrail, debris, shockwave;
     private static AssetManager assetManager;
+    private static Node rootNode;
     
     private static final int COUNT_FACTOR = 1;
     private static final float COUNT_FACTOR_F = 1f;
     private static final boolean POINT_SPRITE = true;
     private static final ParticleMesh.Type EMITTER_TYPE = POINT_SPRITE ? ParticleMesh.Type.Point : ParticleMesh.Type.Triangle;
     
-    public VisualEffects(AssetManager assetManager){        
+    public VisualEffects(AssetManager assetManager, Node rootNode){        
         VisualEffects.assetManager = assetManager;
+        VisualEffects.rootNode = rootNode;
     }
     
     
-    private static ParticleEmitter createFlame(Vector3f position) {
-        flame = new ParticleEmitter("Flame", EMITTER_TYPE, 32 * COUNT_FACTOR);
+    private static void createFlame(Vector3f position) {
+        ParticleEmitter flame = new ParticleEmitter("Flame", EMITTER_TYPE, 32 * COUNT_FACTOR);
         flame.setSelectRandomImage(true);
         flame.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1f / COUNT_FACTOR_F)));
         flame.setEndColor(new ColorRGBA(.4f, .22f, .12f, 0f));
@@ -66,12 +68,15 @@ public class VisualEffects {
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flame.setMaterial(mat);
         flame.setLocalTranslation(position);
-
-        return flame;
+        
+        rootNode.attachChild(flame);
+        flame.emitAllParticles();
+        
+//        return flame;
     }
 
-    private static ParticleEmitter createFlash(Vector3f position) {
-        flash = new ParticleEmitter("Flash", EMITTER_TYPE, 24 * COUNT_FACTOR);
+    private static void createFlash(Vector3f position) {
+        ParticleEmitter flash = new ParticleEmitter("Flash", EMITTER_TYPE, 24 * COUNT_FACTOR);
         flash.setSelectRandomImage(true);
         flash.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1f / COUNT_FACTOR_F)));
         flash.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
@@ -92,11 +97,14 @@ public class VisualEffects {
         flash.setMaterial(mat);
         flash.setLocalTranslation(position);
         
-        return flash;
+        rootNode.attachChild(flash);
+        flash.emitAllParticles();
+        
+//        return flash;
     }
 
-    private static ParticleEmitter createRoundSpark(Vector3f position) {
-        roundspark = new ParticleEmitter("RoundSpark", EMITTER_TYPE, 20 * COUNT_FACTOR);
+    private static void createRoundSpark(Vector3f position) {
+        ParticleEmitter roundspark = new ParticleEmitter("RoundSpark", EMITTER_TYPE, 20 * COUNT_FACTOR);
         roundspark.setStartColor(new ColorRGBA(1f, 0.29f, 0.34f, (float) (1.0 / COUNT_FACTOR_F)));
         roundspark.setEndColor(new ColorRGBA(0, 0, 0, (float) (0.5f / COUNT_FACTOR_F)));
         roundspark.setStartSize(1.2f);
@@ -116,11 +124,14 @@ public class VisualEffects {
         roundspark.setMaterial(mat);
         roundspark.setLocalTranslation(position);
         
-        return roundspark;
+        rootNode.attachChild(roundspark);
+        roundspark.emitAllParticles();
+        
+//        return roundspark;
     }
 
-    private static ParticleEmitter createSpark(Vector3f position) {
-        spark = new ParticleEmitter("Spark", ParticleMesh.Type.Triangle, 30 * COUNT_FACTOR);
+    private static void createSpark(Vector3f position) {
+        ParticleEmitter spark = new ParticleEmitter("Spark", ParticleMesh.Type.Triangle, 30 * COUNT_FACTOR);
         spark.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1.0f / COUNT_FACTOR_F)));
         spark.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
         spark.setStartSize(.5f);
@@ -139,11 +150,14 @@ public class VisualEffects {
         spark.setMaterial(mat);
         spark.setLocalTranslation(position);
         
-        return spark;
+        rootNode.attachChild(spark);
+        spark.emitAllParticles();
+        
+//        return spark;
     }
 
-    private static ParticleEmitter createSmokeTrail(Vector3f position) {
-        smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
+    private static void createSmokeTrail(Vector3f position) {
+        ParticleEmitter smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
         smoketrail.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1.0f / COUNT_FACTOR_F)));
         smoketrail.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
         smoketrail.setStartSize(.2f);
@@ -164,11 +178,14 @@ public class VisualEffects {
         smoketrail.setMaterial(mat);
         smoketrail.setLocalTranslation(position);
         
-        return smoketrail;
+        rootNode.attachChild(smoketrail);
+        smoketrail.emitAllParticles();
+        
+//        return smoketrail;
     }
     
-    private static ParticleEmitter createBallExplosionEffect(Vector3f position) {
-        smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 55 * COUNT_FACTOR);
+    private static void createBallExplosionEffect(Vector3f position) {
+        ParticleEmitter smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 55 * COUNT_FACTOR);
         smoketrail.setStartColor(new ColorRGBA(1f, 1f, 1f, (float) (1.0f / COUNT_FACTOR_F)));
         smoketrail.setEndColor(new ColorRGBA(1f, 1f, 1f, 0f));
         smoketrail.setStartSize(.1f);
@@ -190,13 +207,16 @@ public class VisualEffects {
         smoketrail.setMaterial(mat);
         smoketrail.setLocalTranslation(position);
         
-        return smoketrail;
+        rootNode.attachChild(smoketrail);
+        smoketrail.emitAllParticles();
+        
+//        return smoketrail;
     }
     
     
 
-    private static ParticleEmitter createChangeEffect(Vector3f position) {
-        smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 75 * COUNT_FACTOR);
+    private static void createChangeEffect(Vector3f position) {
+        ParticleEmitter smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 75 * COUNT_FACTOR);
         smoketrail.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1.0f / COUNT_FACTOR_F)));
         smoketrail.setEndColor(new ColorRGBA(.4f, .22f, .12f, 0f));
         smoketrail.setStartSize(.1f);
@@ -218,13 +238,16 @@ public class VisualEffects {
         smoketrail.setMaterial(mat);
         smoketrail.setLocalTranslation(position);
         
-        return smoketrail;
+        rootNode.attachChild(smoketrail);
+        smoketrail.emitAllParticles();
+        
+//        return smoketrail;
     }
     
     
    
-    private static ParticleEmitter createDebris(Vector3f position) {
-        debris = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 15 * COUNT_FACTOR);
+    private static void createDebris(Vector3f position) {
+        ParticleEmitter debris = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 15 * COUNT_FACTOR);
         debris.setSelectRandomImage(true);
         debris.setRandomAngle(true);
         debris.setRotateSpeed(FastMath.TWO_PI * 4);
@@ -247,11 +270,14 @@ public class VisualEffects {
         debris.setMaterial(mat);
         debris.setLocalTranslation(position);
 
-        return debris;
+        rootNode.attachChild(debris);
+        debris.emitAllParticles();
+        
+//        return debris;
     }
 
-    private static ParticleEmitter createShockwave(Vector3f position) {
-        shockwave = new ParticleEmitter("Shockwave", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
+    private static void createShockwave(Vector3f position) {
+        ParticleEmitter shockwave = new ParticleEmitter("Shockwave", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
         shockwave.setRandomAngle(true);
         shockwave.setFaceNormal(Vector3f.UNIT_Y);
         shockwave.setStartColor(new ColorRGBA(.48f, 0.17f, 0.01f, (float) (.8f / COUNT_FACTOR_F)));
@@ -273,44 +299,47 @@ public class VisualEffects {
         shockwave.setMaterial(mat);
         shockwave.setLocalTranslation(position);
         
-        return shockwave;
+        rootNode.attachChild(shockwave);
+        shockwave.emitAllParticles();
+        
+//        return shockwave;
     }
 
 
-    public static ParticleEmitter getFlame(Vector3f position) {
-        return createFlame(position);
+    public static void getFlame(Vector3f position) {
+        createFlame(position);
     }
 
-    public static ParticleEmitter getFlash(Vector3f position) {
-        return createFlash(position);
+    public static void getFlash(Vector3f position) {
+        createFlash(position);
     }
 
-    public static ParticleEmitter getSpark(Vector3f position) {
-        return createSpark(position);
+    public static void getSpark(Vector3f position) {
+        createSpark(position);
     }
 
-    public static ParticleEmitter getRoundspark(Vector3f position) {
-        return createRoundSpark(position);
+    public static void getRoundspark(Vector3f position) {
+        createRoundSpark(position);
     }
 
-    public static ParticleEmitter getSmoketrail(Vector3f position) {
-        return createSmokeTrail(position);
+    public static void getSmoketrail(Vector3f position) {
+        createSmokeTrail(position);
     }
 
-    public static ParticleEmitter getDebris(Vector3f position) {
-        return createDebris(position);
+    public static void getDebris(Vector3f position) {
+        createDebris(position);
     }
 
-    public static ParticleEmitter getShockwave(Vector3f position) {
-        return createShockwave(position);
+    public static void getShockwave(Vector3f position) {
+        createShockwave(position);
     }
     
-    public static ParticleEmitter getChangeEffect(Vector3f position) {
-        return createChangeEffect(position);
+    public static void getChangeEffect(Vector3f position) {
+        createChangeEffect(position);
     }
     
-     public static ParticleEmitter getBallExplosionEffect(Vector3f position) {
-        return createBallExplosionEffect(position);
+     public static void getBallExplosionEffect(Vector3f position) {
+        createBallExplosionEffect(position);
     }
     
     public static Node getExplosionEffect() {

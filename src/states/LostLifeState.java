@@ -24,16 +24,13 @@ import java.util.Map;
  * @author nicolas
  */
 public class LostLifeState extends AbstractAppState {
-    
-    
+
     private int state;
     private float timeElapsed;
-    
     SimpleApplication app;
     AppStateManager stateManager;
     Vector3f position;
     Spatial spatial;
-    
     boolean done;
 
     @Override
@@ -50,11 +47,11 @@ public class LostLifeState extends AbstractAppState {
     public void update(float tpf) {
 
         if (isEnabled()) {
-           
+
             timeElapsed += tpf / 1;
 
             if (state == 0) {
-
+                                       
                 for (Spatial entity : app.getRootNode().getChildren()) {
                     if (entity != null) {
                         if (entity.getName().equals("BreakerBarNode")) {
@@ -72,24 +69,37 @@ public class LostLifeState extends AbstractAppState {
                 app.getRootNode().detachChildNamed("Breaker");
 
                 //Build multiple effect trigger
-                Map<Float, List<ParticleEmitter>> customTriggerEffect = new HashMap<Float, List<ParticleEmitter>>();
-                customTriggerEffect.put(0.25f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getSpark(position), VisualEffects.getSmoketrail(position), VisualEffects.getDebris(position), VisualEffects.getShockwave(position)));
-                customTriggerEffect.put(0.3f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getRoundspark(position)));
+                /*Map<Float, List<ParticleEmitter>> customTriggerEffect = new HashMap<Float, List<ParticleEmitter>>();
+                 customTriggerEffect.put(0.25f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getSpark(position), VisualEffects.getSmoketrail(position), VisualEffects.getDebris(position), VisualEffects.getShockwave(position)));
+                 customTriggerEffect.put(0.3f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getRoundspark(position)));
 
-                effects.ScriptAppState appState = new effects.ScriptAppState(stateManager);
-                appState.setCustomTriggerEffect(customTriggerEffect);
-                stateManager.attach(appState);
+                 effects.ScriptAppState appState = new effects.ScriptAppState(stateManager);
+                 appState.setCustomTriggerEffect(customTriggerEffect);
+                 stateManager.attach(appState);*/
+                
+                
+                VisualEffects.getFlash(position);
+                VisualEffects.getSpark(position);
+                VisualEffects.getSmoketrail(position);
+                VisualEffects.getDebris(position);
+                VisualEffects.getShockwave(position);
+                
 
-                state = 1;
+                state++;
 
             }
 
+
+            if (timeElapsed > 1f + .05f && state == 1) {
+                VisualEffects.getRoundspark(position);
+                state++;
+            }
 
 
             if (timeElapsed >= 4f && done == Boolean.FALSE) {
                 app.getRootNode().detachChildNamed("explosionFX");
                 stateManager.getState(GamePlayAppState.class).reset();
-                done = Boolean.TRUE; 
+                done = Boolean.TRUE;
             }
 
             if (timeElapsed > 5f) {
@@ -101,7 +111,4 @@ public class LostLifeState extends AbstractAppState {
         }
 
     }
-   
-    
-    
 }

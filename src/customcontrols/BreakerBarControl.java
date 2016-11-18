@@ -142,13 +142,13 @@ public class BreakerBarControl extends AbstractControl {
     }
 
     private void executeChangeEffect(Vector3f position) {
-        ParticleEmitter fx = VisualEffects.getChangeEffect(position);
-
-        rootNode.attachChild(fx);
-        fx.emitAllParticles();
+       VisualEffects.getChangeEffect(position);
+//
+//        rootNode.attachChild(fx);
+//        fx.emitAllParticles();
     }
 
-    private void addExtraBalls() {
+    /*private void addExtraBalls() {
         Node node = (Node) rootNode.getChild("BreakerNode");
         Breaker ball = (Breaker) rootNode.getChild("Breaker");
 
@@ -170,22 +170,11 @@ public class BreakerBarControl extends AbstractControl {
             extraBall.addControl(new BreakerControl(rootNode, stateManager));
             rootNode.attachChild(extraBall);
         }
-    }
+    }*/
 
     private void verifyExtraBallActivated() {
-        Node breakerNode = (Node) rootNode.getChild("BreakerNode");
-
-        //Hay mas de una bolita activa
-        if (breakerNode.getChildren().size() > 1) {
-
-            List<Spatial> extraBalls = breakerNode.getChildren();
-
-            for (int i = 0; i < 2; i++) {
-                //Eliminar las bolas extras
-                Breaker extraBall = (Breaker) extraBalls.get(0);
-                extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
-                extraBall.removeFromParent();
-            }
+        if(BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.EXTRA_BALLS.name())){
+            stateManager.getState(GamePlayAppState.class).removeExtraballsFromScene();
         }
     }
 }

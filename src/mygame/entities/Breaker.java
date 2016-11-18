@@ -4,9 +4,9 @@
  */
 package mygame.entities;
 
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -159,10 +159,21 @@ public class Breaker extends Geometry {
     }
     
     public void executeExplosionEffect(Vector3f position){
-        ParticleEmitter fx = VisualEffects.getBallExplosionEffect(position);
-        
-        this.getParent().attachChild(fx);
-        fx.emitAllParticles();
+        VisualEffects.getBallExplosionEffect(position);
+//        
+//        this.getParent().attachChild(fx);
+//        fx.emitAllParticles();
     }
     
+    
+    public void release(AppStateManager stateManager){
+        //Set initial position and direction 
+        this.setLocalTranslation(this.getWorldTranslation());
+        this.setInitialDirection();
+        
+        //Attach the entity to the rootNode
+        Node rootNode = this.getParent().getParent();
+        ((Node)rootNode.getChild("BreakerNode")).attachChild(this);
+        this.addControl(new BreakerControl(rootNode, stateManager));
+    }
 }
