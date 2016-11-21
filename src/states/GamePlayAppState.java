@@ -11,22 +11,18 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
 import effects.VisualEffects;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.Spaceship;
@@ -92,7 +88,7 @@ public class GamePlayAppState extends AbstractAppState {
     }
     
     private void initVisualEffects(){
-        VisualEffects ve = new VisualEffects(assetManager);
+        VisualEffects ve = new VisualEffects(assetManager, app.getRootNode());
     }
 
     private void initMainEntities() {
@@ -221,7 +217,7 @@ public class GamePlayAppState extends AbstractAppState {
     
     public void addExtraBalls(){ 
         Node node = (Node) app.getRootNode().getChild("BreakerNode");
-        Breaker ball = (Breaker) app.getRootNode().getChild("Breaker");
+        Breaker breaker = (Breaker) app.getRootNode().getChild("Breaker");
 
         for (int i = 0; i < 2; i++) {
             Quaternion quat = new Quaternion();
@@ -235,12 +231,31 @@ public class GamePlayAppState extends AbstractAppState {
             }
 
             quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
-            quat.mult(ball.getDirection(), direction);
+            quat.mult(breaker.getDirection(), direction);
 
-            Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
+            Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), breaker.getLocalTranslation(), breaker.getSpeed(), direction);
             extraBall.addControl(new BreakerControl(app.getRootNode(), stateManager));
             node.attachChild(extraBall);
         }
     }
     
+    
+    public void removeExtraballsFromScene(){
+        //Node breakerNode = (Node) app.getRootNode().getChild("BreakerNode");
+
+        //Hay mas de una bolita activa
+        //if (breakerNode.getChildren().size() > 1) {
+
+//            List<Spatial> extraBalls = breakerNode.getChildren();
+//            
+            int i = 0;
+            while(breakerNode.getChildren().size() > 1){
+                Breaker extraBall = (Breaker)breakerNode.getChild(i);
+                extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
+                extraBall.removeFromParent();
+                
+                i++;
+            }
+            
+    }
 }

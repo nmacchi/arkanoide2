@@ -93,7 +93,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
                         stateManager.detach(stateManager.getState(InputAppState.class));
                         stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
-                        stateManager.getState(GamePlayAppState.class).setGameStop(Boolean.TRUE);
+                        stateManager.getState(GamePlayAppState.class).setGameStop(Boolean.TRUE);           
                     } else {
                         removeFromScene();
                     }

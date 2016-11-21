@@ -50,8 +50,8 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         GamePlayAppState initState = new GamePlayAppState();
         stateManager.attach(initState);
         
-        GameGuiAppState guiState = new GameGuiAppState();
-        stateManager.attach(guiState);
+//        GameGuiAppState guiState = new GameGuiAppState();
+//        stateManager.attach(guiState);
         
        
     }

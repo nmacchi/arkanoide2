@@ -143,28 +143,39 @@ public class BreakerBarControl extends AbstractControl {
     }
 
     private void executeChangeEffect(Vector3f position) {
-        ParticleEmitter fx = VisualEffects.getChangeEffect(position);
-
-        rootNode.attachChild(fx);
-        fx.emitAllParticles();
+       VisualEffects.getChangeEffect(position);
+//
+//        rootNode.attachChild(fx);
+//        fx.emitAllParticles();
     }
 
-    
-    
-    private void verifyExtraBallActivated() {
-        Node breakerNode = (Node) rootNode.getChild("BreakerNode");
+    /*private void addExtraBalls() {
+        Node node = (Node) rootNode.getChild("BreakerNode");
+        Breaker ball = (Breaker) rootNode.getChild("Breaker");
 
-        //Hay mas de una bolita activa
-        if (breakerNode.getChildren().size() > 1) {
+        for (int i = 0; i < 2; i++) {
+            Quaternion quat = new Quaternion();
+            Vector3f direction = new Vector3f();
 
-            List<Spatial> extraBalls = breakerNode.getChildren();
-
-            for (int i = 0; i < 2; i++) {
-                //Eliminar las bolas extras
-                Breaker extraBall = (Breaker) extraBalls.get(0);
-                extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
-                extraBall.removeFromParent();
+            int rotationDegree;
+            if (node.getChildren().size() < 1) {
+                rotationDegree = 10;
+            } else {
+                rotationDegree = -10;
             }
+
+            quat.fromAngleAxis(FastMath.PI * rotationDegree / 180, Vector3f.UNIT_Z);
+            quat.mult(ball.getDirection(), direction);
+
+            Breaker extraBall = new Breaker(stateManager.getApplication().getAssetManager(), ball.getLocalTranslation(), ball.getSpeed(), direction);
+            extraBall.addControl(new BreakerControl(rootNode, stateManager));
+            rootNode.attachChild(extraBall);
+        }
+    }*/
+
+    private void verifyExtraBallActivated() {
+        if(BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.EXTRA_BALLS.name())){
+            stateManager.getState(GamePlayAppState.class).removeExtraballsFromScene();
         }
     }
 }
