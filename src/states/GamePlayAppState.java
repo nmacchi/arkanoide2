@@ -18,11 +18,10 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
 import effects.VisualEffects;
-import java.util.List;
+import factories.BreakerBarFactory;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.Spaceship;
@@ -53,7 +52,9 @@ public class GamePlayAppState extends AbstractAppState {
     PlayerState playerState;
     ScriptAppState scriptAppState;
     LostLifeState lostLifeState;
-            
+    
+    BreakerBarFactory breakerBarCreator;
+    
     private AudioNode audio_crash;
     private AudioNode audio_rebound;
     private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
@@ -70,14 +71,17 @@ public class GamePlayAppState extends AbstractAppState {
         this.stateManager = stateManager;
         this.app = (SimpleApplication) app;
         this.assetManager = ((SimpleApplication) app).getAssetManager();
-
+        this.breakerBarCreator = new BreakerBarFactory();
+        
+        this.app.getRootNode().attachChild(breakerBarNode);
+        this.app.getRootNode().attachChild(breakerNode);
+        
         initMainEntities();
         
         lostLifeState = new LostLifeState(); 
         guiAppState = new GameGuiAppState();
         playerState = new PlayerState();
         inputState = new InputAppState();
-        
         
         stateManager.attachAll(playerState, inputState, guiAppState, lostLifeState);
         
@@ -88,21 +92,24 @@ public class GamePlayAppState extends AbstractAppState {
     }
     
     private void initVisualEffects(){
-        VisualEffects ve = new VisualEffects(assetManager, app.getRootNode());
+       VisualEffects ve = new VisualEffects();
+       ve.initVisualEffect(assetManager, app.getRootNode());
     }
 
     private void initMainEntities() {
-        arkanoid = new Arkanoid(assetManager);
-        ball = new Breaker(assetManager);
-        spaceship = new Spaceship(assetManager);
+        breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), breakerBarNode, app, null);
+        breakerBarNode.attachChild(new Breaker(assetManager));
         
-        arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
-        
-        breakerBarNode.attachChild(arkanoid);
-        breakerBarNode.attachChild(ball);
+//        arkanoid = new Arkanoid(assetManager);
+//        ball = new Breaker(assetManager);
+//        spaceship = new Spaceship(assetManager);
+//        
+//        arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
+//        
+//        breakerBarNode.attachChild(arkanoid);
+//        breakerBarNode.attachChild(ball);
  
-        app.getRootNode().attachChild(breakerBarNode);
-        app.getRootNode().attachChild(breakerNode);
+        
     }
 
     private void configureCameraSettings() {
@@ -147,10 +154,12 @@ public class GamePlayAppState extends AbstractAppState {
     public void reset() {
         playerState.restLife();
         
-        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
-        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(new Breaker(assetManager));
+//        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
+//        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
+//        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(new Breaker(assetManager));
 
+        initMainEntities();
+        
         stateManager.attach(inputState);
         this.setGameStop(Boolean.FALSE);
 

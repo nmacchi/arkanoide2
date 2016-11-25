@@ -4,11 +4,9 @@
  */
 package customcontrols;
 
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResults;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -16,7 +14,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import effects.VisualEffects;
-import java.util.List;
+import factories.BreakerBarFactory;
 import mygame.Powerup;
 import mygame.PowerupType;
 import mygame.entities.Arkanoid;
@@ -35,11 +33,14 @@ public class BreakerBarControl extends AbstractControl {
     private CollisionResults results = new CollisionResults();
     private Node rootNode;
     private AppStateManager stateManager;
-
-    public BreakerBarControl(Node rootNode, AppStateManager stateManager) {
+    private SimpleApplication app;
+    private BreakerBarFactory breakerBarCreator;
+    
+    public BreakerBarControl(Node rootNode, SimpleApplication app) {
         this.rootNode = rootNode;
-        this.stateManager = stateManager;
-//        this.breakerBarFactory = new BreakerBarFactory();
+        this.stateManager = app.getStateManager();
+        this.app = app;
+        this.breakerBarCreator = new BreakerBarFactory();
     }
 
     @Override
@@ -71,21 +72,9 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Arkanoid) {
                         executeChangeEffect(spatial.getWorldTranslation());
-                           
-                        ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
-                        Spaceship spaceship = stateManager.getState(GamePlayAppState.class).getSpaceship();
-                        spaceship.setLocalTranslation(spatial.getLocalTranslation());
-                        spaceship.addControl(new SpaceshipControl());
                         
-                        
-                        ((Node) rootNode.getChild("BreakerBarNode")).attachChild(spaceship);
-                         spaceship.addFlammingFX();
+                        breakerBarCreator.createrBar(Spaceship.class.getSimpleName(), (Node)rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
-
-
-                    //executeChangeEffect(spatial.getWorldTranslation());
-
-                    //((Arkanoid) spatial).transformToSpaceship(stateManager, (Node) rootNode.getChild("BreakerBarNode"), spatial.getLocalTranslation());
 
                 }
 
@@ -101,11 +90,8 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
-
-                        ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
-                        Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
-                        arkanoide.setLocalTranslation(spatial.getLocalTranslation());
-                        ((Node) rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
+                        
+                         breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node)rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
 
                     ((Breaker) ((Node)rootNode.getChild("BreakerNode")).getChild(0)).decreaseSpeed();
@@ -117,11 +103,8 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
-
-                        ((Node) rootNode.getChild("BreakerBarNode")).detachAllChildren();
-                        Arkanoid arkanoide = stateManager.getState(GamePlayAppState.class).getArkanoid();
-                        arkanoide.setLocalTranslation(spatial.getLocalTranslation());
-                        ((Node) rootNode.getChild("BreakerBarNode")).attachChild(arkanoide);
+                        
+                        breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node)rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
                 }
 

@@ -39,6 +39,9 @@ public class Breaker extends Geometry {
     
     private int hits;
     
+    private Node localNode;
+    
+    
     public Breaker(AssetManager assetManager) {
         super("Breaker", new Sphere(8, 8, 0.022f, true, false));
         createBallMaterial(assetManager);
@@ -152,7 +155,7 @@ public class Breaker extends Geometry {
         if(speed < maxSpeed){
             hits++;
   
-            if(hits % 5 == 0){
+            if(hits % 3 == 0){
                 speed += 0.05f;
             }   
         }
@@ -160,9 +163,6 @@ public class Breaker extends Geometry {
     
     public void executeExplosionEffect(Vector3f position){
         VisualEffects.getBallExplosionEffect(position);
-//        
-//        this.getParent().attachChild(fx);
-//        fx.emitAllParticles();
     }
     
     
@@ -175,5 +175,15 @@ public class Breaker extends Geometry {
         Node rootNode = this.getParent().getParent();
         ((Node)rootNode.getChild("BreakerNode")).attachChild(this);
         this.addControl(new BreakerControl(rootNode, stateManager));
+    }
+    
+    
+    public void changeToFireBall(){
+        material.setColor("Diffuse", ColorRGBA.Yellow);
+        material.setColor("Ambient", ColorRGBA.Orange);
+        
+        localNode.attachChild(VisualEffects.getFlame(this.getWorldTranslation()));
+        
+        this.getParent().attachChild(localNode);
     }
 }

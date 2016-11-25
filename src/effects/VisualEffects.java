@@ -41,9 +41,15 @@ public class VisualEffects {
     private static final boolean POINT_SPRITE = true;
     private static final ParticleMesh.Type EMITTER_TYPE = POINT_SPRITE ? ParticleMesh.Type.Point : ParticleMesh.Type.Triangle;
     
-    public VisualEffects(AssetManager assetManager, Node rootNode){        
+//    public static void VisualEffects(AssetManager assetManager, Node rootNode){        
+//        VisualEffects.assetManager = assetManager;
+//        VisualEffects.rootNode = rootNode;
+//    }
+    
+    public void initVisualEffect(AssetManager assetManager, Node rootNode){
         VisualEffects.assetManager = assetManager;
         VisualEffects.rootNode = rootNode;
+        
     }
     
     
@@ -304,6 +310,10 @@ public class VisualEffects {
         
 //        return shockwave;
     }
+    
+    private ParticleEmitter createFlammingBall(Vector3f position){
+        
+    }
 
 
     public static void getFlame(Vector3f position) {
@@ -342,6 +352,10 @@ public class VisualEffects {
         createBallExplosionEffect(position);
     }
     
+     public static ParticleEmitter getFlammingBall(Vector3f position){
+         return createFlammingBall(position);
+     }
+     
     public static Node getExplosionEffect() {
         return explosionEffect;
     }

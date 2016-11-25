@@ -26,7 +26,7 @@ public abstract class BreakerBar extends Geometry {
     
     protected PowerupType PowerupType;
     protected String activePower;
-    private static String currentPower = "";
+    private static String currentPower;
     protected float width;
     
    
@@ -36,7 +36,8 @@ public abstract class BreakerBar extends Geometry {
     
     public BreakerBar(AssetManager assetManager){
         this.assetManager = assetManager; 
-        setName("BreakerBar");         
+        setName("BreakerBar");
+        BreakerBar.currentPower = "";
     }
     
     public float getSpeed() {
@@ -108,5 +109,7 @@ public abstract class BreakerBar extends Geometry {
         return impact;
     
     }
+    
+    
     
 }

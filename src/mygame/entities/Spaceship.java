@@ -9,7 +9,6 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import customcontrols.SpaceshipControl;
 import effects.SpaceshipFlame;
 import mygame.Bullet;
 
@@ -31,20 +30,29 @@ public class Spaceship extends BreakerBar{
     
     public Spaceship(){};
     
-    public Spaceship(AssetManager assetManager){
+    /*public Spaceship(AssetManager assetManager){
         super(assetManager);
         createSpaceship();
        
-    }
+    }*/
     
-    public Spaceship(AssetManager assetManager, Vector3f position){
+    /*public Spaceship(AssetManager assetManager, Vector3f position){
         super(assetManager);
-        createSpaceship();
         setLocalTranslation(position);
+        createSpaceship();
+        
+       
+    }*/
+    
+    public Spaceship(AssetManager assetManager, Vector3f position, Node parent){
+        super(assetManager);
+        setLocalTranslation(position);
+        createSpaceship(parent);
+        
        
     }
     
-    private void createSpaceship(){
+    private void createSpaceship(Node parent){
         Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/spaceship_model.j3o")).getChild(0);
         
         setMesh(geometry.getMesh());
@@ -53,9 +61,11 @@ public class Spaceship extends BreakerBar{
         scale(0.095f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
         
-        //setLocalTranslation(new Vector3f(0.25f, 0.03f, 1f));
-//        setLocalTranslation(position);
-//        addControl(new SpaceshipControl());
+        //BreakerBarNode
+        parent.attachChild(this);
+        setParent(parent);
+              
+        addFlammingFX();      
     }
     
     private void createBullets(){
@@ -83,17 +93,14 @@ public class Spaceship extends BreakerBar{
         this.cooldownTime -= tpf;
     }
 
-    public void addFlammingFX(){
-        flamming1 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
-        flamming2 = new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire();
-        
-        localNode.attachChild(flamming1);
-        localNode.attachChild(flamming2);
-        
-        this.getParent().attachChild(localNode);
-        flamming1.emitAllParticles();
-        flamming2.emitAllParticles();
+    private void addFlammingFX(){
+        for(int i = 0; i < 2; i++){
+           localNode.attachChild(new SpaceshipFlame(assetManager, getLocalTranslation()).getSpaceshipFire());
+           
+           getParent().attachChild(localNode);
+           
+           ((ParticleEmitter)localNode.getChild(i)).emitAllParticles();
+        }
     }
-
-
+    
 }

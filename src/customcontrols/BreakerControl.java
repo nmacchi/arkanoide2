@@ -52,7 +52,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     @Override
     protected void controlUpdate(float tpf) {
         if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
-            
+           
             breaker.move(breaker.getDirection().mult(tpf * breaker.getSpeed()));
 
             if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())) {
@@ -87,7 +87,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
                 //Colisiona contra las paredes o el suelo
                 if (results.getClosestCollision().getGeometry().getName().equals("Floor")) {
-                    //System.out.println(((Node)rootNode.getChild("BreakerNode")).getChildren().size());
+//                    System.out.println(((Node)rootNode.getChild("BreakerNode")).getChildren().size());
                     if (((Node) rootNode.getChild("BreakerNode")).getChildren().size() == 1) {
                         removeFromScene();
 
@@ -95,6 +95,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                         stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
                         stateManager.getState(GamePlayAppState.class).setGameStop(Boolean.TRUE);           
                     } else {
+                                System.out.println("HOLA");
                         removeFromScene();
                     }
 
