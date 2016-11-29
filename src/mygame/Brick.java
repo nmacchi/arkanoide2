@@ -23,45 +23,42 @@ import states.PlayerState;
  * @author nicolas
  */
 public class Brick extends Geometry {
-    
+
     protected AppStateManager stateManager;
     protected int points;
     protected int hardness;
-    
     //Dimentions
     private static float width = 0.075f;
     private static float height = 0.025f;
-    
     private static int count = 0;
-    
     private boolean hasPowerup;
     private int countHits;
-    
     //FX
     private SmokeTrail FX;
-    
-    Brick(){}
-    
+
+    Brick() {
+    }
+
     Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {
         this.stateManager = stateManager;
-        
+
         Geometry brick = (Geometry) ((Node) assetManager.loadModel("Models/brick/Cube.mesh.j3o")).getChild(0);
-        
+
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setBoolean("UseMaterialColors", true);
         material.setColor("Specular", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
-        
+
         setMesh(brick.getMesh());
         setLocalTranslation(position);
-        
+
         scale(0.02f, 0.03f, 0.08f);
-        rotate(0f,1.60f,0f);
-        
+        rotate(0f, 1.60f, 0f);
+
         setName("Brick" + count);
         count++;
-        
+
         //create FX
         //FX = new SmokeTrail(assetManager, position);
     }
@@ -93,17 +90,17 @@ public class Brick extends Geometry {
             while (!hasPowerup) {
                 //Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
                 Brick brick = (Brick) bricksNode.getChild(i);
-                
+
                 //Only commonBrick could have rewards
-                if(brick instanceof CommonBrick){
+                if (brick instanceof CommonBrick) {
                     hasPowerup = brick.isHasPowerup();
                     if (!hasPowerup) {
                         brick.setHasPowerup(Boolean.TRUE);
                         hasPowerup = true;
-                        ((CommonBrick)brick).setPowerup(new Powerup(assetManager, brick));
+                        ((CommonBrick) brick).setPowerup(new Powerup(assetManager, brick));
                     }
                 }
-                
+
             }
 
             hasPowerup = false;
@@ -125,8 +122,8 @@ public class Brick extends Geometry {
     public void setHardness(int hardness) {
         this.hardness = hardness;
     }
-    
-    public void countHits(){
+
+    public void countHits() {
         this.countHits++;
     }
 
@@ -137,35 +134,41 @@ public class Brick extends Geometry {
     public SmokeTrail getFX() {
         return FX;
     }
-    
-    public void removeBrick(){
-        countHits();
 
-        if (getCountHits() >= getHardness()) {
-            
-            stateManager.getState(PlayerState.class).setScore(getPoints());
-            
-            if (this instanceof CommonBrick) {
-                if (((CommonBrick) this).isHasPowerup()) {
-                    Powerup powerup = ((CommonBrick) this).getPowerup();
-                    powerup.addControl(new PowerupControl(this.getParent().getParent(), stateManager));
-                    ((Node)this.getParent().getParent().getChild("PowerupsNode")).attachChild(powerup);
+    public void removeBrick() {
+        
+            countHits();
+
+            if (getCountHits() >= getHardness()) {
+
+                stateManager.getState(PlayerState.class).setScore(getPoints());
+
+                if (this instanceof CommonBrick) {
+                    if (((CommonBrick) this).isHasPowerup()) {
+                        Powerup powerup = ((CommonBrick) this).getPowerup();
+                        powerup.addControl(new PowerupControl(this.getParent().getParent(), stateManager));
+                        ((Node) this.getParent().getParent().getChild("PowerupsNode")).attachChild(powerup);
+                    }
                 }
+
+//                executeExplosionEffect(this.getLocalTranslation());
+//                removeFromParent();
+                doRemove();
+//            return true;
             }
             
-            executeExplosionEffect(this.getLocalTranslation());
-            removeFromParent();
-//            return true;
-        }
-        
 //        return false;
     }
-    
-    private void executeExplosionEffect(Vector3f position){
+
+    private void executeExplosionEffect(Vector3f position) {
         VisualEffects.getDebris(position);
-        
+
 //        this.getParent().attachChild(fx);
 //        fx.emitAllParticles();
     }
     
+    public void doRemove(){
+        executeExplosionEffect(this.getLocalTranslation());
+        removeFromParent();
+    }
 }

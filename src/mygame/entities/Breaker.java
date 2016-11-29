@@ -24,7 +24,7 @@ import java.util.Random;
  *
  * @author nicolas
  */
-public class Breaker extends Geometry {
+public class Breaker extends Node {
     
     private static float initialSpeed = 0.5f;
     private static float reducedSpeed = 0.25f;
@@ -39,33 +39,46 @@ public class Breaker extends Geometry {
     
     private int hits;
     
-    private Node localNode;
-    
+    //private Node localNode;
+    private Geometry geometry;
+    private Boolean fireballActivated = false;
     
     public Breaker(AssetManager assetManager) {
-        super("Breaker", new Sphere(8, 8, 0.022f, true, false));
+       // super("Breaker", new Sphere(8, 8, 0.022f, true, false));
+       super("Breaker");
+        
         createBallMaterial(assetManager);
         
         this.speed = initialSpeed;
         setLocalTranslation(initialPosition);
+
     }
     
     public Breaker(AssetManager assetManager, Vector3f position, float speed, Vector3f direction){
-        super("Breaker", new Sphere(8, 8, 0.022f, true, false));
+        //super("Breaker", new Sphere(8, 8, 0.022f, true, false));
+        super("Breaker");
+                
         createBallMaterial(assetManager);
         
         this.speed = speed;
         this.direction = direction;
         setLocalTranslation(position);
+        
     }
     
     private void createBallMaterial(AssetManager assetManager){
-        material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        geometry = new Geometry("Ball", new Sphere(8, 8, 0.022f, true, false));
+        
+        Material material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setTexture("DiffuseMap", assetManager.loadTexture("Textures/breaker.jpg"));
         material.setBoolean("UseMaterialColors", true);
         material.setColor("Diffuse", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
+        
+        geometry.setMaterial(material);
+        
+        attachChild(geometry);
     }
 
     public Vector3f getDirection() {
@@ -179,11 +192,26 @@ public class Breaker extends Geometry {
     
     
     public void changeToFireBall(){
-        material.setColor("Diffuse", ColorRGBA.Yellow);
-        material.setColor("Ambient", ColorRGBA.Orange);
+        fireballActivated = true;
         
-        localNode.attachChild(VisualEffects.getFlame(this.getWorldTranslation()));
+        Geometry ball = (Geometry)this.getChild("Ball");
         
-        this.getParent().attachChild(localNode);
+        ball.getMaterial().setColor("Diffuse", ColorRGBA.Yellow);
+        ball.getMaterial().setColor("Ambient", ColorRGBA.Orange);
+        this.speed = maxSpeed;
+        
+        VisualEffects.getFlame(ball.getLocalTranslation(), this);
+        
+        //this.getParent().attachChild(localNode);
     }
+
+    public Boolean isFireballActivated() {
+        return fireballActivated;
+    }
+
+    public void setFireballActivated(Boolean fireballActivated) {
+        this.fireballActivated = fireballActivated;
+    }
+    
+    
 }

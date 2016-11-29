@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class PowerupType {
     
-    public enum PowerTypes{EXPAND,EXTRA_BALLS,LIFE,SLOWER,FIRE}
+    public enum PowerTypes{FIREBALL,EXTRA_BALLS,LIFE,SLOWER,FIRE}
     
     private static Random random = new Random();
 
@@ -29,10 +29,10 @@ public class PowerupType {
     }
     
     private void selectType(){
-        int pick = random.nextInt(PowerTypes.values().length);
-//        int pick = 4;
+//        int pick = random.nextInt(PowerTypes.values().length);
+        int pick = 0;
         switch(PowerTypes.values()[pick]){
-            case EXPAND:
+            case FIREBALL:
                 this.name = PowerTypes.values()[pick].toString();
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_blue.png", false));
                 break;

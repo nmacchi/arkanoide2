@@ -55,11 +55,17 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
            
             breaker.move(breaker.getDirection().mult(tpf * breaker.getSpeed()));
 
-            if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())) {
+            if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())
+                    || BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.FIREBALL.name())) {
+                
                 timer += tpf;
 
                 if (timer >= 10f) {
+                    
                     BreakerBar.setCurrentPower("");
+                    if(breaker.isFireballActivated()){
+                        breaker.setFireballActivated(Boolean.FALSE);
+                    }
                     breaker.setSpeed(Breaker.getInitialSpeed());
                     timer = 0f;
                 }
@@ -68,21 +74,25 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             r.setOrigin(breaker.getLocalTranslation());
             r.setDirection(breaker.getDirection());
 
-            rootNode.getChild("BricksNode").collideWith(breaker.getWorldBound(), results);
+            rootNode.getChild("BricksNode").collideWith(breaker.getChild("Ball").getWorldBound(), results);
             if (results.size() > 0) {
-                //Colisiona con uno de los ladrillos
-                breaker.setDirection(breaker.reflectVector(results.getClosestCollision()));
+                if(!breaker.isFireballActivated()){
+                    //Colisiona con uno de los ladrillos
+                    breaker.setDirection(breaker.reflectVector(results.getClosestCollision()));
+                    
+                    if (results.getClosestCollision().getGeometry() instanceof Brick) {
+                        ((Brick) results.getClosestCollision().getGeometry()).removeBrick();
 
-                if (results.getClosestCollision().getGeometry() instanceof Brick) {
-                    ((Brick) results.getClosestCollision().getGeometry()).removeBrick();
-
-                    breaker.countHit();
+                        breaker.countHit();
+                    }
+                }else{
+                    ((Brick) results.getClosestCollision().getGeometry()).doRemove();
                 }
                 
                 results.clear();
             }
 
-            rootNode.getChild("Gamefield").collideWith(breaker.getWorldBound(), results);
+            rootNode.getChild("Gamefield").collideWith(breaker.getChild("Ball").getWorldBound(), results);
             if (results.size() > 0) {
 
                 //Colisiona contra las paredes o el suelo
@@ -90,12 +100,11 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 //                    System.out.println(((Node)rootNode.getChild("BreakerNode")).getChildren().size());
                     if (((Node) rootNode.getChild("BreakerNode")).getChildren().size() == 1) {
                         removeFromScene();
-
+               
                         stateManager.detach(stateManager.getState(InputAppState.class));
                         stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
                         stateManager.getState(GamePlayAppState.class).setGameStop(Boolean.TRUE);           
                     } else {
-                                System.out.println("HOLA");
                         removeFromScene();
                     }
 

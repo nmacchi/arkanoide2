@@ -107,7 +107,22 @@ public class BreakerBarControl extends AbstractControl {
                         breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node)rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
                 }
-
+                
+                //Por ahora es la FIRE_BALL
+                if(PowerupType.PowerTypes.FIREBALL.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
+                    verifyExtraBallActivated();
+                    
+                    if (spatial instanceof Spaceship) {
+                        executeChangeEffect(spatial.getWorldTranslation());
+                        
+                         breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node)rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                    }
+                    
+                    
+                    ((Breaker) ((Node)rootNode.getChild("BreakerNode")).getChild(0)).changeToFireBall();
+                }
+                
+                
                 BreakerBar.setCurrentPower(catchedPowerup);
                 powerup.removeFromParent();
 

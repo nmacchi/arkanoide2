@@ -75,6 +75,7 @@ public class GamePlayAppState extends AbstractAppState {
         
         this.app.getRootNode().attachChild(breakerBarNode);
         this.app.getRootNode().attachChild(breakerNode);
+        initVisualEffects();
         
         initMainEntities();
         
@@ -88,7 +89,7 @@ public class GamePlayAppState extends AbstractAppState {
         configureCameraSettings();
         initAudio();
         initSceneLights();
-        initVisualEffects();
+        
     }
     
     private void initVisualEffects(){

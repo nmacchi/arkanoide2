@@ -53,29 +53,59 @@ public class VisualEffects {
     }
     
     
-    private static void createFlame(Vector3f position) {
-        ParticleEmitter flame = new ParticleEmitter("Flame", EMITTER_TYPE, 32 * COUNT_FACTOR);
-        flame.setSelectRandomImage(true);
-        flame.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1f / COUNT_FACTOR_F)));
-        flame.setEndColor(new ColorRGBA(.4f, .22f, .12f, 0f));
-        flame.setStartSize(1.3f);
-        flame.setEndSize(2f);
-        flame.setShape(new EmitterSphereShape(Vector3f.ZERO, 1f));
-        flame.setParticlesPerSec(0);
-        flame.setGravity(0, -5, 0);
-        flame.setLowLife(.4f);
-        flame.setHighLife(.5f);
-        flame.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 7, 0));
-        flame.getParticleInfluencer().setVelocityVariation(1f);
+    private static void createFlame(Vector3f position, Node parent) {
+//        ParticleEmitter flame = new ParticleEmitter("Flame", EMITTER_TYPE, 32 * COUNT_FACTOR);
+//        flame.setSelectRandomImage(true);
+//        flame.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1f / COUNT_FACTOR_F)));
+//        flame.setEndColor(new ColorRGBA(.4f, .22f, .12f, 0f));
+//        flame.setStartSize(1.3f);
+//        flame.setEndSize(2f);
+//        flame.setShape(new EmitterSphereShape(Vector3f.ZERO, 1f));
+//        flame.setParticlesPerSec(0);
+//        flame.setGravity(0, -5, 0);
+//        flame.setLowLife(.4f);
+//        flame.setHighLife(.5f);
+//        flame.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 7, 0));
+//        flame.getParticleInfluencer().setVelocityVariation(1f);
+//        flame.setImagesX(2);
+//        flame.setImagesY(2);
+//        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+//        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
+//        mat.setBoolean("PointSprite", POINT_SPRITE);
+//        flame.setMaterial(mat);
+//        flame.setLocalTranslation(position);
+        
+        Material material = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        material.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
+        material.setFloat("Softness", 3f); // 
+        
+        //Fire
+        ParticleEmitter flame = new ParticleEmitter("Fire", ParticleMesh.Type.Triangle, 50);
+        flame.setMaterial(material);
+        flame.setShape(new EmitterSphereShape(Vector3f.ZERO, 0.022f));
         flame.setImagesX(2);
-        flame.setImagesY(2);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
-        mat.setBoolean("PointSprite", POINT_SPRITE);
-        flame.setMaterial(mat);
+        flame.setImagesY(2); // 2x2 texture animation
+        flame.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f)); // red
+        flame.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
+        flame.setStartSize(0.049f);
+        flame.setEndSize(0.038f);
+        flame.setGravity(0, 0.0f, 0);
+        flame.setLowLife(0.5f);
+        flame.setHighLife(1.2f);
+        flame.setParticlesPerSec(100);
+//        spaceshipFire.setNumParticles(500);
         flame.setLocalTranslation(position);
         
-        rootNode.attachChild(flame);
+        
+        
+        
+        System.out.println("LLEGA");
+        if(parent == null){
+            rootNode.attachChild(flame);
+        }else{
+            parent.attachChild(flame);
+        }
+        
         flame.emitAllParticles();
         
 //        return flame;
@@ -311,13 +341,17 @@ public class VisualEffects {
 //        return shockwave;
     }
     
-    private ParticleEmitter createFlammingBall(Vector3f position){
+    /*private ParticleEmitter createFlammingBall(Vector3f position){
         
-    }
+    }*/
 
 
     public static void getFlame(Vector3f position) {
-        createFlame(position);
+        createFlame(position, null);
+    }
+    
+    public static void getFlame(Vector3f position, Node parent){
+        createFlame(position, parent);
     }
 
     public static void getFlash(Vector3f position) {
@@ -352,9 +386,9 @@ public class VisualEffects {
         createBallExplosionEffect(position);
     }
     
-     public static ParticleEmitter getFlammingBall(Vector3f position){
+     /*public static ParticleEmitter getFlammingBall(Vector3f position){
          return createFlammingBall(position);
-     }
+     }*/
      
     public static Node getExplosionEffect() {
         return explosionEffect;
