@@ -13,11 +13,15 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
 import effects.VisualEffects;
@@ -39,9 +43,13 @@ public class GamePlayAppState extends AbstractAppState {
     
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Node breakerNode = new Node("BreakerNode");
-    private Arkanoid arkanoid;
-    private Breaker ball;
-    private Spaceship spaceship;
+    private Node powerupsNode = new Node("PowerupsNode");
+    private Node gamefield = new Node("Gamefield");
+    
+    
+//    private Arkanoid arkanoid;
+//    private Breaker ball;
+//    private Spaceship spaceship;
     
     AppStateManager stateManager;
     SimpleApplication app;
@@ -75,6 +83,11 @@ public class GamePlayAppState extends AbstractAppState {
         
         this.app.getRootNode().attachChild(breakerBarNode);
         this.app.getRootNode().attachChild(breakerNode);
+        this.app.getRootNode().attachChild(powerupsNode);
+        this.app.getRootNode().attachChild(gamefield);
+        
+        initScene();
+        
         initVisualEffects();
         
         initMainEntities();
@@ -144,13 +157,13 @@ public class GamePlayAppState extends AbstractAppState {
         app.getRootNode().addLight(al);
     }
     
-    public Arkanoid getArkanoid() {
-        return arkanoid;
-    }
-
-    public Breaker getBall() {
-        return ball;
-    }
+//    public Arkanoid getArkanoid() {
+//        return arkanoid;
+//    }
+//
+//    public Breaker getBall() {
+//        return ball;
+//    }
 
     public void reset() {
         playerState.restLife();
@@ -166,9 +179,9 @@ public class GamePlayAppState extends AbstractAppState {
 
     }
 
-    public Spaceship getSpaceship() {
-        return spaceship;
-    }
+//    public Spaceship getSpaceship() {
+//        return spaceship;
+//    }
 
     public boolean isGameStarted() {
         return gameStarted;
@@ -194,6 +207,7 @@ public class GamePlayAppState extends AbstractAppState {
         //TODO: Cuando no haya mas ladrillos pasar al proximo nivel
         if(((Node)app.getRootNode().getChild("BricksNode")).getChildren().isEmpty()){
             stateManager.detach(stateManager.getState(InputAppState.class));
+            gameStarted = Boolean.FALSE;
         }
         
         //Game is finished when player lose all his lifes
@@ -267,5 +281,44 @@ public class GamePlayAppState extends AbstractAppState {
                 i++;
             }
             
+    }
+    
+     private void initScene() {
+        //Floor
+        Box floor = new Box(2.0f, 0.01f, 2.0f);
+        Geometry geomFloor = new Geometry("Floor", floor);
+        geomFloor.setLocalTranslation(0.0f, -0.1f, 0.0f);
+        Material matFloor = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        matFloor.setColor("Color", new ColorRGBA(23f / 255f, 207f / 255f, 246f / 255f, 1f));
+
+        geomFloor.setMaterial(matFloor);
+        geomFloor.setCullHint(Spatial.CullHint.Always);
+        gamefield.attachChild(geomFloor);
+
+        //Bars
+        Material matBars = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        matBars.setColor("Color", new ColorRGBA(198f / 255f, 9f / 255f, 26f / 255f, 1f));
+
+        Box leftBar = new Box(0.025f, 0.66f, 0.025f);
+        Geometry geomLeftBar = new Geometry("LeftBar", leftBar);
+        geomLeftBar.setLocalTranslation(new Vector3f(-0.75f, 0.66f, 1f));
+
+        geomLeftBar.setMaterial(matBars);
+
+        gamefield.attachChild(geomLeftBar);
+
+        Box rightBar = new Box(0.025f, 0.66f, 0.025f);
+        Geometry geomRightBar = new Geometry("RightBar", rightBar);
+        geomRightBar.setLocalTranslation(new Vector3f(0.75f, 0.66f, 1f));
+
+        geomRightBar.setMaterial(matBars);
+        gamefield.attachChild(geomRightBar);
+
+        Box topBar = new Box(0.85f, 0.025f, 0.025f);
+        Geometry geomTopBar = new Geometry("TopBar", topBar);
+        geomTopBar.setLocalTranslation(new Vector3f(0.0f, 1.35f, 1f));
+
+        geomTopBar.setMaterial(matBars);
+        gamefield.attachChild(geomTopBar);
     }
 }

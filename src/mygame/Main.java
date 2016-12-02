@@ -25,9 +25,6 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     
     
     private Node bricks;
-    private Node gamefield;
-    private Node powerupsNode;
-    ParticleEmitter smoke;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -38,30 +35,26 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     public void simpleInitApp() {
         
         bricks = new Node("BricksNode");
-        gamefield = new Node("Gamefield");
-        powerupsNode = new Node("PowerupsNode");
+
         rootNode.attachChild(bricks);
-        rootNode.attachChild(gamefield);
-        rootNode.attachChild(powerupsNode);
-       
-        initScene();
+
         makeWall();
         
         GamePlayAppState initState = new GamePlayAppState();
         stateManager.attach(initState);
-        
-//        GameGuiAppState guiState = new GameGuiAppState();
-//        stateManager.attach(guiState);
+
         
        
     }
 
     private void makeWall() {
-        float initialX = -0.60f;
+        float initialX = -0.64f;
         Vector3f position = new Vector3f(initialX, 0.60f, 1f);
         Brick brick = null;
         //rows
-        for (int i = 0; i <= 5; i++) {
+        int brickNum = 0; 
+        
+        for (int i = 0; i <= 7; i++) {
             
             //bricks per line
             for (int j = 0; j <= 7; j++) {
@@ -74,54 +67,18 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
                 bricks.attachChild(brick);
 
                 //Calculate next position
-                position.setX(brick.getLocalTranslation().getX() + Brick.getWidth() * 2 + 0.02f);
+//                position.setX(brick.getLocalTranslation().getX() + Brick.getWidth() * 2 + 0.02f);
+                position.setX(brick.getLocalTranslation().getX() + ((Brick)bricks.getChild(brickNum)).getWidth() * 2 + 0.01f);
+                
+                brickNum++;
             }
             position.setX(initialX);
-            position.setY(position.getY() + Brick.getHeight() * 2 + 0.04f);
+            position.setY(position.getY() + ((Brick)bricks.getChild(bricks.getChildren().size() -1)).getHeight() * 2 + 0.03f);
         }
         
         
         
         Brick.selectSpecialBrick(assetManager, bricks);
-    }
-
-    private void initScene() {
-        //Floor
-        Box floor = new Box(2.0f, 0.01f, 2.0f);
-        Geometry geomFloor = new Geometry("Floor", floor);
-        geomFloor.setLocalTranslation(0.0f, -0.1f, 0.0f);
-        Material matFloor = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matFloor.setColor("Color", new ColorRGBA(23f / 255f, 207f / 255f, 246f / 255f, 1f));
-
-        geomFloor.setMaterial(matFloor);
-        geomFloor.setCullHint(CullHint.Always);
-        gamefield.attachChild(geomFloor);
-
-        //Bars
-        Material matBars = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matBars.setColor("Color", new ColorRGBA(198f / 255f, 9f / 255f, 26f / 255f, 1f));
-
-        Box leftBar = new Box(0.025f, 0.60f, 0.025f);
-        Geometry geomLeftBar = new Geometry("LeftBar", leftBar);
-        geomLeftBar.setLocalTranslation(new Vector3f(-0.75f, 0.60f, 1f));
-
-        geomLeftBar.setMaterial(matBars);
-
-        gamefield.attachChild(geomLeftBar);
-
-        Box rightBar = new Box(0.025f, 0.60f, 0.025f);
-        Geometry geomRightBar = new Geometry("RightBar", rightBar);
-        geomRightBar.setLocalTranslation(new Vector3f(0.75f, 0.60f, 1f));
-
-        geomRightBar.setMaterial(matBars);
-        gamefield.attachChild(geomRightBar);
-
-        Box topBar = new Box(0.85f, 0.025f, 0.025f);
-        Geometry geomTopBar = new Geometry("TopBar", topBar);
-        geomTopBar.setLocalTranslation(new Vector3f(0.0f, 1.2f, 1f));
-
-        geomTopBar.setMaterial(matBars);
-        gamefield.attachChild(geomTopBar);
     }
 
     @Override

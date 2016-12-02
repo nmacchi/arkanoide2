@@ -7,6 +7,7 @@ package mygame.entities;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -42,6 +43,7 @@ public class Breaker extends Node {
     //private Node localNode;
     private Geometry geometry;
     private Boolean fireballActivated = false;
+    private Boolean slowerActivated = false;
     
     public Breaker(AssetManager assetManager) {
        // super("Breaker", new Sphere(8, 8, 0.022f, true, false));
@@ -165,7 +167,8 @@ public class Breaker extends Node {
     }
     
     public void countHit(){
-        if(speed < maxSpeed){
+        if(speed < maxSpeed && (!fireballActivated
+                || !slowerActivated)){
             hits++;
   
             if(hits % 3 == 0){
@@ -198,11 +201,17 @@ public class Breaker extends Node {
         
         ball.getMaterial().setColor("Diffuse", ColorRGBA.Yellow);
         ball.getMaterial().setColor("Ambient", ColorRGBA.Orange);
-        this.speed = maxSpeed;
-        
+
         VisualEffects.getFlame(ball.getLocalTranslation(), this);
+    }
+    
+    public void deactivateFireBall(){
+        Geometry ball = (Geometry)this.getChild("Ball");
         
-        //this.getParent().attachChild(localNode);
+        ball.getMaterial().setColor("Diffuse", ColorRGBA.White);
+        ball.getMaterial().setColor("Ambient", ColorRGBA.White);
+        
+        this.detachChildNamed("Fire");
     }
 
     public Boolean isFireballActivated() {
@@ -211,6 +220,14 @@ public class Breaker extends Node {
 
     public void setFireballActivated(Boolean fireballActivated) {
         this.fireballActivated = fireballActivated;
+    }
+
+    public Boolean isSlowerActivated() {
+        return slowerActivated;
+    }
+
+    public void setSlowerActivated(Boolean slowerActivated) {
+        this.slowerActivated = slowerActivated;
     }
     
     

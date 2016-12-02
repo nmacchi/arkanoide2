@@ -77,7 +77,7 @@ public class VisualEffects {
         
         Material material = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         material.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
-        material.setFloat("Softness", 3f); // 
+//        material.setFloat("Softness", 3f); // 
         
         //Fire
         ParticleEmitter flame = new ParticleEmitter("Fire", ParticleMesh.Type.Triangle, 50);
@@ -90,9 +90,9 @@ public class VisualEffects {
         flame.setStartSize(0.049f);
         flame.setEndSize(0.038f);
         flame.setGravity(0, 0.0f, 0);
-        flame.setLowLife(0.5f);
-        flame.setHighLife(1.2f);
-        flame.setParticlesPerSec(100);
+        flame.setLowLife(0.3f);
+        flame.setHighLife(0.9f);
+        flame.setParticlesPerSec(80);
 //        spaceshipFire.setNumParticles(500);
         flame.setLocalTranslation(position);
         

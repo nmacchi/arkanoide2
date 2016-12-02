@@ -6,7 +6,7 @@ package mygame;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.effect.ParticleEmitter;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -53,7 +53,7 @@ public class Brick extends Geometry {
         setMesh(brick.getMesh());
         setLocalTranslation(position);
 
-        scale(0.02f, 0.03f, 0.08f);
+        scale(0.02f, 0.03f, 0.07f);
         rotate(0f, 1.60f, 0f);
 
         setName("Brick" + count);
@@ -63,12 +63,14 @@ public class Brick extends Geometry {
         //FX = new SmokeTrail(assetManager, position);
     }
 
-    public static float getWidth() {
-        return width;
+    public  float getWidth() {
+        return ((BoundingBox)this.getWorldBound()).getXExtent();
+//        return width;
     }
 
-    public static float getHeight() {
-        return height;
+    public  float getHeight() {
+        return ((BoundingBox)this.getWorldBound()).getYExtent();
+//        return height;
     }
 
     public boolean isHasPowerup() {

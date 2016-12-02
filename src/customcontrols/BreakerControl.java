@@ -55,21 +55,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
            
             breaker.move(breaker.getDirection().mult(tpf * breaker.getSpeed()));
 
-            if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())
-                    || BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.FIREBALL.name())) {
-                
-                timer += tpf;
-
-                if (timer >= 10f) {
-                    
-                    BreakerBar.setCurrentPower("");
-                    if(breaker.isFireballActivated()){
-                        breaker.setFireballActivated(Boolean.FALSE);
-                    }
-                    breaker.setSpeed(Breaker.getInitialSpeed());
-                    timer = 0f;
-                }
-            }
+            checkPowersActivated(tpf);
 
             r.setOrigin(breaker.getLocalTranslation());
             r.setDirection(breaker.getDirection());
@@ -139,5 +125,28 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
         breaker.removeControl(this);
     }
     
-    
+    private void checkPowersActivated(float tpf){
+        if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())
+                    || BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.FIREBALL.name())) {
+                
+                timer += tpf;
+
+                if (timer >= 10f) {
+                    
+                    BreakerBar.setCurrentPower("");
+                    
+                    if(breaker.isFireballActivated()){
+                        breaker.setFireballActivated(Boolean.FALSE);
+                        breaker.deactivateFireBall();
+                    }
+                    
+                    if(breaker.isSlowerActivated()){
+                        breaker.setSlowerActivated(Boolean.FALSE);
+                        breaker.setSpeed(breaker.getSpeed());
+                    }
+                    
+                    timer = 0f;
+                }
+            }
+    }
 }

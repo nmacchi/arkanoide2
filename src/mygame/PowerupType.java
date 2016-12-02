@@ -29,8 +29,8 @@ public class PowerupType {
     }
     
     private void selectType(){
-//        int pick = random.nextInt(PowerTypes.values().length);
-        int pick = 0;
+        int pick = random.nextInt(PowerTypes.values().length);
+//        int pick = 0;
         switch(PowerTypes.values()[pick]){
             case FIREBALL:
                 this.name = PowerTypes.values()[pick].toString();
