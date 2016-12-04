@@ -18,11 +18,11 @@ public abstract class BreakerBar extends Geometry {
     
 
     protected AssetManager assetManager;
-    protected float speed = 0.7f;
+    protected float speed = 0.75f;
     private static Vector3f direction = new Vector3f();
     
     private static float maxLeftLimit = -0.60f;
-    private static float maxRightLimit = 0.60f;
+    private static float maxRightLimit = 0.65f;
     
     protected PowerupType PowerupType;
     protected String activePower;

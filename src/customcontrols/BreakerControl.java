@@ -5,6 +5,7 @@
 package customcontrols;
 
 import com.jme3.app.state.AppStateManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
 import com.jme3.math.Ray;
@@ -80,7 +81,9 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
             rootNode.getChild("Gamefield").collideWith(breaker.getChild("Ball").getWorldBound(), results);
             if (results.size() > 0) {
-
+                     
+                ((AudioNode)rootNode.getChild("simpleReboundAudio")).playInstance(); //Rebound sound on walls
+           
                 //Colisiona contra las paredes o el suelo
                 if (results.getClosestCollision().getGeometry().getName().equals("Floor")) {
 //                    System.out.println(((Node)rootNode.getChild("BreakerNode")).getChildren().size());
@@ -104,6 +107,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
             ((Geometry) rootNode.getChild("BreakerBar")).collideWith(r, results);
             if (results.size() > 0) {
                 if (results.getClosestCollision().getDistance() <= 0.05f) {
+                    
+                    ((AudioNode)rootNode.getChild("simpleReboundAudio")).playInstance(); //Rebound sound on arkanoid
                     String zone = ((BreakerBar) rootNode.getChild("BreakerBar")).evaluateImpactZone(results.getClosestCollision().getContactPoint().x);
                     breaker.changeDirection(results.getClosestCollision(), zone);
                     
@@ -111,6 +116,11 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 }
                 results.clear();
             }
+            
+            
+            
+            results.clear();
+            
 
         }
     }
@@ -138,6 +148,7 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                     if(breaker.isFireballActivated()){
                         breaker.setFireballActivated(Boolean.FALSE);
                         breaker.deactivateFireBall();
+                        breaker.stopFireballAudio();
                     }
                     
                     if(breaker.isSlowerActivated()){

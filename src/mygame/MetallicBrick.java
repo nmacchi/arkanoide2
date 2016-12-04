@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
+import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 
 /**
@@ -25,5 +26,9 @@ public class MetallicBrick extends Brick {
         
         this.setPoints(DEFAULT_POINTS);
         this.setHardness(DEFAULT_HARDNESS);
+    }
+    
+    public void playMetallicReboundSound(){
+        ((AudioNode)this.getParent().getParent().getChild("metallicReboundAudio")).playInstance();
     }
 }

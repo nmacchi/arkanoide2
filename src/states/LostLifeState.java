@@ -8,16 +8,12 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.effect.ParticleEmitter;
+import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import effects.VisualEffects;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -47,11 +43,12 @@ public class LostLifeState extends AbstractAppState {
     public void update(float tpf) {
 
         if (isEnabled()) {
-
+            
             timeElapsed += tpf / 1;
 
             if (state == 0) {
-                                       
+                ((AudioNode)app.getRootNode().getChild("arkanoidExplosionAudio")).playInstance();
+                
                 for (Spatial entity : app.getRootNode().getChildren()) {
                     if (entity != null) {
                         if (entity.getName().equals("BreakerBarNode")) {
@@ -91,6 +88,7 @@ public class LostLifeState extends AbstractAppState {
 
 
             if (timeElapsed > 1f + .05f && state == 1) {
+                VisualEffects.getFlame(position);
                 VisualEffects.getRoundspark(position);
                 state++;
             }

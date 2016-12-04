@@ -6,6 +6,7 @@ package customcontrols;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -79,6 +80,7 @@ public class BreakerBarControl extends AbstractControl {
                 //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
                 if (PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup)) {
                     stateManager.getState(PlayerState.class).addLife();
+                    ((AudioNode)rootNode.getChild("lifeWonAudio")).playInstance();
                 }
 
 
@@ -113,6 +115,8 @@ public class BreakerBarControl extends AbstractControl {
                     }
 
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).changeToFireBall();
+                    ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).playFireballAudio();
+                    
                 }
 
 

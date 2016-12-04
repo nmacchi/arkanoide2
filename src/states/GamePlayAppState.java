@@ -22,13 +22,12 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import customcontrols.BreakerBarControl;
 import customcontrols.BreakerControl;
+import effects.AudioEffects;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
-import mygame.entities.Spaceship;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -132,17 +131,20 @@ public class GamePlayAppState extends AbstractAppState {
     }
 
     private void initAudio() {
-        audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
-        audio_crash.setPositional(false);
-        audio_crash.setLooping(false);
-        audio_crash.setVolume(2);
-        app.getRootNode().attachChild(audio_crash);
-
-        audio_rebound = new AudioNode(assetManager, "Sounds/effects/bottle-glass-uncork-01.wav", false);
-        audio_rebound.setPositional(false);
-        audio_rebound.setLooping(false);
-        audio_rebound.setVolume(2);
-        app.getRootNode().attachChild(audio_rebound);
+        AudioEffects audioEffects = new AudioEffects(assetManager, app.getRootNode());
+        audioEffects.loadAudioFXs();
+        
+//        audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
+//        audio_crash.setPositional(false);
+//        audio_crash.setLooping(false);
+//        audio_crash.setVolume(2);
+//        app.getRootNode().attachChild(audio_crash);
+//
+//        audio_rebound = new AudioNode(assetManager, "Sounds/effects/bottle-glass-uncork-01.wav", false);
+//        audio_rebound.setPositional(false);
+//        audio_rebound.setLooping(false);
+//        audio_rebound.setVolume(2);
+//        app.getRootNode().attachChild(audio_rebound);
     }
 
     private void initSceneLights() {
@@ -287,7 +289,7 @@ public class GamePlayAppState extends AbstractAppState {
         //Floor
         Box floor = new Box(2.0f, 0.01f, 2.0f);
         Geometry geomFloor = new Geometry("Floor", floor);
-        geomFloor.setLocalTranslation(0.0f, -0.1f, 0.0f);
+        geomFloor.setLocalTranslation(0.0f, -0.12f, 0.0f);
         Material matFloor = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matFloor.setColor("Color", new ColorRGBA(23f / 255f, 207f / 255f, 246f / 255f, 1f));
 
@@ -301,7 +303,7 @@ public class GamePlayAppState extends AbstractAppState {
 
         Box leftBar = new Box(0.025f, 0.66f, 0.025f);
         Geometry geomLeftBar = new Geometry("LeftBar", leftBar);
-        geomLeftBar.setLocalTranslation(new Vector3f(-0.75f, 0.66f, 1f));
+        geomLeftBar.setLocalTranslation(new Vector3f(-0.75f, 0.64f, 1f));
 
         geomLeftBar.setMaterial(matBars);
 
@@ -309,14 +311,14 @@ public class GamePlayAppState extends AbstractAppState {
 
         Box rightBar = new Box(0.025f, 0.66f, 0.025f);
         Geometry geomRightBar = new Geometry("RightBar", rightBar);
-        geomRightBar.setLocalTranslation(new Vector3f(0.75f, 0.66f, 1f));
+        geomRightBar.setLocalTranslation(new Vector3f(0.80f, 0.64f, 1f));
 
         geomRightBar.setMaterial(matBars);
         gamefield.attachChild(geomRightBar);
 
         Box topBar = new Box(0.85f, 0.025f, 0.025f);
         Geometry geomTopBar = new Geometry("TopBar", topBar);
-        geomTopBar.setLocalTranslation(new Vector3f(0.0f, 1.35f, 1f));
+        geomTopBar.setLocalTranslation(new Vector3f(0.0f, 1.33f, 1f));
 
         geomTopBar.setMaterial(matBars);
         gamefield.attachChild(geomTopBar);

@@ -18,7 +18,7 @@ import states.GamePlayAppState;
  */
 public class Arkanoid extends BreakerBar{
     
-    private static Vector3f initialPosition = new Vector3f(0.25f, 0.03f, 1f);
+    private static Vector3f initialPosition = new Vector3f(0.25f, 0.01f, 1f);
     
 //    protected boolean ballShooted;
     

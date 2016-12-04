@@ -8,6 +8,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -16,7 +17,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import customcontrols.BreakerControl;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
@@ -84,6 +84,7 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
             if (rootNode.getChild("BreakerBar") instanceof Spaceship) {
                 if (((Spaceship)rootNode.getChild("BreakerBar")).getCooldownTime() <= 0) {
                     ((Spaceship)rootNode.getChild("BreakerBar")).fire();
+                    ((AudioNode) rootNode.getChild("laserShootAudio")).playInstance();
                 }
             }
             

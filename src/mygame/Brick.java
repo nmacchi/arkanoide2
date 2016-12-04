@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -63,13 +64,13 @@ public class Brick extends Geometry {
         //FX = new SmokeTrail(assetManager, position);
     }
 
-    public  float getWidth() {
-        return ((BoundingBox)this.getWorldBound()).getXExtent();
+    public float getWidth() {
+        return ((BoundingBox) this.getWorldBound()).getXExtent();
 //        return width;
     }
 
-    public  float getHeight() {
-        return ((BoundingBox)this.getWorldBound()).getYExtent();
+    public float getHeight() {
+        return ((BoundingBox) this.getWorldBound()).getYExtent();
 //        return height;
     }
 
@@ -82,7 +83,7 @@ public class Brick extends Geometry {
     }
 
     public static void selectSpecialBrick(AssetManager assetManager, Node bricksNode) {
-        int numSurprises = 6;
+        int numSurprises = 15;
         Random rnd = new Random();
 
         boolean hasPowerup = false;
@@ -90,8 +91,8 @@ public class Brick extends Geometry {
         for (int i = 0; i <= numSurprises; i++) {
 
             while (!hasPowerup) {
-                //Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
-                Brick brick = (Brick) bricksNode.getChild(i);
+                Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
+//                Brick brick = (Brick) bricksNode.getChild(i);
 
                 //Only commonBrick could have rewards
                 if (brick instanceof CommonBrick) {
@@ -138,27 +139,33 @@ public class Brick extends Geometry {
     }
 
     public void removeBrick() {
-        
-            countHits();
 
-            if (getCountHits() >= getHardness()) {
+        countHits();
 
-                stateManager.getState(PlayerState.class).setScore(getPoints());
+        if (getCountHits() >= getHardness()) {
 
-                if (this instanceof CommonBrick) {
-                    if (((CommonBrick) this).isHasPowerup()) {
-                        Powerup powerup = ((CommonBrick) this).getPowerup();
-                        powerup.addControl(new PowerupControl(this.getParent().getParent(), stateManager));
-                        ((Node) this.getParent().getParent().getChild("PowerupsNode")).attachChild(powerup);
-                    }
+            stateManager.getState(PlayerState.class).setScore(getPoints());
+
+            playExplosionAudio();
+            dropPowerupIfExist();
+            /*if (this instanceof CommonBrick) {
+                CommonBrick commonBrick = (CommonBrick) this;
+
+                if (commonBrick.isHasPowerup()) {
+                    Powerup powerup = commonBrick.getPowerup();
+                    powerup.addControl(new PowerupControl(this.getParent().getParent(), stateManager));
+                    ((Node) this.getParent().getParent().getChild("PowerupsNode")).attachChild(powerup);
                 }
+            }*/
 
 //                executeExplosionEffect(this.getLocalTranslation());
 //                removeFromParent();
-                doRemove();
+            doRemove();
 //            return true;
-            }
-            
+        } else {
+            ((MetallicBrick) this).playMetallicReboundSound();
+        }
+
 //        return false;
     }
 
@@ -168,9 +175,27 @@ public class Brick extends Geometry {
 //        this.getParent().attachChild(fx);
 //        fx.emitAllParticles();
     }
-    
-    public void doRemove(){
+
+    public void doRemove() {
+        playExplosionAudio();
+        dropPowerupIfExist();
         executeExplosionEffect(this.getLocalTranslation());
         removeFromParent();
+    }
+
+    public void playExplosionAudio() {
+        ((AudioNode) this.getParent().getParent().getChild("brickExplosionAudio")).playInstance();
+    }
+
+    private void dropPowerupIfExist() {
+        if (this instanceof CommonBrick) {
+            CommonBrick commonBrick = (CommonBrick) this;
+
+            if (commonBrick.isHasPowerup()) {
+                Powerup powerup = commonBrick.getPowerup();
+                powerup.addControl(new PowerupControl(this.getParent().getParent(), stateManager));
+                ((Node) this.getParent().getParent().getChild("PowerupsNode")).attachChild(powerup);
+            }
+        }
     }
 }

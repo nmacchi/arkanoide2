@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
+import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class CommonBrick extends Brick {
 
-    private static List<String> brickColors = Arrays.asList("blue", "red", "green", "purple", "yellow");
+    private static List<String> brickColors = Arrays.asList("blue", "red", "green", "purple", "yellow", "pink", "orange");
     private static int DEFAULT_POINTS = 25;
     private static int DEFAULT_HARDNESS = 1;
     private Powerup powerup;
@@ -43,4 +44,6 @@ public class CommonBrick extends Brick {
     public void setPowerup(Powerup powerup) {
         this.powerup = powerup;
     }
+    
+    
 }

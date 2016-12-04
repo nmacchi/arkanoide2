@@ -6,8 +6,8 @@ package mygame.entities;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResult;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -32,7 +32,7 @@ public class Breaker extends Node {
     private static final float maxSpeed = 1.5f;
     
     private float speed;
-    private static Vector3f initialPosition = new Vector3f(0.25f, 0.08f, 1f);
+    private static Vector3f initialPosition = new Vector3f(0.25f, 0.04f, 1f);
     private Vector3f direction;
     private static int MIN_ANGLE = -5;
     private static int MAX_ANGLE = 5;
@@ -172,7 +172,7 @@ public class Breaker extends Node {
             hits++;
   
             if(hits % 3 == 0){
-                speed += 0.05f;
+                speed += 0.07f;
             }   
         }
     }
@@ -202,7 +202,7 @@ public class Breaker extends Node {
         ball.getMaterial().setColor("Diffuse", ColorRGBA.Yellow);
         ball.getMaterial().setColor("Ambient", ColorRGBA.Orange);
 
-        VisualEffects.getFlame(ball.getLocalTranslation(), this);
+        VisualEffects.getFlammingBall(ball.getLocalTranslation(), this);
     }
     
     public void deactivateFireBall(){
@@ -230,5 +230,11 @@ public class Breaker extends Node {
         this.slowerActivated = slowerActivated;
     }
     
+    public void playFireballAudio(){
+        ((AudioNode)this.getParent().getParent().getChild("fireballAudio")).play();
+    }
     
+    public void stopFireballAudio(){
+        ((AudioNode)this.getParent().getParent().getChild("fireballAudio")).stop();
+    }
 }

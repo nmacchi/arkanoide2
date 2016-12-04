@@ -24,8 +24,8 @@ public class Spaceship extends BreakerBar{
     private float cooldownTime;
     private static float timeToWait = 0.25f;
    
-    private ParticleEmitter flamming1;
-    private ParticleEmitter flamming2;
+//    private ParticleEmitter flamming1;
+//    private ParticleEmitter flamming2;
     private Node localNode = new Node("FlameEffect");
     
     public Spaceship(){};

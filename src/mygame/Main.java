@@ -49,16 +49,16 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     private void makeWall() {
         float initialX = -0.64f;
-        Vector3f position = new Vector3f(initialX, 0.60f, 1f);
+        Vector3f position = new Vector3f(initialX, 0.70f, 1f);
         Brick brick = null;
         //rows
         int brickNum = 0; 
         
-        for (int i = 0; i <= 7; i++) {
+        for (int i = 0; i <= 7 ; i++) {
             
             //bricks per line
-            for (int j = 0; j <= 7; j++) {
-                if(i == 5){
+            for (int j = 0; j <= 9; j++) {
+                if(i == 7){
                     brick = new MetallicBrick(assetManager, position, stateManager);
                 }else{
                     brick = new CommonBrick(assetManager, position, i, stateManager);
@@ -73,7 +73,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
                 brickNum++;
             }
             position.setX(initialX);
-            position.setY(position.getY() + ((Brick)bricks.getChild(bricks.getChildren().size() -1)).getHeight() * 2 + 0.03f);
+            position.setY(position.getY() + ((Brick)bricks.getChild(bricks.getChildren().size() -1)).getHeight() * 2 + 0.01f);
         }
         
         
