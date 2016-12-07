@@ -131,6 +131,10 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     }
 
     private void removeFromScene() {
+        if(breaker.isFireballActivated()){
+            breaker.stopFireballAudio();
+        }
+        
         breaker.removeFromParent();
         breaker.removeControl(this);
     }

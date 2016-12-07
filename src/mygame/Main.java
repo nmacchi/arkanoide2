@@ -59,9 +59,10 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
             //bricks per line
             for (int j = 0; j <= 9; j++) {
                 if(i == 7){
-                    brick = new MetallicBrick(assetManager, position, stateManager);
+                    brick = new CommonBrick(assetManager, position, 1, stateManager);
                 }else{
-                    brick = new CommonBrick(assetManager, position, i, stateManager);
+                    brick = new MetallicBrick(assetManager, position, stateManager);
+                    
                 }
                 
                 bricks.attachChild(brick);

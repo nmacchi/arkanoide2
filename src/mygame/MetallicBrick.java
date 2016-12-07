@@ -9,6 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
+import customcontrols.MetallicBrickLightingControl;
 
 /**
  *
@@ -30,5 +31,13 @@ public class MetallicBrick extends Brick {
     
     public void playMetallicReboundSound(){
         ((AudioNode)this.getParent().getParent().getChild("metallicReboundAudio")).playInstance();
+    }
+    
+    public void doReboundLightEffect(){
+      MetallicBrickLightingControl control = new MetallicBrickLightingControl(this.getParent(), assetManager);  
+      control.setSpatial(this);
+      control.createSpotLight();
+      control.setEnabled(true);
+      this.addControl(control);
     }
 }

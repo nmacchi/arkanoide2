@@ -36,13 +36,18 @@ public class Brick extends Geometry {
     private int countHits;
     //FX
     private SmokeTrail FX;
-
+    
+    
+    //Test 
+    protected AssetManager assetManager;
+    
     Brick() {
     }
 
     Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {
         this.stateManager = stateManager;
-
+        this.assetManager = assetManager;
+        
         Geometry brick = (Geometry) ((Node) assetManager.loadModel("Models/brick/Cube.mesh.j3o")).getChild(0);
 
         material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
@@ -164,6 +169,7 @@ public class Brick extends Geometry {
 //            return true;
         } else {
             ((MetallicBrick) this).playMetallicReboundSound();
+            ((MetallicBrick) this).doReboundLightEffect();
         }
 
 //        return false;

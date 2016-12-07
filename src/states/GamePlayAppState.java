@@ -173,8 +173,9 @@ public class GamePlayAppState extends AbstractAppState {
 //        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
 //        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
 //        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(new Breaker(assetManager));
-
+        
         initMainEntities();
+        VisualEffects.getChangeEffect(((Geometry)breakerBarNode.getChild(0)).getWorldTranslation());
         
         stateManager.attach(inputState);
         this.setGameStop(Boolean.FALSE);
