@@ -20,7 +20,7 @@ public class MetallicBrick extends Brick {
     private static int DEFAULT_POINTS = 50;
     private static int DEFAULT_HARDNESS = 2; 
     
-    MetallicBrick(AssetManager assetManager, Vector3f position, AppStateManager stateManager){
+    public MetallicBrick(AssetManager assetManager, Vector3f position, AppStateManager stateManager){
         super(assetManager, position, stateManager);
         
         material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/metal_brick.jpg", false)));

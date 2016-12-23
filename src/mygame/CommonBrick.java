@@ -27,7 +27,7 @@ public class CommonBrick extends Brick {
      *
      */
 
-    CommonBrick(AssetManager assetManager, Vector3f position, Integer index, AppStateManager stateManager) {
+    public CommonBrick(AssetManager assetManager, Vector3f position, Integer index, AppStateManager stateManager) {
         super(assetManager, position, stateManager);
 
         String color = brickColors.get(index);

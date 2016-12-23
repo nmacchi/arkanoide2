@@ -29,8 +29,8 @@ public class Brick extends Geometry {
     protected int points;
     protected int hardness;
     //Dimentions
-    private static float width = 0.075f;
-    private static float height = 0.025f;
+//    private static float width = 0.075f;
+//    private static float height = 0.025f;
     private static int count = 0;
     private boolean hasPowerup;
     private int countHits;
@@ -41,7 +41,7 @@ public class Brick extends Geometry {
     //Test 
     protected AssetManager assetManager;
     
-    Brick() {
+    public Brick() {
     }
 
     Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {

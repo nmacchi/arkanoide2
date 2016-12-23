@@ -38,7 +38,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
         rootNode.attachChild(bricks);
 
-        makeWall();
+//        makeWall();
         
         GamePlayAppState initState = new GamePlayAppState();
         stateManager.attach(initState);

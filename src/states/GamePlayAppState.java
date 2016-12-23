@@ -10,7 +10,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioNode;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -26,6 +25,7 @@ import customcontrols.BreakerControl;
 import effects.AudioEffects;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
+import levels.LevelManager;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 
@@ -37,39 +37,28 @@ import mygame.entities.Breaker;
 public class GamePlayAppState extends AbstractAppState {
 
     private boolean gameStarted;
+    private boolean gameRunning;
     private boolean gameFinished;
     private boolean gameStop;
-    
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Node breakerNode = new Node("BreakerNode");
     private Node powerupsNode = new Node("PowerupsNode");
     private Node gamefield = new Node("Gamefield");
-    
-    
-//    private Arkanoid arkanoid;
-//    private Breaker ball;
-//    private Spaceship spaceship;
+    private Node bricksNode = new Node("BricksNode");
     
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
-    
     GameGuiAppState guiAppState;
     InputAppState inputState;
     PlayerState playerState;
     ScriptAppState scriptAppState;
     LostLifeState lostLifeState;
-    
     BreakerBarFactory breakerBarCreator;
     
-    private AudioNode audio_crash;
-    private AudioNode audio_rebound;
+    LevelManager levelManager;
+    
     private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
-    
-//    private int state;
-//    private float timeElapsed;
-    
-//    private VisualEffects visualEffects;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -79,51 +68,48 @@ public class GamePlayAppState extends AbstractAppState {
         this.app = (SimpleApplication) app;
         this.assetManager = ((SimpleApplication) app).getAssetManager();
         this.breakerBarCreator = new BreakerBarFactory();
-        
+
         this.app.getRootNode().attachChild(breakerBarNode);
         this.app.getRootNode().attachChild(breakerNode);
         this.app.getRootNode().attachChild(powerupsNode);
         this.app.getRootNode().attachChild(gamefield);
+        this.app.getRootNode().attachChild(bricksNode);
         
         initScene();
         
-        initVisualEffects();
+        initLevels();
         
+        initVisualEffects();
+
         initMainEntities();
         
-        lostLifeState = new LostLifeState(); 
+        //Initialize main states
+        lostLifeState = new LostLifeState();
         guiAppState = new GameGuiAppState();
         playerState = new PlayerState();
         inputState = new InputAppState();
-        
+
         stateManager.attachAll(playerState, inputState, guiAppState, lostLifeState);
         
+        
         configureCameraSettings();
+        
         initAudio();
+        
         initSceneLights();
         
-    }
     
-    private void initVisualEffects(){
-       VisualEffects ve = new VisualEffects();
-       ve.initVisualEffect(assetManager, app.getRootNode());
+    }
+
+    private void initVisualEffects() {
+        VisualEffects ve = new VisualEffects();
+        ve.initVisualEffect(assetManager, app.getRootNode());
     }
 
     private void initMainEntities() {
         breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), breakerBarNode, app, null);
         breakerBarNode.attachChild(new Breaker(assetManager));
-        
-//        arkanoid = new Arkanoid(assetManager);
-//        ball = new Breaker(assetManager);
-//        spaceship = new Spaceship(assetManager);
-//        
-//        arkanoid.addControl(new BreakerBarControl(app.getRootNode(), stateManager));
-//        
-//        breakerBarNode.attachChild(arkanoid);
-//        breakerBarNode.attachChild(ball);
- 
-        
-    }
+   }
 
     private void configureCameraSettings() {
         app.getFlyByCamera().setEnabled(false);
@@ -133,18 +119,6 @@ public class GamePlayAppState extends AbstractAppState {
     private void initAudio() {
         AudioEffects audioEffects = new AudioEffects(assetManager, app.getRootNode());
         audioEffects.loadAudioFXs();
-        
-//        audio_crash = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
-//        audio_crash.setPositional(false);
-//        audio_crash.setLooping(false);
-//        audio_crash.setVolume(2);
-//        app.getRootNode().attachChild(audio_crash);
-//
-//        audio_rebound = new AudioNode(assetManager, "Sounds/effects/bottle-glass-uncork-01.wav", false);
-//        audio_rebound.setPositional(false);
-//        audio_rebound.setLooping(false);
-//        audio_rebound.setVolume(2);
-//        app.getRootNode().attachChild(audio_rebound);
     }
 
     private void initSceneLights() {
@@ -158,42 +132,19 @@ public class GamePlayAppState extends AbstractAppState {
         al.setColor(ColorRGBA.White);
         app.getRootNode().addLight(al);
     }
-    
-//    public Arkanoid getArkanoid() {
-//        return arkanoid;
-//    }
-//
-//    public Breaker getBall() {
-//        return ball;
-//    }
 
     public void reset() {
         playerState.restLife();
-        
-//        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(arkanoid);
-//        arkanoid.setLocalTranslation(Arkanoid.getInitialPosition());
-//        ((Node) app.getRootNode().getChild("BreakerBarNode")).attachChild(new Breaker(assetManager));
-        
+
         initMainEntities();
-        VisualEffects.getChangeEffect(((Geometry)breakerBarNode.getChild(0)).getWorldTranslation());
-        
+        VisualEffects.getChangeEffect(((Geometry) breakerBarNode.getChild(0)).getWorldTranslation());
+
         stateManager.attach(inputState);
         this.setGameStop(Boolean.FALSE);
 
     }
 
-//    public Spaceship getSpaceship() {
-//        return spaceship;
-//    }
-
-    public boolean isGameStarted() {
-        return gameStarted;
-    }
-
-    public void setGameStarted(boolean gameStarted) {
-        this.gameStarted = gameStarted;
-    }
-
+    
     public SimpleApplication getApp() {
         return app;
     }
@@ -204,18 +155,19 @@ public class GamePlayAppState extends AbstractAppState {
         //Exceute state when player lose a life
         if (isGameStop() && !lostLifeState.isEnabled()) {
             lostLifeState.setEnabled(Boolean.TRUE);
-        }    
-        
+        }
+
         //Check if all bricks were removed
         //TODO: Cuando no haya mas ladrillos pasar al proximo nivel
-        if(((Node)app.getRootNode().getChild("BricksNode")).getChildren().isEmpty()){
+        if (((Node) app.getRootNode().getChild("BricksNode")).getChildren().isEmpty() && gameStarted) {
             stateManager.detach(stateManager.getState(InputAppState.class));
             gameStarted = Boolean.FALSE;
+            levelManager.nextLevel();
         }
-        
+
         //Game is finished when player lose all his lifes
         //TODO: Permitir cntinuar o salir (implementar un menu)
-        if(isGameFinished()){
+        if (isGameFinished()) {
             stateManager.detach(stateManager.getState(InputAppState.class));
         }
     }
@@ -223,7 +175,23 @@ public class GamePlayAppState extends AbstractAppState {
     public InputAppState getInputState() {
         return inputState;
     }
+    
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
 
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
+    }
+    
+    public boolean isGameRunning() {
+        return gameRunning;
+    }
+
+    public void setGameRunning(boolean gameRunning) {
+        this.gameRunning = gameRunning;
+    }
+    
     public boolean isGameStop() {
         return gameStop;
     }
@@ -239,10 +207,8 @@ public class GamePlayAppState extends AbstractAppState {
     public void setGameFinished(boolean gameFinished) {
         this.gameFinished = gameFinished;
     }
-    
-    
-    
-    public void addExtraBalls(){ 
+
+    public void addExtraBalls() {
         Node node = (Node) app.getRootNode().getChild("BreakerNode");
         Breaker breaker = (Breaker) app.getRootNode().getChild("Breaker");
 
@@ -265,28 +231,20 @@ public class GamePlayAppState extends AbstractAppState {
             node.attachChild(extraBall);
         }
     }
-    
-    
-    public void removeExtraballsFromScene(){
-        //Node breakerNode = (Node) app.getRootNode().getChild("BreakerNode");
 
-        //Hay mas de una bolita activa
-        //if (breakerNode.getChildren().size() > 1) {
+    public void removeExtraballsFromScene() {
+        int i = 0;
+        while (breakerNode.getChildren().size() > 1) {
+            Breaker extraBall = (Breaker) breakerNode.getChild(i);
+            extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
+            extraBall.removeFromParent();
 
-//            List<Spatial> extraBalls = breakerNode.getChildren();
-//            
-            int i = 0;
-            while(breakerNode.getChildren().size() > 1){
-                Breaker extraBall = (Breaker)breakerNode.getChild(i);
-                extraBall.executeExplosionEffect(extraBall.getWorldTranslation());
-                extraBall.removeFromParent();
-                
-                i++;
-            }
-            
+            i++;
+        }
+
     }
-    
-     private void initScene() {
+
+    private void initScene() {
         //Floor
         Box floor = new Box(2.0f, 0.01f, 2.0f);
         Geometry geomFloor = new Geometry("Floor", floor);
@@ -323,5 +281,12 @@ public class GamePlayAppState extends AbstractAppState {
 
         geomTopBar.setMaterial(matBars);
         gamefield.attachChild(geomTopBar);
+    }
+    
+    
+    private void initLevels(){
+        levelManager = new LevelManager(assetManager, stateManager, bricksNode);
+        levelManager.loadLevels();
+        levelManager.initLevel(); //Get First level
     }
 }
