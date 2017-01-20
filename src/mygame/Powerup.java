@@ -10,8 +10,13 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import java.util.ArrayList;
 import java.util.Random;
+import static mygame.PowerupType.PowerTypes.EXTRA_BALLS;
+import static mygame.PowerupType.PowerTypes.FIRE;
+import static mygame.PowerupType.PowerTypes.FIREBALL;
+import static mygame.PowerupType.PowerTypes.LIFE;
+import static mygame.PowerupType.PowerTypes.SLOWER;
+import mygame.commons.PowerupType;
 
 /**
  *
@@ -26,11 +31,12 @@ public class Powerup extends Geometry {
     private int points;
     
     private PowerupType type;
- 
+    private AssetManager assetManager;
+    
     private static Random random = new Random();
     
     public Powerup(AssetManager assetManager, Brick brick){  
-        type = new PowerupType(assetManager);
+        //type = new PowerupType(assetManager);
         
         Geometry pill = (Geometry) ((Node) assetManager.loadModel("Models/pill/Sphere.001.mesh.j3o")).getChild(0);
         setMesh(pill.getMesh());
@@ -41,7 +47,8 @@ public class Powerup extends Geometry {
         material.setColor("Specular", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
-        material.setTexture("DiffuseMap", type.getTexture());
+//        material.setTexture("DiffuseMap", type.getTexture());
+        material.setTexture("DiffuseMap", selectTextureByPowerupType());
         
         setMaterial(material);
         rotate(0f,1.60f,0f);
@@ -77,6 +84,31 @@ public class Powerup extends Geometry {
     }
    
     
-    
+    private Texture selectTextureByPowerupType(){
+        int pick = random.nextInt(PowerupType.values().length);
+//        int pick = 2;
+        switch(PowerupType.values()[pick]){
+            case FIREBALL:
+                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
+                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_blue.png", false));
+                break;
+            case EXTRA_BALLS:
+                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();        
+                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_light_blue.png", false));
+                break;
+            case LIFE:
+                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
+                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_gray.png", false));
+                break;
+            case SLOWER:
+                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
+                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_green.png", false));
+                break;
+            case FIRE:
+                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
+                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_red.png", false));
+                break;
+        }
+    }
     
 }

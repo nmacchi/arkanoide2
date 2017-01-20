@@ -24,7 +24,7 @@ import states.PlayerState;
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
     
     
-    private Node bricks;
+    //private Node bricks;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -34,9 +34,9 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     @Override
     public void simpleInitApp() {
         
-        bricks = new Node("BricksNode");
+        //bricks = new Node("BricksNode");
 
-        rootNode.attachChild(bricks);
+        //rootNode.attachChild(bricks);
 
 //        makeWall();
         
@@ -47,7 +47,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
        
     }
 
-    private void makeWall() {
+   /* private void makeWall() {
         float initialX = -0.64f;
         Vector3f position = new Vector3f(initialX, 0.70f, 1f);
         Brick brick = null;
@@ -80,7 +80,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         
         
         Brick.selectSpecialBrick(assetManager, bricks);
-    }
+    }*/
 
     @Override
     public void simpleUpdate(float tpf) {

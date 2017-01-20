@@ -98,7 +98,7 @@ public class GamePlayAppState extends AbstractAppState {
         
         initSceneLights();
         
-    
+        
     }
 
     private void initVisualEffects() {
@@ -159,7 +159,7 @@ public class GamePlayAppState extends AbstractAppState {
 
         //Check if all bricks were removed
         //TODO: Cuando no haya mas ladrillos pasar al proximo nivel
-        if (((Node) app.getRootNode().getChild("BricksNode")).getChildren().isEmpty() && gameStarted) {
+        if (bricksNode.getChildren().isEmpty()) {
             stateManager.detach(stateManager.getState(InputAppState.class));
             gameStarted = Boolean.FALSE;
             levelManager.nextLevel();
