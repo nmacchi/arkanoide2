@@ -20,16 +20,16 @@ import com.jme3.scene.Node;
  */
 public class VisualEffects {
     
-    public final static String FLASH = "Flash"; 
-    public final static String FLAME = "Flame"; 
-    public final static String ROUNDSPARK = "Roundspark"; 
-    public final static String SMOKETRAIL = "SmokeTrail"; 
-    public final static String SPARK = "Spark";
-    public final static String SHOCKWAVE = "Shockwave";
-    public final static String DEBRIS = "Debris";
-    
+//    public final static String FLASH = "Flash"; 
+//    public final static String FLAME = "Flame"; 
+//    public final static String ROUNDSPARK = "Roundspark"; 
+//    public final static String SMOKETRAIL = "SmokeTrail"; 
+//    public final static String SPARK = "Spark";
+//    public final static String SHOCKWAVE = "Shockwave";
+//    public final static String DEBRIS = "Debris";
+//    
 
-    private static Node explosionEffect = new Node("explosionFX");
+//    private static Node explosionEffect = new Node("explosionFX");
     private static AssetManager assetManager;
     private static Node rootNode;
     
@@ -350,8 +350,8 @@ public class VisualEffects {
          createFlammingBall(position, parent);
      }
      
-    public static Node getExplosionEffect() {
-        return explosionEffect;
-    }
+//    public static Node getExplosionEffect() {
+//        return explosionEffect;
+//    }
     
 }

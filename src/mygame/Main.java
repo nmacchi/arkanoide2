@@ -1,20 +1,9 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial.CullHint;
-import com.jme3.scene.shape.Box;
-import states.GameGuiAppState;
+import mygame.commons.CommonTextures;
 import states.GamePlayAppState;
-import states.InputAppState;
-import states.PlayerState;
 
 /**
  * test
@@ -23,7 +12,7 @@ import states.PlayerState;
  */
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
     
-    
+    private CommonTextures textures;
     //private Node bricks;
     
     public static void main(String[] args) {
@@ -33,6 +22,10 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleInitApp() {
+        
+        textures = new CommonTextures(assetManager);
+        
+        
         
         //bricks = new Node("BricksNode");
 
@@ -45,6 +38,14 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
         
        
+    }
+
+    public CommonTextures getTextures() {
+        return textures;
+    }
+
+    public void setTextures(CommonTextures textures) {
+        this.textures = textures;
     }
 
    /* private void makeWall() {
@@ -92,4 +93,6 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         //TODO: add render code
     }
 
+    
+    
 }
