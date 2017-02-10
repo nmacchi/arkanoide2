@@ -79,7 +79,7 @@ public class GamePlayAppState extends AbstractAppState {
         
         initLevels();
         
-        initVisualEffects();
+        //initVisualEffects();
 
         initMainEntities();
         
@@ -94,7 +94,7 @@ public class GamePlayAppState extends AbstractAppState {
         
         configureCameraSettings();
         
-        initAudio();
+        //initAudio();
         
         initSceneLights();
         

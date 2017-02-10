@@ -17,7 +17,7 @@ import com.jme3.scene.control.AbstractControl;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
 import mygame.Powerup;
-import mygame.PowerupType;
+import mygame.commons.PowerupType;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
@@ -63,10 +63,10 @@ public class BreakerBarControl extends AbstractControl {
                 Powerup powerup = (Powerup) results.getClosestCollision().getGeometry();
                 stateManager.getState(PlayerState.class).setScore(powerup.getPoints());
 
-                String arkanoidCurrentPower = BreakerBar.getCurrentPower();
-                String catchedPowerup = powerup.getType().getName();
+                PowerupType arkanoidCurrentPower = BreakerBar.getCurrentPower();
+                PowerupType catchedPowerup = powerup.getType();
 
-                if (PowerupType.PowerTypes.FIRE.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+                if (PowerupType.FIRE.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
 
                     verifyExtraBallActivated();
 
@@ -78,13 +78,13 @@ public class BreakerBarControl extends AbstractControl {
                 }
 
                 //No es necesario comprobar si ya lo tiene, puede tomar este modificador varias veces
-                if (PowerupType.PowerTypes.LIFE.name().equals(catchedPowerup)) {
+                if (PowerupType.LIFE.equals(catchedPowerup)) {
                     stateManager.getState(PlayerState.class).addLife();
                     ((AudioNode)rootNode.getChild("lifeWonAudio")).playInstance();
                 }
 
 
-                if (PowerupType.PowerTypes.SLOWER.name().equals(catchedPowerup)) {
+                if (PowerupType.SLOWER.equals(catchedPowerup)) {
 
                     verifyExtraBallActivated();
 
@@ -96,7 +96,7 @@ public class BreakerBarControl extends AbstractControl {
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).decreaseSpeed();
                 }
 
-                if (PowerupType.PowerTypes.EXTRA_BALLS.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+                if (PowerupType.EXTRA_BALLS.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
                     stateManager.getState(GamePlayAppState.class).addExtraBalls();
 
                     if (spatial instanceof Spaceship) {
@@ -106,7 +106,7 @@ public class BreakerBarControl extends AbstractControl {
                 }
 
                 //Por ahora es la FIRE_BALL
-                if (PowerupType.PowerTypes.FIREBALL.name().equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+                if (PowerupType.FIREBALL.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
                     verifyExtraBallActivated();
 
                     if (spatial instanceof Spaceship) {
@@ -168,7 +168,7 @@ public class BreakerBarControl extends AbstractControl {
      }
      }*/
     private void verifyExtraBallActivated() {
-        if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.EXTRA_BALLS.name())) {
+        if (BreakerBar.getCurrentPower().equals(PowerupType.EXTRA_BALLS)) {
             stateManager.getState(GamePlayAppState.class).removeExtraballsFromScene();
         }
     }

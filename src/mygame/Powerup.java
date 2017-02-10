@@ -33,7 +33,7 @@ public class Powerup extends Geometry {
     private static Random random = new Random();
     
     public Powerup(AssetManager assetManager, Brick brick){  
-        //type = new PowerupType(assetManager);
+        type = PowerupType.getRandomType();
         
         Geometry pill = (Geometry) ((Node) assetManager.loadModel("Models/pill/Sphere.001.mesh.j3o")).getChild(0);
         setMesh(pill.getMesh());
@@ -44,8 +44,7 @@ public class Powerup extends Geometry {
         material.setColor("Specular", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
-//        material.setTexture("DiffuseMap", type.getTexture());
-        material.setTexture("DiffuseMap", selectTextureByPowerupType());
+        material.setTexture("DiffuseMap", PowerupType.selectTextureByPowerupType(type));
         
         setMaterial(material);
         rotate(0f,1.60f,0f);
@@ -81,9 +80,9 @@ public class Powerup extends Geometry {
     }
    
     
-    private Texture selectTextureByPowerupType(){
-        int pick = random.nextInt(PowerupType.values().length);
-        type = PowerupType.values()[pick];
+    /*private Texture selectTextureByPowerupType(){
+//        int pick = random.nextInt(PowerupType.values().length);
+//        type = PowerupType.values()[pick];
         
 //        int pick = 2;
         switch(type){
@@ -122,6 +121,6 @@ public class Powerup extends Geometry {
                 return null;
 //                break;
         }
-    }
+    }*/
     
 }

@@ -8,7 +8,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import mygame.PowerupType;
+import mygame.commons.PowerupType;
+
 
 /**
  *
@@ -24,9 +25,12 @@ public abstract class BreakerBar extends Geometry {
     private static float maxLeftLimit = -0.60f;
     private static float maxRightLimit = 0.65f;
     
-    protected PowerupType PowerupType;
-    protected String activePower;
-    private static String currentPower;
+//    protected PowerupType PowerupType;
+//    protected String activePower;
+//    private static String currentPower;
+    
+    private static PowerupType currentPower;
+    
     protected float width;
     
    
@@ -37,7 +41,7 @@ public abstract class BreakerBar extends Geometry {
     public BreakerBar(AssetManager assetManager){
         this.assetManager = assetManager; 
         setName("BreakerBar");
-        BreakerBar.currentPower = "";
+        BreakerBar.currentPower = PowerupType.NA;
     }
     
     public float getSpeed() {
@@ -48,21 +52,21 @@ public abstract class BreakerBar extends Geometry {
         this.speed = speed;
     }
 
-    public PowerupType getPowerupType() {
-        return PowerupType;
-    }
+//    public PowerupType getPowerupType() {
+//        return PowerupType;
+//    }
+//
+//    public void setPowerupType(PowerupType PowerupType) {
+//        this.PowerupType = PowerupType;
+//    }
 
-    public void setPowerupType(PowerupType PowerupType) {
-        this.PowerupType = PowerupType;
-    }
-
-    public String getActivePower() {
-        return activePower;
-    }
-
-    public void setActivePower(String activePower) {
-        this.activePower = activePower;
-    }
+//    public String getActivePower() {
+//        return activePower;
+//    }
+//
+//    public void setActivePower(String activePower) {
+//        this.activePower = activePower;
+//    }
 
     public static Vector3f getDirection() {
         return direction;
@@ -76,11 +80,11 @@ public abstract class BreakerBar extends Geometry {
         return maxRightLimit;
     }
 
-    public static String getCurrentPower() {
+    public static PowerupType getCurrentPower() {
         return currentPower;
     }
 
-    public static void setCurrentPower(String currentPower) {
+    public static void setCurrentPower(PowerupType currentPower) {
         BreakerBar.currentPower = currentPower;
     }
     

@@ -5,6 +5,7 @@
 package mygame.commons;
 
 import com.jme3.asset.TextureKey;
+import com.jme3.texture.Texture;
 import java.util.Random;
 
 
@@ -14,11 +15,12 @@ import java.util.Random;
  */
 public enum PowerupType {
     
-    FIREBALL(0, "POWERUP_FIREBALL", "Textures/pill/pill_texture_blue.png"),
-    EXTRA_BALLS(1, "POWERUP_EXTRABALLS", "Textures/pill/pill_texture_light_blue.png"),
-    LIFE(2, "POWERUP_LIFE", "Textures/pill/pill_texture_gray.png"),
-    SLOWER(3, "POWERUP_SLOWER", "Textures/pill/pill_texture_green.png"),
-    FIRE(4, "POWERUP_FIRE", "Textures/pill/pill_texture_red.png");
+    NA(0, "N/A", ""),
+    FIREBALL(1, "POWERUP_FIREBALL", "Textures/pill/pill_texture_blue.png"),
+    EXTRA_BALLS(2, "POWERUP_EXTRABALLS", "Textures/pill/pill_texture_light_blue.png"),
+    LIFE(3, "POWERUP_LIFE", "Textures/pill/pill_texture_gray.png"),
+    SLOWER(4, "POWERUP_SLOWER", "Textures/pill/pill_texture_green.png"),
+    FIRE(5, "POWERUP_FIRE", "Textures/pill/pill_texture_red.png");
     
     private final int codigo;
     private final String description;
@@ -44,7 +46,7 @@ public enum PowerupType {
         return texture;
     }
     
-    private void selectType(){
+   /* private void selectType(){
         int pick = random.nextInt(mygame.PowerupType.PowerTypes.values().length);
 //        int pick = 2;
         switch(mygame.PowerupType.PowerTypes.values()[pick]){
@@ -69,6 +71,37 @@ public enum PowerupType {
                 this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_red.png", false));
                 break;
         }
+    }*/
+    
+    
+    public static PowerupType getRandomType(){
+        int pick = random.nextInt(PowerupType.values().length);
+        return PowerupType.values()[pick];
+    }
+    
+    
+    public static Texture selectTextureByPowerupType(PowerupType poweruptype){
+        Texture texture = null;
+        
+        switch(poweruptype){
+            case FIREBALL:
+                texture = CommonTextures.POWERUP_FIREBALL;  
+                break;
+            case EXTRA_BALLS:
+                texture = CommonTextures.POWERUP_EXTRABALL;
+                break;
+            case LIFE:
+                texture = CommonTextures.POWERUP_LIFE;
+                break;
+            case SLOWER:
+                texture = CommonTextures.POWERUP_SLOWER;
+                break;
+            case FIRE:
+                texture = CommonTextures.POWERUP_FIRE;
+                break;
+        }
+        
+        return texture;
     }
     
     

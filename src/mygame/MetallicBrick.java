@@ -10,6 +10,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import customcontrols.MetallicBrickLightingControl;
+import mygame.commons.BricksType;
 
 /**
  *
@@ -23,7 +24,8 @@ public class MetallicBrick extends Brick {
     public MetallicBrick(AssetManager assetManager, Vector3f position, AppStateManager stateManager){
         super(assetManager, position, stateManager);
         
-        material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/metal_brick.jpg", false)));
+        //material.setTexture("DiffuseMap", assetManager.loadTexture(new TextureKey("Textures/metal_brick.jpg", false)));
+        material.setTexture("DiffuseMap", BricksType.getBrickTextureByType(BricksType.METALLIC_BRICK));
         
         this.setPoints(DEFAULT_POINTS);
         this.setHardness(DEFAULT_HARDNESS);

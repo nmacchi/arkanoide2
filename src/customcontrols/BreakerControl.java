@@ -16,7 +16,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import mygame.Brick;
-import mygame.PowerupType;
+import mygame.commons.PowerupType;
 import mygame.entities.Breaker;
 import mygame.entities.BreakerBar;
 import states.GamePlayAppState;
@@ -140,14 +140,14 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
     }
     
     private void checkPowersActivated(float tpf){
-        if (BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.SLOWER.name())
-                    || BreakerBar.getCurrentPower().equals(PowerupType.PowerTypes.FIREBALL.name())) {
+        if (BreakerBar.getCurrentPower().equals(PowerupType.SLOWER)
+                    || BreakerBar.getCurrentPower().equals(PowerupType.FIREBALL)) {
                 
                 timer += tpf;
 
                 if (timer >= 10f) {
                     
-                    BreakerBar.setCurrentPower("");
+                    BreakerBar.setCurrentPower(PowerupType.NA);
                     
                     if(breaker.isFireballActivated()){
                         breaker.setFireballActivated(Boolean.FALSE);

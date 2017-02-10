@@ -2,6 +2,8 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
+import effects.AudioEffects;
+import effects.VisualEffects;
 import mygame.commons.CommonTextures;
 import states.GamePlayAppState;
 
@@ -12,8 +14,9 @@ import states.GamePlayAppState;
  */
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
     
-    private CommonTextures textures;
-    //private Node bricks;
+    private CommonTextures textures; 
+    private VisualEffects visualFX; 
+    private AudioEffects audioFX;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -22,10 +25,16 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleInitApp() {
-        
         textures = new CommonTextures(assetManager);
+        visualFX = new VisualEffects();
+        audioFX = new AudioEffects(assetManager, rootNode);
         
         
+        //:TODO Implementar una pantalla de carga para esta instancia
+        //:TODO Cargar efectos visuales, sonidos
+        textures.loadTextures();
+        visualFX.initVisualEffect(assetManager, rootNode);
+        audioFX.loadAudioFXs();
         
         //bricks = new Node("BricksNode");
 
@@ -40,13 +49,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
        
     }
 
-    public CommonTextures getTextures() {
-        return textures;
-    }
-
-    public void setTextures(CommonTextures textures) {
-        this.textures = textures;
-    }
+    
 
    /* private void makeWall() {
         float initialX = -0.64f;
