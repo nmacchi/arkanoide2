@@ -21,10 +21,10 @@ public class Level1 extends Level{
     @Override
     public void buildLevel(AssetManager assetManager, AppStateManager stateManager, Node parent) {
         
-        
         float initialX = -0.64f;
         Vector3f position = new Vector3f(initialX, 0.70f, 1f);
         int brickNum = 0; 
+        
         
         for (int i = 0; i <= 7 ; i++) {
             
@@ -33,7 +33,7 @@ public class Level1 extends Level{
                 if(i == 7){
                     parent.attachChild(new MetallicBrick(assetManager, position, stateManager));
                 }else{
-                    parent.attachChild(new CommonBrick(assetManager, position, i, stateManager));   
+                    parent.attachChild(new CommonBrick(assetManager, position, i, stateManager));
                 }
 
                 //Calculate next position
@@ -42,10 +42,11 @@ public class Level1 extends Level{
                 brickNum++;
             }
             position.setX(initialX);
-            position.setY(position.getY() + ((Brick)parent.getChild(parent.getChildren().size() -1)).getHeight() * 2 + 0.01f);
+            position.setY(position.getY() + ((Brick)parent.getChild(parent.getChildren().size() -1)).getHeight() * 2 + BRICK_SEPARATOR);
         }
 
-//        Brick.selectSpecialBrick(assetManager, parent);
+        
+        Brick.selectSpecialBrick(assetManager, parent, calculateNumberOfPowerups(parent));
         
     }
     

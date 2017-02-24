@@ -2,8 +2,11 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
+import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.style.BaseStyles;
 import effects.AudioEffects;
 import effects.VisualEffects;
+import mygame.commons.CommonModels;
 import mygame.commons.CommonTextures;
 import states.GamePlayAppState;
 
@@ -14,6 +17,7 @@ import states.GamePlayAppState;
  */
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
     
+    private CommonModels models;
     private CommonTextures textures; 
     private VisualEffects visualFX; 
     private AudioEffects audioFX;
@@ -25,13 +29,23 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleInitApp() {
+        //Initialize Lemur GUI
+        GuiGlobals.initialize(this);
+        BaseStyles.loadGlassStyle();
+        GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
+        
+        
+        models = new CommonModels(assetManager);
         textures = new CommonTextures(assetManager);
         visualFX = new VisualEffects();
         audioFX = new AudioEffects(assetManager, rootNode);
         
         
+        
+        
         //:TODO Implementar una pantalla de carga para esta instancia
         //:TODO Cargar efectos visuales, sonidos
+        models.loadModels();
         textures.loadTextures();
         visualFX.initVisualEffect(assetManager, rootNode);
         audioFX.loadAudioFXs();
@@ -42,6 +56,12 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
 //        makeWall();
         
+
+
+        
+
+
+
         GamePlayAppState initState = new GamePlayAppState();
         stateManager.attach(initState);
 

@@ -7,7 +7,7 @@ package factories;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import mygame.entities.BreakerBar;
+import mygame.commons.BreakerBarTypes;
 
 /**
  *
@@ -15,7 +15,7 @@ import mygame.entities.BreakerBar;
  */
 public abstract class BreakerBarFactoryMethod {
     
-    public abstract void createrBar(String name, Node parentNode, SimpleApplication simpleApplication, Vector3f position);
+    public abstract void createrBar(BreakerBarTypes barType, Node parentNode, SimpleApplication simpleApplication, Vector3f position);
     
     
     

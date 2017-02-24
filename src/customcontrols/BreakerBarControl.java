@@ -17,6 +17,7 @@ import com.jme3.scene.control.AbstractControl;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
 import mygame.Powerup;
+import mygame.commons.BreakerBarTypes;
 import mygame.commons.PowerupType;
 import mygame.entities.Arkanoid;
 import mygame.entities.Breaker;
@@ -72,7 +73,7 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Arkanoid) {
                         executeChangeEffect(spatial.getWorldTranslation());
-                        breakerBarCreator.createrBar(Spaceship.class.getSimpleName(), (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                        breakerBarCreator.createrBar(BreakerBarTypes.SPACESHIP, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
 
                 }
@@ -90,7 +91,7 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
-                        breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                        breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
 
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).decreaseSpeed();
@@ -101,7 +102,7 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
-                        breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                        breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
                 }
 
@@ -111,7 +112,7 @@ public class BreakerBarControl extends AbstractControl {
 
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
-                        breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                        breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
                     }
 
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).changeToFireBall();

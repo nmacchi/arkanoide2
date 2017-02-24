@@ -17,16 +17,21 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture2D;
+import com.jme3.ui.Picture;
 import customcontrols.BreakerControl;
 import effects.AudioEffects;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
 import levels.LevelManager;
-import mygame.entities.Arkanoid;
+import mygame.commons.BreakerBarTypes;
+import mygame.commons.CommonTextures;
 import mygame.entities.Breaker;
 
 /**
@@ -49,6 +54,7 @@ public class GamePlayAppState extends AbstractAppState {
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
+    RenderManager renderManager;
     GameGuiAppState guiAppState;
     InputAppState inputState;
     PlayerState playerState;
@@ -67,6 +73,7 @@ public class GamePlayAppState extends AbstractAppState {
         this.stateManager = stateManager;
         this.app = (SimpleApplication) app;
         this.assetManager = ((SimpleApplication) app).getAssetManager();
+        this.renderManager = ((SimpleApplication) app).getRenderManager();
         this.breakerBarCreator = new BreakerBarFactory();
 
         this.app.getRootNode().attachChild(breakerBarNode);
@@ -94,20 +101,20 @@ public class GamePlayAppState extends AbstractAppState {
         
         configureCameraSettings();
         
-        //initAudio();
+        loadBackgroundImage();
         
         initSceneLights();
         
         
     }
 
-    private void initVisualEffects() {
+    /*private void initVisualEffects() {
         VisualEffects ve = new VisualEffects();
         ve.initVisualEffect(assetManager, app.getRootNode());
-    }
+    }*/
 
     private void initMainEntities() {
-        breakerBarCreator.createrBar(Arkanoid.class.getSimpleName(), breakerBarNode, app, null);
+        breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, breakerBarNode, app, null);
         breakerBarNode.attachChild(new Breaker(assetManager));
    }
 
@@ -116,10 +123,10 @@ public class GamePlayAppState extends AbstractAppState {
         app.getCamera().setLocation(CAM_LOCATION);
     }
 
-    private void initAudio() {
+    /*private void initAudio() {
         AudioEffects audioEffects = new AudioEffects(assetManager, app.getRootNode());
         audioEffects.loadAudioFXs();
-    }
+    }*/
 
     private void initSceneLights() {
         DirectionalLight sun = new DirectionalLight();
@@ -283,6 +290,22 @@ public class GamePlayAppState extends AbstractAppState {
         gamefield.attachChild(geomTopBar);
     }
     
+    
+    private void loadBackgroundImage(){
+        Picture backgroundImage = new Picture("background");
+        backgroundImage.setTexture(assetManager, (Texture2D)CommonTextures.BACKGROUND, false);
+        backgroundImage.setWidth(app.getContext().getSettings().getWidth());
+        backgroundImage.setHeight(app.getContext().getSettings().getHeight());
+        backgroundImage.setPosition(0, 0);
+        
+        ViewPort pv = renderManager.createPreView("background", app.getCamera());
+        pv.setClearFlags(true, true, true);
+        pv.attachScene(backgroundImage);
+        
+        app.getViewPort().setClearFlags(false, true, true);
+        
+        backgroundImage.updateGeometricState();
+    }
     
     private void initLevels(){
         levelManager = new LevelManager(assetManager, stateManager, bricksNode);

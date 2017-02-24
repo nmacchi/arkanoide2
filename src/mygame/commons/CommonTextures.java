@@ -32,7 +32,13 @@ public class CommonTextures {
     public static Texture ORANGE_BRICK;
     public static Texture PINK_BRICK;
     public static Texture METALLIC_BRICK;
-
+    
+    //BREAKER
+    public static Texture BREAKER;
+    
+    //BACKGROUND
+    public static Texture BACKGROUND;
+    
     public CommonTextures(){ }
     
     public CommonTextures(AssetManager assetManager){
@@ -57,8 +63,11 @@ public class CommonTextures {
         PINK_BRICK = assetManager.loadTexture(new TextureKey(BricksType.PINK_BRICK.getTexturePath(), false));
         METALLIC_BRICK = assetManager.loadTexture(new TextureKey(BricksType.METALLIC_BRICK.getTexturePath(), false));
         
-        //ARKANOID
-        //SPACESHIP
+        //BREAKER
+        BREAKER = assetManager.loadTexture("Textures/breaker.jpg");
+        
+        //BACKGROUND
+        BACKGROUND = assetManager.loadTexture(new TextureKey("Textures/space.jpg", true));
     }
     
     

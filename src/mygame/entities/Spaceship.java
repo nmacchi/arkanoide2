@@ -9,8 +9,10 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import effects.SpaceshipFlame;
 import mygame.Bullet;
+import mygame.commons.CommonModels;
 
 /**
  *
@@ -53,7 +55,8 @@ public class Spaceship extends BreakerBar{
     }
     
     private void createSpaceship(Node parent){
-        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/spaceship/spaceship_model.j3o")).getChild(0);
+        Spatial model = CommonModels.SPACESHIP;
+        Geometry geometry = (Geometry)((Node) model).getChild(0);
         
         setMesh(geometry.getMesh());
         setMaterial(geometry.getMaterial());

@@ -45,6 +45,7 @@ public class Brick extends Geometry {
     }
 
     Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {
+        super("Brick" + count);
         this.stateManager = stateManager;
         this.assetManager = assetManager;
         
@@ -55,14 +56,13 @@ public class Brick extends Geometry {
         material.setColor("Specular", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
         material.setFloat("Shininess", 32f);
-
-        setMesh(brick.getMesh());
+        
+        mesh = brick.getMesh();
+        
         setLocalTranslation(position);
-
         scale(0.02f, 0.03f, 0.07f);
         rotate(0f, 1.60f, 0f);
 
-        setName("Brick" + count);
         count++;
 
         //create FX
@@ -87,13 +87,13 @@ public class Brick extends Geometry {
         this.hasPowerup = hasPowerup;
     }
 
-    public static void selectSpecialBrick(AssetManager assetManager, Node bricksNode) {
-        int numSurprises = 15;
+    public static void selectSpecialBrick(AssetManager assetManager, Node bricksNode, int powerupsAmount) {
+        //int numSurprises = 15;
         Random rnd = new Random();
 
         boolean hasPowerup = false;
 
-        for (int i = 0; i <= numSurprises; i++) {
+        for (int i = 0; i <= powerupsAmount; i++) {
 
             while (!hasPowerup) {
                 Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
@@ -149,7 +149,7 @@ public class Brick extends Geometry {
 
         if (getCountHits() >= getHardness()) {
 
-            stateManager.getState(PlayerState.class).setScore(getPoints());
+            //stateManager.getState(PlayerState.class).setScore(getPoints());
 
             playExplosionAudio();
             dropPowerupIfExist();
@@ -183,6 +183,7 @@ public class Brick extends Geometry {
     }
 
     public void doRemove() {
+        stateManager.getState(PlayerState.class).setScore(getPoints());
         playExplosionAudio();
         dropPowerupIfExist();
         executeExplosionEffect(this.getLocalTranslation());

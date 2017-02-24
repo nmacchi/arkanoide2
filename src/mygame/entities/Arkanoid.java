@@ -4,13 +4,12 @@
  */
 package mygame.entities;
 
-import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import customcontrols.BreakerBarControl;
-import states.GamePlayAppState;
+import com.jme3.scene.Spatial;
+import mygame.commons.CommonModels;
 
 /**
  *
@@ -33,11 +32,18 @@ public class Arkanoid extends BreakerBar{
     public Arkanoid(AssetManager assetManager, Vector3f position, Node parent){
         super(assetManager);
         createArkanoid(parent);
-        setLocalTranslation(position);
+        
+        if(position != null){
+            setLocalTranslation(position);    
+        }else{
+            setLocalTranslation(initialPosition);
+        }
+        
     }
     
     private void createArkanoid(Node parent){
-        Geometry geometry = (Geometry)((Node)assetManager.loadModel("Models/arkanoide/Arkanoide.j3o")).getChild(0);
+        Spatial model = CommonModels.ARKANOID; 
+        Geometry geometry = (Geometry)((Node)model).getChild(0);
         
         setMesh(geometry.getMesh());
         setMaterial(geometry.getMaterial());

@@ -6,12 +6,7 @@ package mygame;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.TextureKey;
-import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
-import java.util.Arrays;
-import java.util.List;
-import mygame.commons.BricksType;
 import mygame.commons.BricksType;
 
 /**
@@ -21,13 +16,17 @@ import mygame.commons.BricksType;
 public class CommonBrick extends Brick {
 
     //private static List<String> brickColors = Arrays.asList("blue", "red", "green", "purple", "yellow", "pink", "orange");
-    private static int DEFAULT_POINTS = 25;
-    private static int DEFAULT_HARDNESS = 1;
+    private static final int DEFAULT_POINTS = 25;
+    private static final int DEFAULT_HARDNESS = 1;
     private Powerup powerup;
-    private BricksType type;
+    private final BricksType type;
     
     /**
      *
+     * @param assetManager
+     * @param position
+     * @param index
+     * @param stateManager
      */
 
     public CommonBrick(AssetManager assetManager, Vector3f position, Integer index, AppStateManager stateManager) {
@@ -38,9 +37,8 @@ public class CommonBrick extends Brick {
         type = BricksType.getBrickByIndex(index);
         material.setTexture("DiffuseMap", BricksType.getBrickTextureByType(type));
         
-        
-        this.setPoints(DEFAULT_POINTS);
-        this.setHardness(DEFAULT_HARDNESS);
+        points = DEFAULT_POINTS;
+        hardness = DEFAULT_HARDNESS;
     }
 
     public Powerup getPowerup() {

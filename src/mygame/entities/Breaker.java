@@ -20,6 +20,7 @@ import com.jme3.scene.shape.Sphere;
 import customcontrols.BreakerControl;
 import effects.VisualEffects;
 import java.util.Random;
+import mygame.commons.CommonTextures;
 
 /**
  *
@@ -72,7 +73,7 @@ public class Breaker extends Node {
         geometry = new Geometry("Ball", new Sphere(8, 8, 0.022f, true, false));
         
         Material material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        material.setTexture("DiffuseMap", assetManager.loadTexture("Textures/breaker.jpg"));
+        material.setTexture("DiffuseMap", CommonTextures.BREAKER);
         material.setBoolean("UseMaterialColors", true);
         material.setColor("Diffuse", ColorRGBA.White);
         material.setColor("Ambient", ColorRGBA.White);
