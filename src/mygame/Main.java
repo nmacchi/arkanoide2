@@ -1,14 +1,16 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.ProgressBar;
 import com.simsilica.lemur.style.BaseStyles;
 import effects.AudioEffects;
 import effects.VisualEffects;
 import mygame.commons.CommonModels;
 import mygame.commons.CommonTextures;
-import states.GamePlayAppState;
 
 /**
  * test
@@ -21,6 +23,8 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     private CommonTextures textures; 
     private VisualEffects visualFX; 
     private AudioEffects audioFX;
+    
+    Double progress = 0.0D;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -43,13 +47,14 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         
         
         
+        
         //:TODO Implementar una pantalla de carga para esta instancia
         //:TODO Cargar efectos visuales, sonidos
-        models.loadModels();
+        /*models.loadModels();
         textures.loadTextures();
         visualFX.initVisualEffect(assetManager, rootNode);
         audioFX.loadAudioFXs();
-        
+        */
         //bricks = new Node("BricksNode");
 
         //rootNode.attachChild(bricks);
@@ -62,8 +67,8 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
 
 
-        GamePlayAppState initState = new GamePlayAppState();
-        stateManager.attach(initState);
+        //GamePlayAppState initState = new GamePlayAppState();
+        //stateManager.attach(initState);
 
         
        
@@ -108,7 +113,8 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleUpdate(float tpf) {
-        
+        progress += 0.1;
+        ((ProgressBar)((Container)guiNode.getChild(0)).getChild(0)).setProgressValue(progress);
     }
 
     @Override
