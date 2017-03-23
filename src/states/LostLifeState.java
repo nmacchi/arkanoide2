@@ -49,8 +49,12 @@ public class LostLifeState extends AbstractAppState {
             if (state == 0) {
                 ((AudioNode)app.getRootNode().getChild("arkanoidExplosionAudio")).playInstance();
                 
-                for (Spatial entity : app.getRootNode().getChildren()) {
+                position = ((Geometry) ((Node)app.getRootNode().getChild("BreakerBarNode")).getChildren().get(0)).getWorldTranslation();
+                
+                
+                /*for (Spatial entity : app.getRootNode().getChildren()) {
                     if (entity != null) {
+                        
                         if (entity.getName().equals("BreakerBarNode")) {
                             spatial = entity;
                             position = ((Geometry) ((Node) entity).getChild("BreakerBar")).getWorldTranslation();
@@ -58,13 +62,14 @@ public class LostLifeState extends AbstractAppState {
                         }
 
                     }
-                }
+                }*/
 
 
                 //Reset entites
-                ((Node) spatial).detachAllChildren();
-                app.getRootNode().detachChildNamed("Breaker");
-
+                ((Node)app.getRootNode().getChild("BreakerBarNode")).detachAllChildren();
+                /*app.getRootNode().detachChildNamed("Breaker");
+                */
+                
                 //Build multiple effect trigger
                 /*Map<Float, List<ParticleEmitter>> customTriggerEffect = new HashMap<Float, List<ParticleEmitter>>();
                  customTriggerEffect.put(0.25f, Arrays.asList(VisualEffects.getFlash(position), VisualEffects.getSpark(position), VisualEffects.getSmoketrail(position), VisualEffects.getDebris(position), VisualEffects.getShockwave(position)));

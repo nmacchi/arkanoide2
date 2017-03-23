@@ -10,10 +10,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.PhysicsSpace;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.simsilica.lemur.Container;
 import com.simsilica.lemur.ProgressBar;
 import effects.AudioEffects;
 import effects.VisualEffects;
@@ -28,9 +25,7 @@ import mygame.commons.CommonTextures;
  * @author nicolas
  */
 public class LoadingGameState extends AbstractAppState {
-    
-    //private static final String PROGRESS_BAR_MESSAGE = "Loading...";
-    
+   
     //Elements to be loaded
     private CommonModels models;
     private CommonTextures textures; 
@@ -38,42 +33,48 @@ public class LoadingGameState extends AbstractAppState {
     private AudioEffects audioFX;
     
     private boolean load = false;
-    private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(2);
+    private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
     private Future loadFuture = null;
     
     SimpleApplication app;
+    AppStateManager stateManager;
     AssetManager assetManager;
-    Node rootNode;
-    Node guiNode;
-    ProgressBar progressBar;
+
     
-    
+    @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
         this.app = ((SimpleApplication)app);
         this.assetManager = this.app.getAssetManager();
-        this.rootNode = this.app.getRootNode();
-        this.guiNode = this.app.getGuiNode();
+        this.stateManager = stateManager;
+      
+        load = true;
         
-        
-        initProgressBar();
+        stateManager.getState(GameGuiAppState.class).initProgressBar();
     }
     
-    private void initProgressBar(){
-        Container panel = new Container();
-        progressBar = new ProgressBar();
-        progressBar.setPreferredSize(new Vector3f(300,20,1));
-        //progressBar.setMessage(PROGRESS_BAR_MESSAGE);
-
-        panel.addChild(progressBar);
-        
-        guiNode.attachChild(panel);
-        panel.setLocalTranslation(this.app.getContext().getSettings().getWidth()/2 - progressBar.getPreferredSize().x / 2, this.app.getContext().getSettings().getHeight()/2,0);
-        
-    }
-    
+    @Override
     public void update(float tpf) {
+        if(load){
+            if(loadFuture == null){
+                loadFuture = executor.submit(callable);
+                
+            }
+            
+            if(loadFuture.isDone()){
+                audioFX.loadAudioToSceneGraph(); //Attach audios to rootNode once loading is finished
+                stopThreadExecution(); //Stop loading thread
+                
+                stateManager.getState(GameGuiAppState.class).detachChildrenFromPanel(); //Remove progressBar from GUI
+                
+                setEnabled(false); //Disable state
+                
+                load = false;
+            }
+            
+        }
+        
     }
     
     
@@ -81,18 +82,28 @@ public class LoadingGameState extends AbstractAppState {
         
         public Void call() throws Exception {
             
-            models.loadModels();
+            models = new CommonModels(assetManager);    
             updateProgressBar(15, "Cargando Modelos...");
+            models.loadModels();
+            Thread.sleep(500);
             
-            textures.loadTextures();
+            textures = new CommonTextures(assetManager);        
             updateProgressBar(30, "Cargando Texturas...");
+            textures.loadTextures();
+            Thread.sleep(500);
             
-            visualFX.initVisualEffect(assetManager, rootNode);
+            visualFX = new VisualEffects();
             updateProgressBar(45, "Cargando Efectos...");
+            visualFX.initVisualEffect(assetManager, app.getRootNode());
+            Thread.sleep(500);
             
-            audioFX.loadAudioFXs();
+            audioFX = new AudioEffects(assetManager, app.getRootNode());
             updateProgressBar(60, "Cargando Sonidos...");
-            
+            audioFX.loadAudioFXs();
+            Thread.sleep(500);
+            //
+            updateProgressBar(100, "Completo");
+            Thread.sleep(500);
             
             return null;
             
@@ -105,9 +116,20 @@ public class LoadingGameState extends AbstractAppState {
         app.enqueue(new Callable(){
             public Object call() throws Exception {
                 
+                stateManager.getState(GameGuiAppState.class).setProgressBarValues(progress, progressMessage);
+
+                return null;
             }
             
         });
+    }
+    
+    /**
+     *
+     */
+    public void stopThreadExecution() {
+        //the pool executor needs to be shut down so the application properly exits.
+        executor.shutdown();
     }
     
 }

@@ -3,14 +3,20 @@ package mygame;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
-import com.simsilica.lemur.ProgressBar;
+import com.simsilica.lemur.Label;
+import com.simsilica.lemur.Panel;
+import com.simsilica.lemur.anim.Animation;
+import com.simsilica.lemur.anim.SpatialTweens;
+import com.simsilica.lemur.anim.Tween;
+import com.simsilica.lemur.anim.TweenAnimation;
+import com.simsilica.lemur.effect.AbstractEffect;
+import com.simsilica.lemur.effect.Effect;
+import com.simsilica.lemur.effect.EffectInfo;
 import com.simsilica.lemur.style.BaseStyles;
-import effects.AudioEffects;
-import effects.VisualEffects;
-import mygame.commons.CommonModels;
-import mygame.commons.CommonTextures;
+import states.GameGuiAppState;
+import states.GamePlayAppState;
+import states.LoadingGameState;
 
 /**
  * test
@@ -18,13 +24,16 @@ import mygame.commons.CommonTextures;
  * @author normenhansen
  */
 public class Main extends SimpleApplication /*implements PhysicsCollisionListener*/ {
+        
+    private GamePlayAppState gameState;
+    private LoadingGameState loadingGameState;
+    private GameGuiAppState guiAppState;
     
-    private CommonModels models;
-    private CommonTextures textures; 
-    private VisualEffects visualFX; 
-    private AudioEffects audioFX;
+    private float timeout = 0f;
     
-    Double progress = 0.0D;
+    Label myLabel;
+    Boolean firstAnimationElapsed = false;
+    Boolean secondAnimationElapsed = false;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -33,88 +42,35 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleInitApp() {
-        //Initialize Lemur GUI
-        GuiGlobals.initialize(this);
-        BaseStyles.loadGlassStyle();
-        GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
+        
+        //Start GUI appState
+        guiAppState = new GameGuiAppState();
+        loadingGameState = new LoadingGameState();        
+        gameState = new GamePlayAppState();
         
         
-        models = new CommonModels(assetManager);
-        textures = new CommonTextures(assetManager);
-        visualFX = new VisualEffects();
-        audioFX = new AudioEffects(assetManager, rootNode);
-        
-        
-        
-        
-        
-        //:TODO Implementar una pantalla de carga para esta instancia
-        //:TODO Cargar efectos visuales, sonidos
-        /*models.loadModels();
-        textures.loadTextures();
-        visualFX.initVisualEffect(assetManager, rootNode);
-        audioFX.loadAudioFXs();
-        */
-        //bricks = new Node("BricksNode");
-
-        //rootNode.attachChild(bricks);
-
-//        makeWall();
-        
-
-
-        
-
-
-
-        //GamePlayAppState initState = new GamePlayAppState();
-        //stateManager.attach(initState);
-
-        
-       
+        stateManager.attachAll(guiAppState, loadingGameState);   
+     
     }
 
-    
-
-   /* private void makeWall() {
-        float initialX = -0.64f;
-        Vector3f position = new Vector3f(initialX, 0.70f, 1f);
-        Brick brick = null;
-        //rows
-        int brickNum = 0; 
-        
-        for (int i = 0; i <= 7 ; i++) {
-            
-            //bricks per line
-            for (int j = 0; j <= 9; j++) {
-                if(i == 7){
-                    brick = new CommonBrick(assetManager, position, 1, stateManager);
-                }else{
-                    brick = new MetallicBrick(assetManager, position, stateManager);
-                    
-                }
-                
-                bricks.attachChild(brick);
-
-                //Calculate next position
-//                position.setX(brick.getLocalTranslation().getX() + Brick.getWidth() * 2 + 0.02f);
-                position.setX(brick.getLocalTranslation().getX() + ((Brick)bricks.getChild(brickNum)).getWidth() * 2 + 0.01f);
-                
-                brickNum++;
-            }
-            position.setX(initialX);
-            position.setY(position.getY() + ((Brick)bricks.getChild(bricks.getChildren().size() -1)).getHeight() * 2 + 0.01f);
-        }
-        
-        
-        
-        Brick.selectSpecialBrick(assetManager, bricks);
-    }*/
 
     @Override
     public void simpleUpdate(float tpf) {
-        progress += 0.1;
-        ((ProgressBar)((Container)guiNode.getChild(0)).getChild(0)).setProgressValue(progress);
+        if(!loadingGameState.isEnabled()/* && !gameState.isInitialized()*/){
+            
+            timeout += tpf;
+            
+            //Wait 2 seconds after loading the game before starts 
+            if(timeout > 2f){
+                //stateManager.detach(loadingGameState);
+                
+                //Once the loading game is finished proceed to start the game
+                stateManager.attach(gameState);
+                
+                timeout = 0f;
+            }
+           
+        }
     }
 
     @Override
@@ -123,5 +79,5 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
     }
 
     
-    
+
 }

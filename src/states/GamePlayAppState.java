@@ -17,6 +17,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FadeFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
@@ -26,7 +28,6 @@ import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
 import customcontrols.BreakerControl;
-import effects.AudioEffects;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
 import levels.LevelManager;
@@ -41,10 +42,13 @@ import mygame.entities.Breaker;
  */
 public class GamePlayAppState extends AbstractAppState {
 
-    private boolean gameStarted;
-    private boolean gameRunning;
-    private boolean gameFinished;
-    private boolean gameStop;
+    private boolean gameStarted = false;
+    private boolean gameRunning = false;
+    private boolean gameFinished = true;
+    private boolean gameStop = false;
+    private boolean sceneLoaded = false; 
+    private boolean levelLoaded;
+    
     private Node breakerBarNode = new Node("BreakerBarNode");
     private Node breakerNode = new Node("BreakerNode");
     private Node powerupsNode = new Node("PowerupsNode");
@@ -54,64 +58,86 @@ public class GamePlayAppState extends AbstractAppState {
     AppStateManager stateManager;
     SimpleApplication app;
     AssetManager assetManager;
-    RenderManager renderManager;
-    GameGuiAppState guiAppState;
     InputAppState inputState;
     PlayerState playerState;
-    ScriptAppState scriptAppState;
     LostLifeState lostLifeState;
     BreakerBarFactory breakerBarCreator;
     
+    FadeFilter fadeFilter;
+    
+    
     LevelManager levelManager;
     
-    private static Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
+    private static final Vector3f CAM_LOCATION = new Vector3f(-0.005f, 0.52f, 3.19f);
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-
+        
+        //setEnabled(false);
+        
         this.stateManager = stateManager;
         this.app = (SimpleApplication) app;
         this.assetManager = ((SimpleApplication) app).getAssetManager();
-        this.renderManager = ((SimpleApplication) app).getRenderManager();
         this.breakerBarCreator = new BreakerBarFactory();
 
+        levelManager = new LevelManager(assetManager, stateManager, bricksNode);
+        LevelManager.loadLevels(); //Mover al inicio
+        
         this.app.getRootNode().attachChild(breakerBarNode);
         this.app.getRootNode().attachChild(breakerNode);
         this.app.getRootNode().attachChild(powerupsNode);
         this.app.getRootNode().attachChild(gamefield);
         this.app.getRootNode().attachChild(bricksNode);
         
-        initScene();
         
-        initLevels();
+        //addViewportFilterPostProcessor();
         
-        //initVisualEffects();
+        //this.app.getViewPort().setEnabled(false);
+        
+        //initScene();
 
-        initMainEntities();
+        //initMainEntities();
         
         //Initialize main states
         lostLifeState = new LostLifeState();
-        guiAppState = new GameGuiAppState();
         playerState = new PlayerState();
         inputState = new InputAppState();
-
-        stateManager.attachAll(playerState, inputState, guiAppState, lostLifeState);
+        //changeLevelState  = new ChangeLevelState(new LevelManager(assetManager, stateManager, bricksNode));
         
+        stateManager.attachAll(playerState, inputState, lostLifeState);
+       
+        //loadBackgroundImage();
         
-        configureCameraSettings();
+        //configureCameraSettings();
         
-        loadBackgroundImage();
+        //initSceneLights();
         
-        initSceneLights();
+        //initLevels();
+        
         
         
     }
-
-    /*private void initVisualEffects() {
-        VisualEffects ve = new VisualEffects();
-        ve.initVisualEffect(assetManager, app.getRootNode());
-    }*/
+    
+    
+    
+    private void loadScene(){
+        configureCameraSettings();
+        initSceneLights();
+        initScene();
+        initMainEntities();
+        loadBackgroundImage();
+    }
+    
+    /**
+    * Set fade effect between levels 
+    */
+    private void addViewportFilterPostProcessor(){
+        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        fadeFilter = new FadeFilter(2);
+        fpp.addFilter(fadeFilter);
+        this.app.getViewPort().addProcessor(fpp);
+    }
 
     private void initMainEntities() {
         breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, breakerBarNode, app, null);
@@ -159,6 +185,36 @@ public class GamePlayAppState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         
+        if(!isGameStarted() && isGameFinished()){
+            System.out.println("FADE OUT");
+            //fadeFilter.fadeOut();
+            
+            gameFinished = Boolean.FALSE;
+            
+            levelLoaded = false;
+        }
+        
+        if(isGameStarted() && !levelLoaded){
+            System.out.println("CARGANDO NIVEL");
+            
+            //Do this only for the first level
+            if(!sceneLoaded){
+                System.out.println("CARGA ESCENA");
+                loadScene();
+                sceneLoaded = true;
+               
+            }
+            
+            levelManager.nextLevel();
+            
+            
+            
+            levelLoaded = true;
+            System.out.println("FADE IN");
+            //fadeFilter.fadeIn();
+        }
+        
+        
         //Exceute state when player lose a life
         if (isGameStop() && !lostLifeState.isEnabled()) {
             lostLifeState.setEnabled(Boolean.TRUE);
@@ -166,21 +222,23 @@ public class GamePlayAppState extends AbstractAppState {
 
         //Check if all bricks were removed
         //TODO: Cuando no haya mas ladrillos pasar al proximo nivel
-        if (bricksNode.getChildren().isEmpty()) {
-            stateManager.detach(stateManager.getState(InputAppState.class));
+        if (bricksNode.getChildren().isEmpty() && isGameRunning()) {
+            //stateManager.detach(stateManager.getState(InputAppState.class));
             gameStarted = Boolean.FALSE;
-            levelManager.nextLevel();
+            gameRunning = Boolean.FALSE;
+            gameFinished = Boolean.TRUE;
+            
+            //fadeFilter.fadeOut();
+            
+            //levelManager.nextLevel();
         }
 
         //Game is finished when player lose all his lifes
         //TODO: Permitir cntinuar o salir (implementar un menu)
         if (isGameFinished()) {
             stateManager.detach(stateManager.getState(InputAppState.class));
+           
         }
-    }
-
-    public InputAppState getInputState() {
-        return inputState;
     }
     
     public boolean isGameStarted() {
@@ -298,7 +356,7 @@ public class GamePlayAppState extends AbstractAppState {
         backgroundImage.setHeight(app.getContext().getSettings().getHeight());
         backgroundImage.setPosition(0, 0);
         
-        ViewPort pv = renderManager.createPreView("background", app.getCamera());
+        ViewPort pv = app.getRenderManager().createPreView("background", app.getCamera());
         pv.setClearFlags(true, true, true);
         pv.attachScene(backgroundImage);
         
@@ -307,9 +365,9 @@ public class GamePlayAppState extends AbstractAppState {
         backgroundImage.updateGeometricState();
     }
     
-    private void initLevels(){
+    /*private void initLevels(){
         levelManager = new LevelManager(assetManager, stateManager, bricksNode);
         levelManager.loadLevels();
         levelManager.initLevel(); //Get First level
-    }
+    }*/
 }

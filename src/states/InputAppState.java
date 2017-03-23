@@ -96,11 +96,12 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     public void onAction(String name, boolean isPressed, float tpf) {
 
         if (((Geometry) ((Node) rootNode.getChild("BreakerBarNode")).getChild(0)) instanceof Arkanoid) {
-            if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+            if (name.equals(InputMapping.SHOOT.name()) && !isPressed && !stateManager.getState(GamePlayAppState.class).isGameRunning()) {
              
                 ((Breaker) rootNode.getChild("Breaker")).release(stateManager);
-                stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
-                
+                //stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+                stateManager.getState(GamePlayAppState.class).setGameRunning(Boolean.TRUE);
+
             }
         }
     }

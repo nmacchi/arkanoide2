@@ -4,7 +4,6 @@
  */
 package mygame.commons;
 
-import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import java.util.Random;
 
@@ -27,6 +26,7 @@ public enum PowerupType {
     private final String texture;
 
     private static Random random = new Random();
+    private static final int MIN_VALUE = 1;
     
     PowerupType(int codigo, String description, String texture){
         this.codigo = codigo;
@@ -46,43 +46,16 @@ public enum PowerupType {
         return texture;
     }
     
-   /* private void selectType(){
-        int pick = random.nextInt(mygame.PowerupType.PowerTypes.values().length);
-//        int pick = 2;
-        switch(mygame.PowerupType.PowerTypes.values()[pick]){
-            case FIREBALL:
-                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
-                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_blue.png", false));
-                break;
-            case EXTRA_BALLS:
-                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();        
-                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_light_blue.png", false));
-                break;
-            case LIFE:
-                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
-                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_gray.png", false));
-                break;
-            case SLOWER:
-                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
-                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_green.png", false));
-                break;
-            case FIRE:
-                //this.name = mygame.PowerupType.PowerTypes.values()[pick].toString();
-                this.texture = assetManager.loadTexture(new TextureKey("Textures/pill/pill_texture_red.png", false));
-                break;
-        }
-    }*/
-    
     
     public static PowerupType getRandomType(){
-        int pick = random.nextInt(PowerupType.values().length);
+        int pick = random.nextInt(4) + 1; 
         return PowerupType.values()[pick];
     }
     
     
     public static Texture selectTextureByPowerupType(PowerupType poweruptype){
         Texture texture = null;
-        
+
         switch(poweruptype){
             case FIREBALL:
                 texture = CommonTextures.POWERUP_FIREBALL;  

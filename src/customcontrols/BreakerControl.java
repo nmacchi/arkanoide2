@@ -52,7 +52,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
     @Override
     protected void controlUpdate(float tpf) {
-        if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+        //if (stateManager.getState(GamePlayAppState.class).isGameStarted()) {
+        if (stateManager.getState(GamePlayAppState.class).isGameRunning()) {
            
             breaker.move(breaker.getDirection().mult(tpf * breaker.getSpeed()));
 
@@ -60,7 +61,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
             r.setOrigin(breaker.getLocalTranslation());
             r.setDirection(breaker.getDirection());
-
+            
+            //Check collisions agains Bricks
             rootNode.getChild("BricksNode").collideWith(breaker.getChild("Ball").getWorldBound(), results);
             if (results.size() > 0) {
                 if(!breaker.isFireballActivated()){
@@ -78,7 +80,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                 
                 results.clear();
             }
-
+            
+            //Check collision agains Gamefield
             rootNode.getChild("Gamefield").collideWith(breaker.getChild("Ball").getWorldBound(), results);
             if (results.size() > 0) {
                      
@@ -91,7 +94,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                         removeFromScene();
                
                         stateManager.detach(stateManager.getState(InputAppState.class));
-                        stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
+                        //stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.FALSE);
+                        stateManager.getState(GamePlayAppState.class).setGameRunning(Boolean.FALSE);
                         stateManager.getState(GamePlayAppState.class).setGameStop(Boolean.TRUE);           
                     } else {
                         removeFromScene();
@@ -103,7 +107,8 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
 
                 results.clear();
             }
-
+            
+            //Check collision agains Arkanoid
             ((Geometry) rootNode.getChild("BreakerBar")).collideWith(r, results);
             if (results.size() > 0) {
                 if (results.getClosestCollision().getDistance() <= 0.05f) {

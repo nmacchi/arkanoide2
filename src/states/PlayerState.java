@@ -14,7 +14,7 @@ import com.jme3.app.state.AppStateManager;
  */
 public class PlayerState extends AbstractAppState {
     
-    private static int INITIAL_DEFAULT_LIVES = 3;
+    private static final int INITIAL_DEFAULT_LIVES = 3;
     private int currentLives;
     private int score;
     private AppStateManager stateManager;

@@ -169,7 +169,6 @@ public class Brick extends Geometry {
 //            return true;
         } else {
             ((MetallicBrick) this).playMetallicReboundSound();
-            ((MetallicBrick) this).doReboundLightEffect();
         }
 
 //        return false;

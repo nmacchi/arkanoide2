@@ -16,12 +16,14 @@ import java.util.List;
  */
 public class LevelManager {
     
-    private List<Level> levels = new ArrayList<Level>();
+    private static final List<Level> levels = new ArrayList<Level>();
     private AssetManager assetManager;
     private AppStateManager stateManager;
     private Node bricksNode;
     
-    private int index;
+    private static int index;
+    
+    private static Boolean isLevelLoading;
     
     public LevelManager(){
         
@@ -31,21 +33,46 @@ public class LevelManager {
         this.assetManager = assetManager;
         this.stateManager = stateManager;
         this.bricksNode = bricksNode;
+        
+        index = 0; //Spot to the first level by default
     }
     
-    public void loadLevels(){
+    public static void loadLevels(){
+        levels.add(new Level1());
+        levels.add(new Level1());
         levels.add(new Level1());
         //ADD MORE LEVELS
     }
     
+    /**
+     * Attach bricks to parent node
+     */
     public void initLevel(){
+        isLevelLoading = true;
         ((Level)levels.get(index)).buildLevel(assetManager, stateManager, bricksNode);
     }
     
-    public void nextLevel(){
-        index++;
+    public int nextLevel(){
         bricksNode.detachAllChildren();
         initLevel();
+        index++;
+        return index;
     }
+    
+    public static int getCurrentLevel(){
+        return index + 1;
+    }
+
+    public static Boolean IsLevelLoading() {
+        return isLevelLoading;
+    }
+
+    public static void setLevelLoading(Boolean isLevelLoading) {
+        LevelManager.isLevelLoading = isLevelLoading;
+    }
+
+    
+    
+    
     
 }

@@ -16,6 +16,7 @@ public class AudioEffects {
     
     private AssetManager assetManager;
     private Node rootNode;
+    private final Node audioNode;
     
     //Audio Effects Nodes
     private AudioNode simpleReboundAudio;
@@ -26,9 +27,11 @@ public class AudioEffects {
     private AudioNode brickExplosionAudio;
     private AudioNode lifeWonAudio;
     
-    public AudioEffects(){}
+    public AudioEffects(){this.audioNode = new Node();
+}
     
     public AudioEffects(AssetManager assetManager, Node rootNode){
+        this.audioNode = new Node();
         this.assetManager = assetManager;
         this.rootNode = rootNode;
     }
@@ -40,7 +43,8 @@ public class AudioEffects {
         simpleReboundAudio.setPositional(false);
         simpleReboundAudio.setLooping(false);
         simpleReboundAudio.setVolume(1);
-        rootNode.attachChild(simpleReboundAudio);
+        audioNode.attachChild(simpleReboundAudio);
+        //rootNode.attachChild(simpleReboundAudio);
         
         //Brick explosion 
         brickExplosionAudio = new AudioNode(assetManager, "Sounds/effects/small_explosion.wav", false);
@@ -48,7 +52,9 @@ public class AudioEffects {
         brickExplosionAudio.setPositional(false);
         brickExplosionAudio.setLooping(false);
         brickExplosionAudio.setVolume(0.5f);
-        rootNode.attachChild(brickExplosionAudio);
+        audioNode.attachChild(brickExplosionAudio);
+//        rootNode.attachChild(brickExplosionAudio);
+        
         
         //Brick metallic rebound 
         metallicReboundAudio = new AudioNode(assetManager, "Sounds/effects/metal-hammer-hit-01.wav", false);
@@ -56,7 +62,8 @@ public class AudioEffects {
         metallicReboundAudio.setPositional(false);
         metallicReboundAudio.setLooping(false);
         metallicReboundAudio.setVolume(1);
-        rootNode.attachChild(metallicReboundAudio);
+        audioNode.attachChild(metallicReboundAudio);
+        //rootNode.attachChild(metallicReboundAudio);
         
         //Brick fireball
         fireballAudio = new AudioNode(assetManager, "Sounds/effects/fireball.wav", false);
@@ -64,7 +71,8 @@ public class AudioEffects {
         fireballAudio.setPositional(false);
         fireballAudio.setLooping(true);
         fireballAudio.setVolume(4);
-        rootNode.attachChild(fireballAudio);
+        audioNode.attachChild(fireballAudio);
+//        rootNode.attachChild(fireballAudio);
         
         //Arkanoid explosion
         arkanoidExplosionAudio = new AudioNode(assetManager, "Sounds/effects/explosion.wav", false);
@@ -72,7 +80,8 @@ public class AudioEffects {
         arkanoidExplosionAudio.setPositional(false);
         arkanoidExplosionAudio.setLooping(false);
         arkanoidExplosionAudio.setVolume(4);
-        rootNode.attachChild(arkanoidExplosionAudio);
+        audioNode.attachChild(arkanoidExplosionAudio);
+//        rootNode.attachChild(arkanoidExplosionAudio);
         
         //Spaceship shoot audio
         laserShootAudio = new AudioNode(assetManager, "Sounds/effects/laser.wav", false);
@@ -80,7 +89,8 @@ public class AudioEffects {
         laserShootAudio.setPositional(false);
         laserShootAudio.setLooping(false);
         laserShootAudio.setVolume(2);
-        rootNode.attachChild(laserShootAudio);
+        audioNode.attachChild(laserShootAudio);
+//        rootNode.attachChild(laserShootAudio);
         
         //Life won audio
         lifeWonAudio = new AudioNode(assetManager, "Sounds/effects/life_won.ogg", false);
@@ -88,10 +98,13 @@ public class AudioEffects {
         lifeWonAudio.setPositional(false);
         lifeWonAudio.setLooping(false);
         lifeWonAudio.setVolume(2);
-        rootNode.attachChild(lifeWonAudio);
+        audioNode.attachChild(lifeWonAudio);
+//        rootNode.attachChild(lifeWonAudio);
     }
     
-    
+    public void loadAudioToSceneGraph(){
+        rootNode.attachChild(audioNode);
+    }
     
     
 }

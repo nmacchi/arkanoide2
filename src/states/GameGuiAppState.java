@@ -15,37 +15,71 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.simsilica.lemur.Container;
+import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.Label;
+import com.simsilica.lemur.Panel;
+import com.simsilica.lemur.ProgressBar;
+import com.simsilica.lemur.anim.Animation;
+import com.simsilica.lemur.anim.SpatialTweens;
+import com.simsilica.lemur.anim.Tween;
+import com.simsilica.lemur.anim.TweenAnimation;
+import com.simsilica.lemur.anim.Tweens;
+import com.simsilica.lemur.effect.AbstractEffect;
+import com.simsilica.lemur.effect.Effect;
+import com.simsilica.lemur.effect.EffectInfo;
+import com.simsilica.lemur.style.BaseStyles;
+import levels.LevelManager;
+import mygame.commons.CommonModels;
 
 /**
  *
  * @author nicolas
  */
 public class GameGuiAppState extends AbstractAppState {
-   
+    
+    private Boolean isPlayerStateLoaded = false;
     private AppStateManager stateManager;
+    private SimpleApplication app;
 //    private static int INITIAL_POSITION_LOCAL_NODE = 100;
     
     private BitmapText stateIndicator;
     private BitmapText scoreIndicator;
+    private ProgressBar progressBar;
+    private Node guiNode;
     
     private Node localNode = new Node ("Lives Node");
-//    private Spatial arkanoid;
+
+    
+    
+    private float timer = 0f; 
+    Boolean firstAnimationElapsed = false;
+    Boolean secondAnimationElapsed = false;
+
+    
+    private Container panel;
+    //private Label label;
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
         this.stateManager = stateManager;
-//        this.xPositionForLives = INITIAL_POSITION_LOCAL_NODE;
+        this.guiNode = ((SimpleApplication)app).getGuiNode();
+        this.app = (SimpleApplication)app;
         
+        //Initialize Lemur GUI API
+        GuiGlobals.initialize(this.app);
+        BaseStyles.loadGlassStyle();
+        GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
         
-        ((SimpleApplication)app).getGuiNode().attachChild(localNode);
+        //Main container
+        panel = new Container();
+        panel.setName("mainContainer");
         
-        initGUILights(app);
+        guiNode.attachChild(panel);
         
-        initializeStateIndicator(app);
-        initializeScoreIndicator(app, stateManager);
-        updateLivesIndicator(app, stateManager.getState(PlayerState.class).getCurrentLives());   
+        //createLevelMessage();
     }
 
     @Override
@@ -65,7 +99,7 @@ public class GameGuiAppState extends AbstractAppState {
         stateIndicator.setColor(ColorRGBA.Blue);                             // font color
         stateIndicator.setLocalTranslation(300, app.getContext().getSettings().getHeight() / 2, 0); // position
         
-        ((SimpleApplication)app).getGuiNode().attachChild(stateIndicator);
+        guiNode.attachChild(stateIndicator);
     }
     
     private void initializeScoreIndicator(Application app, AppStateManager stateManager){
@@ -77,16 +111,17 @@ public class GameGuiAppState extends AbstractAppState {
         scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
         scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
     
-        ((SimpleApplication)app).getGuiNode().attachChild(scoreIndicator);
+        guiNode.attachChild(scoreIndicator);
     }
     
     public void updateLivesIndicator(Application app, int lives){
         localNode.detachAllChildren();
         
         int xPositionForLives = 100;
-        
-        for(int x=0; x < lives; x++){
-            Spatial arkanoid = app.getAssetManager().loadModel("Models/arkanoide/Arkanoide.j3o");
+
+        for(int x=0; x < lives -1; x++){
+            
+            Spatial arkanoid = CommonModels.ARKANOID.clone();
             arkanoid.scale(20f);
             arkanoid.rotate(-0.5f,2.5f,0f);
     
@@ -124,4 +159,140 @@ public class GameGuiAppState extends AbstractAppState {
     public void updateScoreIndicator(){
         scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
     }
+    
+    /**
+     * Progress Bar
+     */
+    public void initProgressBar(){ 
+        progressBar = new ProgressBar();
+        progressBar.setPreferredSize(new Vector3f(300,20,1));
+        //progressBar.setMessage(PROGRESS_BAR_MESSAGE);
+
+        panel.addChild(progressBar);
+        
+        
+        panel.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - progressBar.getPreferredSize().x / 2, app.getContext().getSettings().getHeight()/2,0);
+        
+    }
+    
+    public void setProgressBarValues(Double progress, String message){
+        progressBar.setMessage(message);
+        progressBar.setProgressValue(progress);
+    }
+    
+    private void initGameIndicators(){
+        guiNode.attachChild(localNode);
+        
+        initGUILights(app);
+        
+        initializeStateIndicator(app);
+        initializeScoreIndicator(app, stateManager);
+        updateLivesIndicator(app, stateManager.getState(PlayerState.class).getCurrentLives());
+    }
+    
+    @Override
+    public void update(float tpf){
+        //Init game indicators when playerstate is initialize 
+        if(stateManager.getState(PlayerState.class) != null && stateManager.getState(PlayerState.class).isInitialized() &&  !isPlayerStateLoaded){
+           
+            initGameIndicators();
+            isPlayerStateLoaded = true;
+        }
+        
+        
+        if(stateManager.getState(GamePlayAppState.class) != null && !stateManager.getState(GamePlayAppState.class).isGameStarted()){
+            timer += tpf;
+            
+            if(!firstAnimationElapsed){
+                createLevelMessage();
+                firstAnimationElapsed = true;
+                
+                ((Label)guiNode.getChild("myLabel")).runEffect("slideIn");
+            
+            }
+        
+            if(timer > 5 && firstAnimationElapsed && !secondAnimationElapsed){
+                secondAnimationElapsed = true;
+                ((Label)guiNode.getChild("myLabel")).runEffect("slideOut");
+            }
+            
+            if(timer > 7){
+                ((Label)guiNode.getChild("myLabel")).removeFromParent();
+                stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+                timer = 0;
+            }
+            
+       }
+        
+        
+        
+        
+    }
+    
+    public void detachChildrenFromPanel(){
+        ((Node)guiNode.getChild("mainContainer")).detachAllChildren();
+    }
+    
+    /**
+     * Level Message
+     */
+    public void createLevelMessage(){     
+        Label label = new Label("Level " + LevelManager.getCurrentLevel());
+//        Label label = new Label("Level 1");
+        label.setName("myLabel");
+        label.setFont(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"));
+        label.setFontSize(25);
+        label.setColor(ColorRGBA.Orange);
+        
+        label.addEffect("slideIn", labelIn);
+        label.addEffect("slideOut", labelOut);
+        
+        guiNode.attachChild(label);
+        System.out.println(label.getText());
+    }
+
+
+    
+    
+    
+    
+    /**
+     * Effects
+     */
+    
+    Effect<Panel> labelIn = new AbstractEffect<Panel>("slideIn/slideOut") {
+            @Override
+            public Animation create( Panel target, EffectInfo existing ) {
+                
+                Vector3f startPosition;
+                Vector3f endPosition;
+                
+                startPosition = new Vector3f(0,app.getContext().getSettings().getHeight()/2,0);
+                endPosition = new Vector3f(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight()/2,0);
+                
+                
+                Tween scale = SpatialTweens.scale(target, 0, 1, 2);
+                Tween move = SpatialTweens.move(target, startPosition, endPosition, 2);
+                return new TweenAnimation(Tweens.smoothStep(Tweens.parallel(move, scale)));
+            }
+        };
+        
+        
+        
+    Effect<Panel> labelOut = new AbstractEffect<Panel>("slideIn/slideOut") {
+            @Override
+            public Animation create( Panel target, EffectInfo existing ) {
+                Vector3f startPosition;
+                Vector3f endPosition;
+                
+                startPosition = new Vector3f(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight()/2,0);
+                endPosition = new Vector3f(app.getContext().getSettings().getWidth(), app.getContext().getSettings().getHeight()/2, 0);
+                
+                Tween scale = SpatialTweens.scale(target, 1, 0, 1);
+                Tween move = SpatialTweens.move(target, startPosition, endPosition, 1);
+                return new TweenAnimation(Tweens.smoothStep(Tweens.parallel(move,scale)));
+            }
+        };
+    
+    
 }
