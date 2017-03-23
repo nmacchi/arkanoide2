@@ -219,7 +219,11 @@ public class GameGuiAppState extends AbstractAppState {
             if(timer > 7){
                 ((Label)guiNode.getChild("myLabel")).removeFromParent();
                 stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+                
                 timer = 0;
+                firstAnimationElapsed = false;
+                secondAnimationElapsed = false;        
+                
             }
             
        }

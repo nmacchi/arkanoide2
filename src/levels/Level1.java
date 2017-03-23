@@ -30,7 +30,7 @@ public class Level1 extends Level{
             
             //bricks per line
             for (int j = 0; j <= 9; j++) {
-                if(i == 1){
+                if(i == 7){
                     parent.attachChild(new MetallicBrick(assetManager, position, stateManager));
                 }else{
                     parent.attachChild(new CommonBrick(assetManager, position, i, stateManager));
