@@ -31,7 +31,7 @@ public class Brick extends Geometry {
     //Dimentions
 //    private static float width = 0.075f;
 //    private static float height = 0.025f;
-    private static int count = 0;
+    //private static int count = 0;
     private boolean hasPowerup;
     private int countHits;
     //FX
@@ -45,7 +45,8 @@ public class Brick extends Geometry {
     }
 
     Brick(AssetManager assetManager, Vector3f position, AppStateManager stateManager) {
-        super("Brick" + count);
+        //super("Brick" + count);
+        super("Brick");
         this.stateManager = stateManager;
         this.assetManager = assetManager;
         
@@ -63,7 +64,7 @@ public class Brick extends Geometry {
         scale(0.02f, 0.03f, 0.07f);
         rotate(0f, 1.60f, 0f);
 
-        count++;
+        //count++;
 
         //create FX
         //FX = new SmokeTrail(assetManager, position);
@@ -96,7 +97,7 @@ public class Brick extends Geometry {
         for (int i = 0; i <= powerupsAmount; i++) {
 
             while (!hasPowerup) {
-                Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(count));
+                Brick brick = (Brick) bricksNode.getChild(rnd.nextInt(bricksNode.getChildren().size()));
 //                Brick brick = (Brick) bricksNode.getChild(i);
 
                 //Only commonBrick could have rewards

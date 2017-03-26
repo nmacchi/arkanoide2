@@ -101,10 +101,12 @@ public class LostLifeState extends AbstractAppState {
 
             if (timeElapsed >= 4f && done == Boolean.FALSE) {
                 app.getRootNode().detachChildNamed("explosionFX");
+                stateManager.getState(PlayerState.class).restLife();
                 stateManager.getState(GamePlayAppState.class).reset();
                 done = Boolean.TRUE;
             }
-
+            
+            //reset flow flags
             if (timeElapsed > 5f) {
                 setEnabled(Boolean.FALSE);
                 timeElapsed = 0;

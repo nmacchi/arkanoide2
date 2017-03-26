@@ -91,8 +91,6 @@ public class GamePlayAppState extends AbstractAppState {
         this.app.getRootNode().attachChild(bricksNode);
         
         
-        //addViewportFilterPostProcessor();
-        
         //this.app.getViewPort().setEnabled(false);
         
         //initScene();
@@ -105,7 +103,7 @@ public class GamePlayAppState extends AbstractAppState {
         inputState = new InputAppState();
         //changeLevelState  = new ChangeLevelState(new LevelManager(assetManager, stateManager, bricksNode));
         
-        stateManager.attachAll(playerState, inputState, lostLifeState);
+        stateManager.attachAll(playerState, lostLifeState);
        
         //loadBackgroundImage();
         
@@ -125,19 +123,11 @@ public class GamePlayAppState extends AbstractAppState {
         configureCameraSettings();
         initSceneLights();
         initScene();
-        initMainEntities();
+        //initMainEntities();
         loadBackgroundImage();
     }
     
-    /**
-    * Set fade effect between levels 
-    */
-    private void addViewportFilterPostProcessor(){
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        fadeFilter = new FadeFilter(2);
-        fpp.addFilter(fadeFilter);
-        this.app.getViewPort().addProcessor(fpp);
-    }
+    
 
     private void initMainEntities() {
         breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, breakerBarNode, app, null);
@@ -149,10 +139,6 @@ public class GamePlayAppState extends AbstractAppState {
         app.getCamera().setLocation(CAM_LOCATION);
     }
 
-    /*private void initAudio() {
-        AudioEffects audioEffects = new AudioEffects(assetManager, app.getRootNode());
-        audioEffects.loadAudioFXs();
-    }*/
 
     private void initSceneLights() {
         DirectionalLight sun = new DirectionalLight();
@@ -167,7 +153,7 @@ public class GamePlayAppState extends AbstractAppState {
     }
 
     public void reset() {
-        playerState.restLife();
+        //playerState.restLife();
 
         initMainEntities();
         VisualEffects.getChangeEffect(((Geometry) breakerBarNode.getChild(0)).getWorldTranslation());
@@ -205,6 +191,8 @@ public class GamePlayAppState extends AbstractAppState {
                
             }
             
+            reset();
+            
             levelManager.nextLevel();
             
             
@@ -228,7 +216,7 @@ public class GamePlayAppState extends AbstractAppState {
             gameRunning = Boolean.FALSE;
             gameFinished = Boolean.TRUE;
             
-            //fadeFilter.fadeOut();
+            stateManager.getState(GameGuiAppState.class).fadeInScene();
             
             //levelManager.nextLevel();
         }
@@ -237,7 +225,7 @@ public class GamePlayAppState extends AbstractAppState {
         //TODO: Permitir cntinuar o salir (implementar un menu)
         if (isGameFinished()) {
             stateManager.detach(stateManager.getState(InputAppState.class));
-           
+            
         }
     }
     

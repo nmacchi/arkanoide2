@@ -9,6 +9,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResults;
 import com.jme3.export.Savable;
 import com.jme3.math.Ray;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
@@ -101,7 +102,19 @@ public class BreakerControl extends AbstractControl implements Savable, Cloneabl
                         removeFromScene();
                     }
 
-                } else {
+                } else if(results.getClosestCollision().getGeometry().getName().equals("LeftBar") 
+                      || results.getClosestCollision().getGeometry().getName().equals("RightBar")){
+                    
+                    float x = breaker.getDirection().getX() * -1; //negate X component
+                    
+                    breaker.setDirection(new Vector3f(breaker.getDirection().setX(x)));
+                    
+                } else if(results.getClosestCollision().getGeometry().getName().equals("TopBar")){
+                    float y = breaker.getDirection().getY() * -1; //negate Y component
+                    
+                    breaker.setDirection(new Vector3f(breaker.getDirection().setY(y)));
+                    
+                } else {    
                     breaker.setDirection(breaker.reflectVector(results.getClosestCollision()));
                 }
 

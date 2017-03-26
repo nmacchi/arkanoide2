@@ -21,14 +21,17 @@ import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Panel;
 import com.simsilica.lemur.ProgressBar;
 import com.simsilica.lemur.anim.Animation;
+import com.simsilica.lemur.anim.PanelTweens;
 import com.simsilica.lemur.anim.SpatialTweens;
 import com.simsilica.lemur.anim.Tween;
 import com.simsilica.lemur.anim.TweenAnimation;
 import com.simsilica.lemur.anim.Tweens;
+import com.simsilica.lemur.component.QuadBackgroundComponent;
 import com.simsilica.lemur.effect.AbstractEffect;
 import com.simsilica.lemur.effect.Effect;
 import com.simsilica.lemur.effect.EffectInfo;
 import com.simsilica.lemur.style.BaseStyles;
+import static jdk.nashorn.internal.objects.NativeRegExpExecResult.length;
 import levels.LevelManager;
 import mygame.commons.CommonModels;
 
@@ -79,6 +82,8 @@ public class GameGuiAppState extends AbstractAppState {
         
         guiNode.attachChild(panel);
         
+        
+        createBlackoutPanel();
         //createLevelMessage();
     }
 
@@ -220,6 +225,9 @@ public class GameGuiAppState extends AbstractAppState {
                 ((Label)guiNode.getChild("myLabel")).removeFromParent();
                 stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
                 
+                fadeOutScene();
+                
+                
                 timer = 0;
                 firstAnimationElapsed = false;
                 secondAnimationElapsed = false;        
@@ -255,9 +263,38 @@ public class GameGuiAppState extends AbstractAppState {
         System.out.println(label.getText());
     }
 
-
+    /**
+     * Fade effect over scene 
+     */
+    private void createBlackoutPanel(){       
+        Container myPanel = new Container();
+        myPanel.setName("blackoutPanel");
+        myPanel.setPreferredSize(new Vector3f(app.getContext().getSettings().getWidth(), app.getContext().getSettings().getHeight(), 0));
+        myPanel.setLocalTranslation(0,app.getContext().getSettings().getHeight(),0);
+        
+        QuadBackgroundComponent  quad = new QuadBackgroundComponent();
+        quad.setColor(ColorRGBA.Black);
+        quad.setAlpha(1f);
+        quad.setZOffset(-1f);
+        
+        myPanel.setBackground(quad);
+        
+        myPanel.addEffect("fadeIn", fadeIn);
+        myPanel.addEffect("fadeOut", fadeOut);
+        
+        guiNode.attachChild(myPanel);
+    }
     
+    public void fadeOutScene(){
+        ((Container)guiNode.getChild("blackoutPanel")).runEffect("fadeOut");
+    }
     
+    /**
+     * Turn off scene
+     */
+    public void fadeInScene(){
+        ((Container)guiNode.getChild("blackoutPanel")).runEffect("fadeIn");
+    }
     
     
     /**
@@ -298,5 +335,22 @@ public class GameGuiAppState extends AbstractAppState {
             }
         };
     
+    
+    
+    Effect<Panel> fadeIn = new AbstractEffect<Panel>("fadeIn/fadeOut") {
+        @Override
+        public Animation create( Panel target, EffectInfo existing ) {
+            Tween fade = PanelTweens.fade(target, 0f, 1f, 1);
+            return new TweenAnimation(fade);
+        }
+    };
+    
+    Effect<Panel> fadeOut = new AbstractEffect<Panel>("fadeIn/fadeOut") {
+        @Override
+        public Animation create( Panel target, EffectInfo existing ) {
+            Tween fade = PanelTweens.fade(target, 1f, 0f, 2);
+            return new TweenAnimation(fade);
+        }
+    };
     
 }
