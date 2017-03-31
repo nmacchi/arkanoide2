@@ -4,7 +4,6 @@
  */
 package states;
 
-import effects.ScriptAppState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -17,9 +16,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FadeFilter;
-import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -27,6 +24,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
+import com.simsilica.lemur.anim.AnimationState;
 import customcontrols.BreakerControl;
 import effects.VisualEffects;
 import factories.BreakerBarFactory;
@@ -61,6 +59,7 @@ public class GamePlayAppState extends AbstractAppState {
     InputAppState inputState;
     PlayerState playerState;
     LostLifeState lostLifeState;
+    AnimationState animationState;
     BreakerBarFactory breakerBarCreator;
     
     FadeFilter fadeFilter;
@@ -101,9 +100,10 @@ public class GamePlayAppState extends AbstractAppState {
         lostLifeState = new LostLifeState();
         playerState = new PlayerState();
         inputState = new InputAppState();
+        animationState = new AnimationState();
         //changeLevelState  = new ChangeLevelState(new LevelManager(assetManager, stateManager, bricksNode));
         
-        stateManager.attachAll(playerState, lostLifeState);
+        stateManager.attachAll(playerState, lostLifeState, animationState);
        
         //loadBackgroundImage();
         
