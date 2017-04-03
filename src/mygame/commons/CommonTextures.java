@@ -22,7 +22,6 @@ public class CommonTextures {
     public static Texture POWERUP_LIFE;
     public static Texture POWERUP_EXTRABALL;
     public static Texture POWERUP_FIRE;
-    public static Texture POWERUP_EXPAND;
     
     //BRICKS 
     public static Texture RED_BRICK;
@@ -53,7 +52,6 @@ public class CommonTextures {
         POWERUP_LIFE = assetManager.loadTexture(new TextureKey(PowerupType.LIFE.getTexture(), false));
         POWERUP_EXTRABALL = assetManager.loadTexture(new TextureKey(PowerupType.EXTRA_BALLS.getTexture(), false));
         POWERUP_FIRE = assetManager.loadTexture(new TextureKey(PowerupType.FIRE.getTexture(), false));
-        POWERUP_EXPAND = assetManager.loadTexture(new TextureKey(PowerupType.EXPAND.getTexture(), false));
         
         //BRICKS
         RED_BRICK = assetManager.loadTexture(new TextureKey(BricksType.RED_BRICK.getTexturePath(), false));

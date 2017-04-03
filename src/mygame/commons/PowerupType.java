@@ -19,9 +19,7 @@ public enum PowerupType {
     EXTRA_BALLS(2, "POWERUP_EXTRABALLS", "Textures/pill/pill_texture_light_blue.png"),
     LIFE(3, "POWERUP_LIFE", "Textures/pill/pill_texture_gray.png"),
     SLOWER(4, "POWERUP_SLOWER", "Textures/pill/pill_texture_green.png"),
-    FIRE(5, "POWERUP_FIRE", "Textures/pill/pill_texture_red.png"),
-    EXPAND(6, "POWERUP_EXPAND", "Textures/pill/pill_texture_pink.png");
-    
+    FIRE(5, "POWERUP_FIRE", "Textures/pill/pill_texture_red.png");
     
     private final int codigo;
     private final String description;
@@ -50,7 +48,7 @@ public enum PowerupType {
     
     
     public static PowerupType getRandomType(){
-        int pick = random.nextInt(5) + 1;
+        int pick = random.nextInt(4) + 1; 
         return PowerupType.values()[pick];
     }
     
@@ -73,9 +71,6 @@ public enum PowerupType {
                 break;
             case FIRE:
                 texture = CommonTextures.POWERUP_FIRE;
-                break;
-            case EXPAND:
-                texture = CommonTextures.POWERUP_EXPAND;
                 break;
         }
         
