@@ -22,7 +22,7 @@ public abstract class BreakerBar extends Geometry {
     protected float speed = 0.75f;
     private static Vector3f direction = new Vector3f();
     
-    private static float maxLeftLimit = -0.60f;
+    private static float maxLeftLimit = -0.68f;
     private static float maxRightLimit = 0.65f;
     
 //    protected PowerupType PowerupType;
@@ -42,6 +42,7 @@ public abstract class BreakerBar extends Geometry {
         this.assetManager = assetManager; 
         setName("BreakerBar");
         BreakerBar.currentPower = PowerupType.NA;
+        //this.width = calculateGeometryWidth();
     }
     
     public float getSpeed() {
@@ -96,18 +97,26 @@ public abstract class BreakerBar extends Geometry {
         return this.width;
     }
     
+    public void setWidth(float width){
+        this.width = width;
+    }
+    
     public String evaluateImpactZone(float xBallPosition){
         String impact = "";
         
-        if(xBallPosition >= (this.getWorldTranslation().x - 0.01f) &&  xBallPosition <= (this.getWorldTranslation().x + 0.01f)){
+//        if(xBallPosition >= (this.getWorldTranslation().x - 0.01f) &&  xBallPosition <= (this.getWorldTranslation().x + 0.01f)){
+//            impact = "Center";
+//        }
+        
+        if(xBallPosition == this.getWorldTranslation().x){
             impact = "Center";
         }
         
-        if(xBallPosition >= (this.getWorldTranslation().x - width) &&  xBallPosition <= (this.getWorldTranslation().x - width + 0.04f)){
+        if(xBallPosition >= (this.getWorldTranslation().x - width) &&  xBallPosition <= (this.getWorldTranslation().x - width + 0.03f)){
             impact = "Left";
         }
         
-        if(xBallPosition <= (this.getWorldTranslation().x + width) && xBallPosition >= (this.getWorldTranslation().x + width - 0.04f)){
+        if(xBallPosition <= (this.getWorldTranslation().x + width) && xBallPosition >= (this.getWorldTranslation().x + width - 0.03f)){
             impact = "Right";
         }
         return impact;

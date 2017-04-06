@@ -26,7 +26,7 @@ public class Level1 extends Level{
         int brickNum = 0; 
         
         
-        for (int i = 0; i <= 1 ; i++) {
+        for (int i = 0; i <= 7 ; i++) {
             
             //bricks per line
             for (int j = 0; j <= 9; j++) {

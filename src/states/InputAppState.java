@@ -32,9 +32,11 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     private AppStateManager stateManager;
     private Node rootNode;
     private float xPosition;
-    private Vector3f direction;
+    //private Vector3f direction;
     SimpleApplication app;
-
+    
+    private Vector3f direction;
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -44,8 +46,12 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
         this.inputManager = ((SimpleApplication) app).getInputManager();
         this.stateManager = stateManager;
 
-        this.direction = BreakerBar.getDirection();
-
+        //this.direction = BreakerBar.getDirection();
+        direction = new Vector3f();
+        
+        
+        
+        
         addInputMappings();
     }
 
@@ -68,14 +74,28 @@ public class InputAppState extends AbstractAppState implements AnalogListener, A
     public void onAnalog(String name, float value, float tpf) {
         direction.set(Vector3f.UNIT_X).normalizeLocal();
         
-        if (name.equals(InputMapping.LEFT.name()) && xPosition >= BreakerBar.getMaxLeftLimit()) {
-            direction.multLocal(-0.7f * tpf);
-            ((Node) rootNode.getChild("BreakerBarNode")).move(direction);
+        
+//        Geometry leftBar = (Geometry)rootNode.getChild("LeftBar");
+//        
+//        System.out.println("LEFT BAR POS: " + leftBar.getLocalTranslation().getX());
+//        System.out.println("LEFT BAR POS (WORLD POS): " + leftBar.getWorldTranslation().getX());
+//        System.out.println("MITAD BARRA: (MODEL BOUND)" + ((BoundingBox)leftBar.getModelBound()).getXExtent() /2);
+//        System.out.println("MITAD BARRA: (WORLD BOUND)" + ((BoundingBox)leftBar.getWorldBound()).getXExtent() /2);
+//        System.out.println("MITAD ARKANOID: (WORLD BOUND)" + ((BoundingBox)((BreakerBar)rootNode.getChild("BreakerBar")).getWorldBound()).getXExtent() / 2);
+//        System.out.println("MITAD ARKANOID: (MODEL BOUND)" + ((BoundingBox)((BreakerBar)rootNode.getChild("BreakerBar")).getModelBound()).getXExtent() / 2);
+//        System.out.println("MAX LEFT LIMIT : " + leftBar.getLocalTranslation().getX() + ((BoundingBox)leftBar.getModelBound()).getXExtent() /2  + ((BoundingBox)((BreakerBar)rootNode.getChild("BreakerBar")).getWorldBound()).getXExtent() / 2);
+//        
+//        float limit = leftBar.getLocalTranslation().getX() + ((BoundingBox)leftBar.getModelBound()).getXExtent() + ((BoundingBox)((BreakerBar)rootNode.getChild("BreakerBar")).getWorldBound()).getXExtent(); 
+        
+        
+        if (name.equals(InputMapping.LEFT.name()) && xPosition >= ((float)((Node)rootNode.getChild("Gamefield")).getUserData("leftSideLimit") + ((BreakerBar)rootNode.getChild("BreakerBar")).getWidth())) {
+//            direction.multLocal(-0.7f * tpf);
+            ((Node) rootNode.getChild("BreakerBarNode")).move(direction.multLocal(-0.7f * tpf));
         }
 
-        if (name.equals(InputMapping.RIGHT.name()) && xPosition <= BreakerBar.getMaxRightLimit()) {
-            direction.multLocal(0.7f * tpf);
-            ((Node) rootNode.getChild("BreakerBarNode")).move(direction);
+        if (name.equals(InputMapping.RIGHT.name()) && xPosition <= ((float)((Node)rootNode.getChild("Gamefield")).getUserData("rightSideLimit") - ((BreakerBar)rootNode.getChild("BreakerBar")).getWidth())) {
+            //direction.multLocal(0.7f * tpf);
+            ((Node) rootNode.getChild("BreakerBarNode")).move(direction.multLocal(0.7f * tpf));
         }
 
         xPosition = ((Geometry) rootNode.getChild("BreakerBar")).getWorldTranslation().x;
