@@ -174,7 +174,7 @@ public class GamePlayAppState extends AbstractAppState {
     public void update(float tpf) {
         
         if(!isGameStarted() && isGameFinished()){
-            System.out.println("FADE OUT");
+            //System.out.println("FADE OUT");
             //fadeFilter.fadeOut();
             
             gameFinished = Boolean.FALSE;
