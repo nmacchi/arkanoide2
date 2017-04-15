@@ -119,7 +119,11 @@ public class BreakerBarControl extends AbstractControl {
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).playFireballAudio();
                     
                 }
-
+                
+                if(PowerupType.EXPAND.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
+                    ((Arkanoid)spatial).expand(stateManager);
+                }
+                
 
                 BreakerBar.setCurrentPower(catchedPowerup);
                 powerup.removeFromParent();

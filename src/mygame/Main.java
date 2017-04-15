@@ -1,19 +1,19 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.simsilica.lemur.GuiGlobals;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Label;
-import com.simsilica.lemur.Panel;
-import com.simsilica.lemur.anim.Animation;
+import com.simsilica.lemur.anim.AnimationState;
 import com.simsilica.lemur.anim.SpatialTweens;
 import com.simsilica.lemur.anim.Tween;
-import com.simsilica.lemur.anim.TweenAnimation;
-import com.simsilica.lemur.effect.AbstractEffect;
-import com.simsilica.lemur.effect.Effect;
-import com.simsilica.lemur.effect.EffectInfo;
-import com.simsilica.lemur.style.BaseStyles;
+import com.simsilica.lemur.anim.Tweens;
 import states.GameGuiAppState;
 import states.GamePlayAppState;
 import states.LoadingGameState;
@@ -51,6 +51,30 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         
         stateManager.attachAll(guiAppState, loadingGameState);   
      
+        
+        
+        /*Box box = new Box(1,1,1);
+        Geometry cube = new Geometry("cube", box);
+        Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color",ColorRGBA.Blue);
+        cube.setMaterial(material);
+        
+        cube.setLocalTranslation(0,0,0);
+        cube.scale(0.095f, 0.07f, 0.045f);
+        
+        rootNode.attachChild(cube);
+        */
+        
+        
+        
+  
+
+       
+        
+        
+        
+        
+        
     }
 
 
