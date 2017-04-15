@@ -213,6 +213,7 @@ public class Breaker extends Node {
         ball.getMaterial().setColor("Ambient", ColorRGBA.White);
         
         this.detachChildNamed("Fire");
+        stopFireballAudio();
     }
 
     public Boolean isFireballActivated() {

@@ -80,7 +80,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleUpdate(float tpf) {
-        if(!loadingGameState.isEnabled()/* && !gameState.isInitialized()*/){
+        if(!loadingGameState.isEnabled() && !gameState.isInitialized()){
             
             timeout += tpf;
             
@@ -89,7 +89,10 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
                 //stateManager.detach(loadingGameState);
                 
                 //Once the loading game is finished proceed to start the game
-                stateManager.attach(gameState);
+                System.out.println("Entre 1 millon y medio de veces, jajajajaja");
+                guiAppState.showMainMenu();
+                
+                //stateManager.attach(gameState);
                 
                 timeout = 0f;
             }

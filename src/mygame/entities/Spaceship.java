@@ -64,6 +64,8 @@ public class Spaceship extends BreakerBar{
         scale(0.095f, 0.07f, 0.045f);
         rotate(0f,1.60f,0f);
         
+        this.width = calculateGeometryWidth();
+        
         //BreakerBarNode
         parent.attachChild(this);
         setParent(parent);

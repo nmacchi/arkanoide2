@@ -24,7 +24,7 @@ public abstract class Level {
     /**
      * Set the percentaje of powerups related to the amount of common bricks per level  
      */
-    private static final int PERCENTAJE_REWARDS = 20;
+    private static final int PERCENTAJE_REWARDS = 15;
     
     public abstract void buildLevel(AssetManager assetManager, AppStateManager stateManager, Node parent);
     

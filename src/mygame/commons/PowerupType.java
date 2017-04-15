@@ -50,7 +50,7 @@ public enum PowerupType {
     
     
     public static PowerupType getRandomType(){
-        int pick = random.nextInt(5) + 1;
+        int pick = random.nextInt(6) + 1;
         return PowerupType.values()[pick];
     }
     

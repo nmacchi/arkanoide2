@@ -6,8 +6,7 @@ package mygame.entities;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -68,7 +67,12 @@ public class Arkanoid extends BreakerBar{
     public static Vector3f getInitialPosition() {
         return initialPosition;
     }
-
+    
+    @Override
+    public float getWidth(){
+        return ((BoundingBox)this.getWorldBound()).getXExtent();
+    }
+    
 
 //    public void transformToSpaceship(AppStateManager stateManager, Node parentNode, Vector3f position){
 //        parentNode.detachAllChildren();

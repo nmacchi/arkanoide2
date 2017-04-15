@@ -39,7 +39,7 @@ public class LevelManager {
     
     public static void loadLevels(){
         levels.add(new Level1());
-        levels.add(new Level1());
+        levels.add(new Level2());
         levels.add(new Level1());
         //ADD MORE LEVELS
     }

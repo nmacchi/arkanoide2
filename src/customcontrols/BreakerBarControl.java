@@ -7,6 +7,7 @@ package customcontrols;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioNode;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -85,24 +86,35 @@ public class BreakerBarControl extends AbstractControl {
                 }
 
 
-                if (PowerupType.SLOWER.equals(catchedPowerup)) {
-
+                if (PowerupType.SLOWER.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+                    
                     verifyExtraBallActivated();
 
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
                         breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                    }else if(spatial instanceof Arkanoid && arkanoidCurrentPower.equals(PowerupType.EXPAND)){
+                        ((Arkanoid)spatial).contract(stateManager);
+                        ((Arkanoid)spatial).setWidth(((BoundingBox)spatial.getWorldBound()).getXExtent());
                     }
 
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).decreaseSpeed();
                 }
 
                 if (PowerupType.EXTRA_BALLS.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)) {
+                    
+                    if(((Breaker)rootNode.getChild("Breaker")).isFireballActivated()){
+                        ((Breaker)rootNode.getChild("Breaker")).deactivateFireBall();
+                    }
+                    
                     stateManager.getState(GamePlayAppState.class).addExtraBalls();
-
+                    
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
                         breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                    }else if(spatial instanceof Arkanoid && arkanoidCurrentPower.equals(PowerupType.EXPAND)){
+                        ((Arkanoid)spatial).contract(stateManager);
+                        ((Arkanoid)spatial).setWidth(((BoundingBox)spatial.getWorldBound()).getXExtent());
                     }
                 }
 
@@ -113,6 +125,9 @@ public class BreakerBarControl extends AbstractControl {
                     if (spatial instanceof Spaceship) {
                         executeChangeEffect(spatial.getWorldTranslation());
                         breakerBarCreator.createrBar(BreakerBarTypes.ARKANOID, (Node) rootNode.getChild("BreakerBarNode"), app, spatial.getLocalTranslation());
+                    }else if(spatial instanceof Arkanoid && arkanoidCurrentPower.equals(PowerupType.EXPAND)){
+                        ((Arkanoid)spatial).contract(stateManager);
+                        ((Arkanoid)spatial).setWidth(((BoundingBox)spatial.getWorldBound()).getXExtent());
                     }
 
                     ((Breaker) ((Node) rootNode.getChild("BreakerNode")).getChild(0)).changeToFireBall();
@@ -122,6 +137,8 @@ public class BreakerBarControl extends AbstractControl {
                 
                 if(PowerupType.EXPAND.equals(catchedPowerup) && !catchedPowerup.equals(arkanoidCurrentPower)){
                     ((Arkanoid)spatial).expand(stateManager);
+                    
+                    ((Arkanoid)spatial).setWidth(((BoundingBox)spatial.getWorldBound()).getXExtent());
                 }
                 
 

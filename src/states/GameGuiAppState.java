@@ -15,6 +15,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
@@ -31,7 +33,6 @@ import com.simsilica.lemur.effect.AbstractEffect;
 import com.simsilica.lemur.effect.Effect;
 import com.simsilica.lemur.effect.EffectInfo;
 import com.simsilica.lemur.style.BaseStyles;
-import static jdk.nashorn.internal.objects.NativeRegExpExecResult.length;
 import levels.LevelManager;
 import mygame.commons.CommonModels;
 
@@ -212,14 +213,14 @@ public class GameGuiAppState extends AbstractAppState {
                 createLevelMessage();
                 firstAnimationElapsed = true;
                 
-                ((Label)guiNode.getChild("myLabel")).runEffect("slideIn");
+                //((Label)guiNode.getChild("myLabel")).runEffect("slideIn");
             
             }
         
-            if(timer > 5 && firstAnimationElapsed && !secondAnimationElapsed){
+            /*if(timer > 5 && firstAnimationElapsed && !secondAnimationElapsed){
                 secondAnimationElapsed = true;
                 ((Label)guiNode.getChild("myLabel")).runEffect("slideOut");
-            }
+            }*/
             
             if(timer > 7){
                 ((Label)guiNode.getChild("myLabel")).removeFromParent();
@@ -249,7 +250,7 @@ public class GameGuiAppState extends AbstractAppState {
      * Level Message
      */
     public void createLevelMessage(){     
-        Label label = new Label("Level " + LevelManager.getCurrentLevel());
+        Label label = new Label("Round " + LevelManager.getCurrentLevel());
 //        Label label = new Label("Level 1");
         label.setName("myLabel");
         label.setFont(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"));
@@ -260,7 +261,10 @@ public class GameGuiAppState extends AbstractAppState {
         label.addEffect("slideOut", labelOut);
         
         guiNode.attachChild(label);
-        System.out.println(label.getText());
+        
+        label.runEffect("slideIn");
+        label.runEffect("slideOut");
+
     }
 
     /**
@@ -296,6 +300,29 @@ public class GameGuiAppState extends AbstractAppState {
         ((Container)guiNode.getChild("blackoutPanel")).runEffect("fadeIn");
     }
     
+    
+    public void showMainMenu(){
+        Container mainWindow = new Container();
+        guiNode.attachChild(mainWindow);
+        
+//        mainWindow.setLocalScale(5, 10, 0);
+        mainWindow.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight()/2, 0);
+        
+        Button startButton = mainWindow.addChild(new Button("Comenzar"));
+        startButton.addClickCommands(new Command<Button>(){
+            
+            @Override
+            public void execute(Button s) {
+//                if(s.isPressed()){
+                   System.out.println("llegaaaaaaa"); 
+                   stateManager.attach(new GamePlayAppState());
+//                }
+            }
+            
+        });
+        
+        
+    }
     
     /**
      * Effects
@@ -336,8 +363,11 @@ public class GameGuiAppState extends AbstractAppState {
         };
     
     
+    /**
+     * Fade effects scene
+     */
     
-    Effect<Panel> fadeIn = new AbstractEffect<Panel>("fadeIn/fadeOut") {
+    Effect<Panel> fadeIn = new AbstractEffect<Panel>("fadeIn") {
         @Override
         public Animation create( Panel target, EffectInfo existing ) {
             Tween fade = PanelTweens.fade(target, 0f, 1f, 1);
@@ -345,7 +375,7 @@ public class GameGuiAppState extends AbstractAppState {
         }
     };
     
-    Effect<Panel> fadeOut = new AbstractEffect<Panel>("fadeIn/fadeOut") {
+    Effect<Panel> fadeOut = new AbstractEffect<Panel>("fadeOut") {
         @Override
         public Animation create( Panel target, EffectInfo existing ) {
             Tween fade = PanelTweens.fade(target, 1f, 0f, 2);

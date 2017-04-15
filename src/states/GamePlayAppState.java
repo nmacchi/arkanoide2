@@ -9,6 +9,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -32,6 +33,7 @@ import levels.LevelManager;
 import mygame.commons.BreakerBarTypes;
 import mygame.commons.CommonTextures;
 import mygame.entities.Breaker;
+import mygame.entities.BreakerBar;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -172,7 +174,7 @@ public class GamePlayAppState extends AbstractAppState {
     public void update(float tpf) {
         
         if(!isGameStarted() && isGameFinished()){
-            System.out.println("FADE OUT");
+            //System.out.println("FADE OUT");
             //fadeFilter.fadeOut();
             
             gameFinished = Boolean.FALSE;
@@ -318,7 +320,7 @@ public class GamePlayAppState extends AbstractAppState {
         geomLeftBar.setLocalTranslation(new Vector3f(-0.75f, 0.64f, 1f));
 
         geomLeftBar.setMaterial(matBars);
-
+       
         gamefield.attachChild(geomLeftBar);
 
         Box rightBar = new Box(0.025f, 0.66f, 0.025f);
@@ -334,6 +336,9 @@ public class GamePlayAppState extends AbstractAppState {
 
         geomTopBar.setMaterial(matBars);
         gamefield.attachChild(geomTopBar);
+        
+        gamefield.setUserData("leftSideLimit", geomLeftBar.getLocalTranslation().getX() + ((BoundingBox)geomLeftBar.getModelBound()).getXExtent());
+        gamefield.setUserData("rightSideLimit", geomRightBar.getLocalTranslation().getX() - ((BoundingBox)geomRightBar.getModelBound()).getXExtent());
     }
     
     

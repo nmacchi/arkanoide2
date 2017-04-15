@@ -32,6 +32,7 @@ public class CommonTextures {
     public static Texture YELLOW_BRICK;
     public static Texture ORANGE_BRICK;
     public static Texture PINK_BRICK;
+    public static Texture LIGHT_BLUE_BRICK;
     public static Texture METALLIC_BRICK;
     
     //BREAKER
@@ -63,6 +64,7 @@ public class CommonTextures {
         YELLOW_BRICK = assetManager.loadTexture(new TextureKey(BricksType.YELLOW_BRICK.getTexturePath(), false));
         ORANGE_BRICK = assetManager.loadTexture(new TextureKey(BricksType.ORANGE_BRICK.getTexturePath(), false));
         PINK_BRICK = assetManager.loadTexture(new TextureKey(BricksType.PINK_BRICK.getTexturePath(), false));
+        LIGHT_BLUE_BRICK = assetManager.loadTexture(new TextureKey(BricksType.LIGHT_BLUE_BRICK.getTexturePath(), false));
         METALLIC_BRICK = assetManager.loadTexture(new TextureKey(BricksType.METALLIC_BRICK.getTexturePath(), false));
         
         //BREAKER

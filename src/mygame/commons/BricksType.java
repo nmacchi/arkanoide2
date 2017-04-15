@@ -20,7 +20,8 @@ public enum BricksType {
     PURPLE_BRICK(4, "PURPLE BRICK", "Textures/brick/texture_purple.png"),
     PINK_BRICK(5, "PINK BRICK", "Textures/brick/texture_pink.png"),
     ORANGE_BRICK(6, "ORANGE BRICK", "Textures/brick/texture_orange.png"),
-    METALLIC_BRICK(7, "METALLIC BRICK", "Textures/metal_brick.jpg");
+    LIGHT_BLUE_BRICK(7, "LIGHT BLUE BRICK", "Textures/brick/texture_light_blue.png"),
+    METALLIC_BRICK(8, "METALLIC BRICK", "Textures/metal_brick.jpg");
     
     
     private final int codigo;
@@ -73,6 +74,9 @@ public enum BricksType {
                 break;
             case ORANGE_BRICK:
                 texture = CommonTextures.ORANGE_BRICK;
+                break;
+            case LIGHT_BLUE_BRICK:
+                texture = CommonTextures.LIGHT_BLUE_BRICK;
                 break;
             case METALLIC_BRICK:
                 texture = CommonTextures.METALLIC_BRICK;
