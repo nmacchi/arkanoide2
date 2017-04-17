@@ -51,9 +51,8 @@ public class GameGuiAppState extends AbstractAppState {
     private BitmapText scoreIndicator;
     private ProgressBar progressBar;
     private Node guiNode;
-    
-    private Node localNode = new Node ("Lives Node");
-
+    private Node livesNode;
+    private Container blackPanel;
     
     
     private float timer = 0f; 
@@ -77,6 +76,12 @@ public class GameGuiAppState extends AbstractAppState {
         BaseStyles.loadGlassStyle();
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
         
+        initGUILights(app);
+        
+        stateIndicator = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false); 
+        scoreIndicator = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false); 
+        livesNode = new Node ("guiLivesNode");
+        
         //Main container
         panel = new Container();
         panel.setName("mainContainer");
@@ -98,30 +103,33 @@ public class GameGuiAppState extends AbstractAppState {
         
     }
     
-    private void initializeStateIndicator(Application app){
-        stateIndicator = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false); 
+    /*private void initializeStateIndicator(Application app){
+        if(!guiNode.hasChild(stateIndicator)){
         
-        stateIndicator.setSize(25f);      // font size
-        stateIndicator.setColor(ColorRGBA.Blue);                             // font color
-        stateIndicator.setLocalTranslation(300, app.getContext().getSettings().getHeight() / 2, 0); // position
+            stateIndicator.setName("guiStateIndicator");
+            stateIndicator.setSize(25f);      // font size
+            stateIndicator.setColor(ColorRGBA.Blue);                             // font color
+            stateIndicator.setLocalTranslation(300, app.getContext().getSettings().getHeight() / 2, 0); // position
         
-        guiNode.attachChild(stateIndicator);
-    }
+            guiNode.attachChild(stateIndicator);
+        }
+    }*/
     
-    private void initializeScoreIndicator(Application app, AppStateManager stateManager){
-        scoreIndicator = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false); 
+    private void initializeScoreIndicator(Application app, AppStateManager stateManager){    
+        if(!guiNode.hasChild(scoreIndicator)){
         
-        scoreIndicator.setName("Score Indicator");
-        scoreIndicator.setSize(18f);      // font size
-        scoreIndicator.setColor(ColorRGBA.White);
-        scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
-        scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
+            scoreIndicator.setName("guiScoreIndicator");
+            scoreIndicator.setSize(18f);      // font size
+            scoreIndicator.setColor(ColorRGBA.White);
+            scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
+            scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
     
-        guiNode.attachChild(scoreIndicator);
+            guiNode.attachChild(scoreIndicator);
+        }   
     }
     
     public void updateLivesIndicator(Application app, int lives){
-        localNode.detachAllChildren();
+        livesNode.detachAllChildren();
         
         int xPositionForLives = 100;
 
@@ -133,12 +141,14 @@ public class GameGuiAppState extends AbstractAppState {
     
             arkanoid.setLocalTranslation(app.getContext().getSettings().getWidth() - xPositionForLives,50, 0);
             
-            localNode.attachChild(arkanoid);
+            livesNode.attachChild(arkanoid);
          
             xPositionForLives += 50;
         }
         
-        
+        if(!guiNode.hasChild(livesNode)){
+            guiNode.attachChild(livesNode);
+        }
         
     }
     
@@ -187,11 +197,9 @@ public class GameGuiAppState extends AbstractAppState {
     }
     
     private void initGameIndicators(){
-        guiNode.attachChild(localNode);
+        //guiNode.attachChild(livesNode);
         
-        initGUILights(app);
-        
-        initializeStateIndicator(app);
+        //initializeStateIndicator(app);
         initializeScoreIndicator(app, stateManager);
         updateLivesIndicator(app, stateManager.getState(PlayerState.class).getCurrentLives());
     }
@@ -199,11 +207,19 @@ public class GameGuiAppState extends AbstractAppState {
     @Override
     public void update(float tpf){
         //Init game indicators when playerstate is initialize 
-        if(stateManager.getState(PlayerState.class) != null && stateManager.getState(PlayerState.class).isInitialized() &&  !isPlayerStateLoaded){
+        /*if(stateManager.getState(GamePlayAppState.class) != null && !stateManager.getState(GamePlayAppState.class).isGameStarted()){
+            
+            if(stateManager.getState(PlayerState.class) != null && stateManager.getState(PlayerState.class).isInitialized() &&  !isPlayerStateLoaded){
            
-            initGameIndicators();
-            isPlayerStateLoaded = true;
-        }
+                initGameIndicators();
+                //isPlayerStateLoaded = true;
+            
+            }
+            
+            
+        } */
+        
+        
         
         
         if(stateManager.getState(GamePlayAppState.class) != null && !stateManager.getState(GamePlayAppState.class).isGameStarted()){
@@ -251,17 +267,19 @@ public class GameGuiAppState extends AbstractAppState {
      */
     public void createLevelMessage(){     
         Label label = new Label("Round " + LevelManager.getCurrentLevel());
-//        Label label = new Label("Level 1");
+
         label.setName("myLabel");
         label.setFont(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"));
         label.setFontSize(25);
         label.setColor(ColorRGBA.Orange);
         
+        //Attach Effects to element
         label.addEffect("slideIn", labelIn);
         label.addEffect("slideOut", labelOut);
         
         guiNode.attachChild(label);
         
+        //Execute effects
         label.runEffect("slideIn");
         label.runEffect("slideOut");
 
@@ -271,22 +289,24 @@ public class GameGuiAppState extends AbstractAppState {
      * Fade effect over scene 
      */
     private void createBlackoutPanel(){       
-        Container myPanel = new Container();
-        myPanel.setName("blackoutPanel");
-        myPanel.setPreferredSize(new Vector3f(app.getContext().getSettings().getWidth(), app.getContext().getSettings().getHeight(), 0));
-        myPanel.setLocalTranslation(0,app.getContext().getSettings().getHeight(),0);
+        blackPanel = new Container();
+        blackPanel.setName("blackoutPanel");
+        blackPanel.setPreferredSize(new Vector3f(app.getContext().getSettings().getWidth(), app.getContext().getSettings().getHeight(), 0));
+        blackPanel.setLocalTranslation(0,app.getContext().getSettings().getHeight(),0);
         
         QuadBackgroundComponent  quad = new QuadBackgroundComponent();
         quad.setColor(ColorRGBA.Black);
         quad.setAlpha(1f);
         quad.setZOffset(-1f);
         
-        myPanel.setBackground(quad);
+        blackPanel.setBackground(quad);
         
-        myPanel.addEffect("fadeIn", fadeIn);
-        myPanel.addEffect("fadeOut", fadeOut);
+        blackPanel.addEffect("fadeIn", fadeIn);
+        blackPanel.addEffect("fadeOut", fadeOut);
         
-        guiNode.attachChild(myPanel);
+        guiNode.attachChild(blackPanel);
+        
+        blackPanel.runEffect("fadeOut");
     }
     
     public void fadeOutScene(){
@@ -302,7 +322,7 @@ public class GameGuiAppState extends AbstractAppState {
     
     
     public void showMainMenu(){
-        Container mainWindow = new Container();
+        final Container mainWindow = new Container();
         guiNode.attachChild(mainWindow);
         
 //        mainWindow.setLocalScale(5, 10, 0);
@@ -313,10 +333,13 @@ public class GameGuiAppState extends AbstractAppState {
             
             @Override
             public void execute(Button s) {
-//                if(s.isPressed()){
-                   System.out.println("llegaaaaaaa"); 
-                   stateManager.attach(new GamePlayAppState());
-//                }
+                if(s.isPressed()){
+                   
+                   blackPanel.runEffect("fadeIn");
+                   mainWindow.removeFromParent(); 
+                   initGameIndicators();
+                   stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+                }
             }
             
         });

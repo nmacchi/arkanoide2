@@ -33,7 +33,6 @@ import levels.LevelManager;
 import mygame.commons.BreakerBarTypes;
 import mygame.commons.CommonTextures;
 import mygame.entities.Breaker;
-import mygame.entities.BreakerBar;
 
 /**
  * Init principal entities, audio effects and key inputs
@@ -75,58 +74,45 @@ public class GamePlayAppState extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
-        //setEnabled(false);
-        
         this.stateManager = stateManager;
         this.app = (SimpleApplication) app;
         this.assetManager = ((SimpleApplication) app).getAssetManager();
         this.breakerBarCreator = new BreakerBarFactory();
-
+        
         levelManager = new LevelManager(assetManager, stateManager, bricksNode);
         LevelManager.loadLevels(); //Mover al inicio
         
+        stateManager.getState(GameGuiAppState.class).showMainMenu();
+        
+    }
+    
+    
+    
+    private void loadGameComponents(){
+        configureCameraSettings();
+        initSceneLights();
+        initScene();
+        loadBackgroundImage();
+        
+        breakerBarNode = new Node("BreakerBarNode");
+        breakerNode = new Node("BreakerNode");
+        powerupsNode = new Node("PowerupsNode");
+        gamefield = new Node("Gamefield");
+        bricksNode = new Node("BricksNode");
+    
         this.app.getRootNode().attachChild(breakerBarNode);
         this.app.getRootNode().attachChild(breakerNode);
         this.app.getRootNode().attachChild(powerupsNode);
         this.app.getRootNode().attachChild(gamefield);
         this.app.getRootNode().attachChild(bricksNode);
         
-        
-        //this.app.getViewPort().setEnabled(false);
-        
-        //initScene();
-
-        //initMainEntities();
-        
-        //Initialize main states
         lostLifeState = new LostLifeState();
         playerState = new PlayerState();
         inputState = new InputAppState();
         animationState = new AnimationState();
-        //changeLevelState  = new ChangeLevelState(new LevelManager(assetManager, stateManager, bricksNode));
         
         stateManager.attachAll(playerState, lostLifeState, animationState);
-       
-        //loadBackgroundImage();
         
-        //configureCameraSettings();
-        
-        //initSceneLights();
-        
-        //initLevels();
-        
-        
-        
-    }
-    
-    
-    
-    private void loadScene(){
-        configureCameraSettings();
-        initSceneLights();
-        initScene();
-        //initMainEntities();
-        loadBackgroundImage();
     }
     
     
@@ -173,7 +159,10 @@ public class GamePlayAppState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         
-        if(!isGameStarted() && isGameFinished()){
+        
+        
+        
+        /*if(!isGameStarted() && isGameFinished()){
             //System.out.println("FADE OUT");
             //fadeFilter.fadeOut();
             
@@ -188,7 +177,7 @@ public class GamePlayAppState extends AbstractAppState {
             //Do this only for the first level
             if(!sceneLoaded){
                 System.out.println("CARGA ESCENA");
-                loadScene();
+                loadGameComponents();
                 sceneLoaded = true;
                
             }
@@ -202,7 +191,7 @@ public class GamePlayAppState extends AbstractAppState {
             levelLoaded = true;
             System.out.println("FADE IN");
             //fadeFilter.fadeIn();
-        }
+        }*/
         
         
         //Exceute state when player lose a life

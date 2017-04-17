@@ -89,10 +89,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
                 //stateManager.detach(loadingGameState);
                 
                 //Once the loading game is finished proceed to start the game
-                System.out.println("Entre 1 millon y medio de veces, jajajajaja");
-                guiAppState.showMainMenu();
-                
-                //stateManager.attach(gameState);
+                stateManager.attach(gameState);
                 
                 timeout = 0f;
             }

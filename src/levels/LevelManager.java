@@ -48,7 +48,6 @@ public class LevelManager {
      * Attach bricks to parent node
      */
     public void initLevel(){
-        isLevelLoading = true;
         ((Level)levels.get(index)).buildLevel(assetManager, stateManager, bricksNode);
     }
     
@@ -56,23 +55,12 @@ public class LevelManager {
         bricksNode.detachAllChildren();
         initLevel();
         index++;
+        
         return index;
     }
     
     public static int getCurrentLevel(){
         return index + 1;
     }
-
-    public static Boolean IsLevelLoading() {
-        return isLevelLoading;
-    }
-
-    public static void setLevelLoading(Boolean isLevelLoading) {
-        LevelManager.isLevelLoading = isLevelLoading;
-    }
-
-    
-    
-    
     
 }
