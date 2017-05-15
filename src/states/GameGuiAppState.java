@@ -87,7 +87,7 @@ public class GameGuiAppState extends AbstractAppState {
         panel.setName("mainContainer");
         
         guiNode.attachChild(panel);
-        
+        guiNode.attachChild(livesNode);
         
         createBlackoutPanel();
         //createLevelMessage();
@@ -122,8 +122,9 @@ public class GameGuiAppState extends AbstractAppState {
             scoreIndicator.setSize(18f);      // font size
             scoreIndicator.setColor(ColorRGBA.White);
             scoreIndicator.setLocalTranslation(app.getContext().getSettings().getWidth()/2 - 50, app.getContext().getSettings().getHeight(), 0); // position
-            scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
-    
+//            scoreIndicator.setText(stateManager.getState(PlayerState.class).getFormattedScore());
+            scoreIndicator.setText(String.format("%08d", 0));
+
             guiNode.attachChild(scoreIndicator);
         }   
     }
@@ -146,9 +147,9 @@ public class GameGuiAppState extends AbstractAppState {
             xPositionForLives += 50;
         }
         
-        if(!guiNode.hasChild(livesNode)){
-            guiNode.attachChild(livesNode);
-        }
+//        if(!guiNode.hasChild(livesNode)){
+//            guiNode.attachChild(livesNode);
+//        }
         
     }
     
@@ -226,6 +227,7 @@ public class GameGuiAppState extends AbstractAppState {
             timer += tpf;
             
             if(!firstAnimationElapsed){
+                System.out.println("LLEGA");
                 createLevelMessage();
                 firstAnimationElapsed = true;
                 
@@ -281,7 +283,7 @@ public class GameGuiAppState extends AbstractAppState {
         
         //Execute effects
         label.runEffect("slideIn");
-        label.runEffect("slideOut");
+//        label.runEffect("slideOut");
 
     }
 
@@ -335,10 +337,13 @@ public class GameGuiAppState extends AbstractAppState {
             public void execute(Button s) {
                 if(s.isPressed()){
                    
-                   blackPanel.runEffect("fadeIn");
+//                   blackPanel.runEffect("fadeIn");
                    mainWindow.removeFromParent(); 
+                   //initGameIndicators();
+                   stateManager.attach(new GamePlayAppState());
+                   stateManager.attach(new PlayerState());
                    initGameIndicators();
-                   stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
+//                   stateManager.getState(GamePlayAppState.class).setGameStarted(Boolean.TRUE);
                 }
             }
             

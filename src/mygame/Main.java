@@ -46,7 +46,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
         //Start GUI appState
         guiAppState = new GameGuiAppState();
         loadingGameState = new LoadingGameState();        
-        gameState = new GamePlayAppState();
+        //gameState = new GamePlayAppState();
         
         
         stateManager.attachAll(guiAppState, loadingGameState);   
@@ -80,7 +80,7 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
 
     @Override
     public void simpleUpdate(float tpf) {
-        if(!loadingGameState.isEnabled() && !gameState.isInitialized()){
+        if(!loadingGameState.isEnabled() && !loadingGameState.isLoad()){
             
             timeout += tpf;
             
@@ -89,8 +89,8 @@ public class Main extends SimpleApplication /*implements PhysicsCollisionListene
                 //stateManager.detach(loadingGameState);
                 
                 //Once the loading game is finished proceed to start the game
-                stateManager.attach(gameState);
-                
+                //stateManager.attach(gameState);
+                stateManager.getState(GameGuiAppState.class).showMainMenu();
                 timeout = 0f;
             }
            

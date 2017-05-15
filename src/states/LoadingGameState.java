@@ -131,5 +131,14 @@ public class LoadingGameState extends AbstractAppState {
         //the pool executor needs to be shut down so the application properly exits.
         executor.shutdown();
     }
+
+    public boolean isLoad() {
+        return load;
+    }
+
+    public void setLoad(boolean load) {
+        this.load = load;
+    }
+    
     
 }

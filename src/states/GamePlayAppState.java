@@ -58,7 +58,7 @@ public class GamePlayAppState extends AbstractAppState {
     SimpleApplication app;
     AssetManager assetManager;
     InputAppState inputState;
-    PlayerState playerState;
+    //PlayerState playerState;
     LostLifeState lostLifeState;
     AnimationState animationState;
     BreakerBarFactory breakerBarCreator;
@@ -107,11 +107,12 @@ public class GamePlayAppState extends AbstractAppState {
         this.app.getRootNode().attachChild(bricksNode);
         
         lostLifeState = new LostLifeState();
-        playerState = new PlayerState();
+//        playerState = new PlayerState();
         inputState = new InputAppState();
         animationState = new AnimationState();
         
-        stateManager.attachAll(playerState, lostLifeState, animationState);
+//        stateManager.attachAll(playerState, lostLifeState, animationState);
+        stateManager.attachAll(lostLifeState, animationState);
         
     }
     
